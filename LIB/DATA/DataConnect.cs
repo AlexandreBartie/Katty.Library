@@ -23,8 +23,8 @@ namespace BlueRocket.LIBRARY
 
         public string varTimeOutDB = "##timeout##";
 
-        public int timeoutDB;
-        public int timeoutSQL;
+        public int timeoutDB = 30;
+        public int timeoutSQL = 30;
 
         public string GetFullConnection(string prmStrConnection) => myString.GetSubstituir(prmStrConnection, varTimeOutDB, timeoutDB.ToString());
 
