@@ -98,7 +98,7 @@ namespace BlueRocket.LIBRARY
         private DataConnect Connect;
 
         private DataBaseOracle _Oracle;
-        public DataBaseOracle Oracle { get { if (_Oracle == null) _Oracle = new DataBaseOracle(); return _Oracle; } }
+        public DataBaseOracle Oracle { get { if (_Oracle == null) _Oracle = new DataBaseOracle(Connect); return _Oracle; } }
 
         public DataAssist(DataConnect prmConnect)
         {

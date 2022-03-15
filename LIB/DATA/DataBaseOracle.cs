@@ -26,6 +26,9 @@ namespace BlueRocket.LIBRARY
         public string port;
         public string service;
 
+        public DataBaseOracle(DataConnect prmConnect)
+        { Connect = prmConnect; }
+
         public string GetString() => String.Format(model, host, port, service, user, password, Connect.varTimeOutDB);
 
     }
