@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using BlueRocket.CORE.Lib.Parse;
-using BlueRocket.CORE;
-using BlueRocket.CORE.Lib.Generic;
+using BlueRocket.LIBRARY.Lib.Parse;
+using BlueRocket.LIBRARY;
+using BlueRocket.LIBRARY.Lib.Generic;
 
-namespace BlueRocket.CORE.Lib.Files
+namespace BlueRocket.LIBRARY.Lib.Files
 {
     public class FileJUNIT : FileTXT
     {

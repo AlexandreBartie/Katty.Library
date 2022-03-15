@@ -1,9 +1,9 @@
-﻿using BlueRocket.CORE.Lib.Generic;
+﻿using BlueRocket.LIBRARY.Lib.Generic;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.CORE.Lib.Parse
+namespace BlueRocket.LIBRARY.Lib.Parse
 {
     public class myArgs: xMemo
     {

@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.CORE.Lib.Data
+namespace BlueRocket.LIBRARY.Lib.Data
 {
-    public class DataBaseConnectVirtual
+    public class DataVirtualConnect
     {
         private OracleConnection conexao;
 
-        public DataBaseConnectVirtual(string prmConnection)
+        public DataVirtualConnect(string prmConnection)
         {
             conexao = new OracleConnection(prmConnection);
         }
@@ -22,19 +22,19 @@ namespace BlueRocket.CORE.Lib.Data
 
         public bool Execute(string prmNoSQL, int prmTimeOut)
         {
-            DataCommandVirtual Command = new DataCommandVirtual(prmNoSQL, this, prmTimeOut);
+            DataVirtualCommand Command = new DataVirtualCommand(prmNoSQL, this, prmTimeOut);
 
             return Command.GetNoResults();
         }
 
     }
 
-    public class DataCommandVirtual
+    public class DataVirtualCommand
     {
 
         private OracleCommand command;
 
-        public DataCommandVirtual(string prmSQL, DataBaseConnectVirtual prmConnect, int prmTimeOut)
+        public DataVirtualCommand(string prmSQL, DataVirtualConnect prmConnect, int prmTimeOut)
         {
             command = new OracleCommand(prmSQL, prmConnect.GetConnection);
 
@@ -48,18 +48,18 @@ namespace BlueRocket.CORE.Lib.Data
             return result == -1;
         }
 
-        public DataReaderVirtual GetReader() => new DataReaderVirtual(command);
+        public DataVirtualReader GetReader() => new DataVirtualReader(command);
 
     }
 
-    public class DataReaderVirtual
+    public class DataVirtualReader
     {
 
         private OracleDataReader reader;
 
         private OracleCommand command;
 
-        public DataReaderVirtual(OracleCommand prmCommand)
+        public DataVirtualReader(OracleCommand prmCommand)
         {
             command = prmCommand;
 

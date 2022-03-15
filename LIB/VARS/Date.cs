@@ -1,10 +1,10 @@
-﻿using BlueRocket.CORE.Tools.Calc;
+﻿using BlueRocket.LIBRARY.Tools.Calc;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace BlueRocket.CORE.Lib.Vars
+namespace BlueRocket.LIBRARY.Lib.Vars
 {
     public static class myDate
     {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
-namespace BlueRocket.CORE.Tools.Util
+namespace BlueRocket.LIBRARY.Tools.Util
 {
 
     public abstract class myThread

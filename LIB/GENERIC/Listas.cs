@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using System.Linq;
-using BlueRocket.CORE.Lib.Parse;
-using BlueRocket.CORE.Lib.Vars;
+using BlueRocket.LIBRARY.Lib.Parse;
+using BlueRocket.LIBRARY.Lib.Vars;
 
-namespace BlueRocket.CORE.Lib.Generic
+namespace BlueRocket.LIBRARY.Lib.Generic
 {
     public class xLista : List<string>
     {

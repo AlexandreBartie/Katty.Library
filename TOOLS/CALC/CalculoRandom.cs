@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.CORE.TOOLS.CALC
+namespace BlueRocket.LIBRARY.TOOLS.CALC
 {
     internal class CalculoRandom
     {

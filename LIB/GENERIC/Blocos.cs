@@ -1,9 +1,9 @@
-﻿using BlueRocket.CORE.Lib.Vars;
+﻿using BlueRocket.LIBRARY.Lib.Vars;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.CORE.Lib.Generic
+namespace BlueRocket.LIBRARY.Lib.Generic
 {
 
     public static class Bloco

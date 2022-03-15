@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text.Json;
 using System.Diagnostics;
-using BlueRocket.CORE;
-using BlueRocket.CORE.Lib.Generic;
+using BlueRocket.LIBRARY;
+using BlueRocket.LIBRARY.Lib.Generic;
 
-namespace BlueRocket.CORE.Lib.Parse
+namespace BlueRocket.LIBRARY.Lib.Parse
 {
     public class myJSON
     {

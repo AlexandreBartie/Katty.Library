@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace BlueRocket.CORE.Tools.Util
+namespace BlueRocket.LIBRARY.Tools.Util
 {
     public class myFileDialog
     {
