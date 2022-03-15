@@ -3,9 +3,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Text;
 using System.IO;
-using BlueRocket.LIBRARY.Lib.Vars;
 
-namespace BlueRocket.LIBRARY.Lib.Files
+namespace BlueRocket.LIBRARY
 {
     public class FileTXT
     {

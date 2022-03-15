@@ -3,13 +3,8 @@ using System.Data;
 using System.Collections.Generic;
 using System;
 using System.IO;
-using BlueRocket.LIBRARY.Lib.Generic;
-using BlueRocket.LIBRARY.Lib.Parse;
-using BlueRocket.LIBRARY.Tools.Calc;
-using BlueRocket.LIBRARY.Factory;
-using BlueRocket.LIBRARY.Factory.Data;
 
-namespace BlueRocket.LIBRARY.Lib.Data
+namespace BlueRocket.LIBRARY
 {
 
     public class DataCursor : DataCursorDados
@@ -33,7 +28,7 @@ namespace BlueRocket.LIBRARY.Lib.Data
                 SetQuery(); SetMask(prmMask);
             }
             else
-            { Trace.LogData.FailSQLNoDataBaseConnection(DataBase.tag, sql, DataBase.erro); Erro = DataBase.erro; }
+            { Trace.LogData.FailSQLNoDataBase(DataBase.tag, sql, DataBase.erro); Erro = DataBase.erro; }
         }
 
         private void SetQuery()

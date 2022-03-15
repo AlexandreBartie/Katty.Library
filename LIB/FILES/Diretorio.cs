@@ -1,14 +1,10 @@
-﻿using BlueRocket.LIBRARY.Lib.Files;
-using BlueRocket.LIBRARY;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using BlueRocket.LIBRARY.Lib.Vars;
-using BlueRocket.LIBRARY.Lib.Generic;
 
-namespace BlueRocket.LIBRARY.Lib.Files
+namespace BlueRocket.LIBRARY
 {
 
     public class Path

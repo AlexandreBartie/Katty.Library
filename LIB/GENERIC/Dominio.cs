@@ -1,9 +1,8 @@
-﻿using BlueRocket.LIBRARY.Lib.Vars;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Lib.Generic
+namespace BlueRocket.LIBRARY
 {
     public class myDominio
     {

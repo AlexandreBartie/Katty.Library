@@ -1,11 +1,8 @@
-﻿using BlueRocket.LIBRARY;
-using BlueRocket.LIBRARY.Lib.Generic;
-using BlueRocket.LIBRARY.Lib.Vars;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Tools.Calc
+namespace BlueRocket.LIBRARY
 {
     public enum eTipoMarcaData { dia, mes, ano }
 

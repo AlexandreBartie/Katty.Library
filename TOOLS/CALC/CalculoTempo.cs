@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Tools.Calc
+namespace BlueRocket.LIBRARY
 {
     public class Cronometro
     {

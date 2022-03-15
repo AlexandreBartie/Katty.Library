@@ -1,10 +1,9 @@
-﻿using BlueRocket.LIBRARY.Lib.Generic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Lib.Vars
+namespace BlueRocket.LIBRARY
 {
 
     public static class myFormat
@@ -96,7 +95,7 @@ namespace BlueRocket.LIBRARY.Lib.Vars
         }
 
     }
-    internal static class myCSV
+    public static class myCSV
     {
 
         public static string TextToCSV(string prmText, string prmFormat) => myFormat.TextToString(prmText, prmFormat);

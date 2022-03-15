@@ -1,10 +1,8 @@
-﻿using BlueRocket.LIBRARY.Lib.Generic;
-using BlueRocket.LIBRARY.Lib.Vars;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Lib.Parse
+namespace BlueRocket.LIBRARY
 {
     public class myTupla
     {

@@ -1,11 +1,9 @@
-﻿using BlueRocket.LIBRARY.Factory.Data;
-using BlueRocket.LIBRARY.Lib.Parse;
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Lib.Data
+namespace BlueRocket.LIBRARY
 {
 
     public class DataBaseOracleConnect

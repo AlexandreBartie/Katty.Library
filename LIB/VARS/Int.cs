@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Lib.Vars
+namespace BlueRocket.LIBRARY
 {
     public static class myInt
     {

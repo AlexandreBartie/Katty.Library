@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY.Lib.Data
+namespace BlueRocket.LIBRARY
 {
     public class DataVirtualConnect
     {

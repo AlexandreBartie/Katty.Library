@@ -4,10 +4,8 @@ using System.Diagnostics;
 using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using System.Linq;
-using BlueRocket.LIBRARY.Lib.Parse;
-using BlueRocket.LIBRARY.Lib.Vars;
 
-namespace BlueRocket.LIBRARY.Lib.Generic
+namespace BlueRocket.LIBRARY
 {
     public class xLista : List<string>
     {
