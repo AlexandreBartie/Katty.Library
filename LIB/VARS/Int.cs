@@ -66,6 +66,13 @@ namespace BlueRocket.LIBRARY
 
         public static int GetNegativo(int prmValor) => (-GetPositivo(prmValor));
 
+        public static int GetMaior(int prmValorA, int prmValorB)
+        {
+            if (prmValorA > prmValorB)
+                return (prmValorA);
+
+            return (prmValorB);
+        }
         public static int GetIntervalo(int prmValor, int prmMinimo, int prmMaximo)
         {
 

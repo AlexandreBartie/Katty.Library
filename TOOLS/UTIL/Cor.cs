@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace BlueRocket.LIBRARY.Tools.Util
+namespace BlueRocket.LIBRARY
 {
     public class myColor
     {

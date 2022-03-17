@@ -16,6 +16,8 @@ namespace BlueRocket.LIBRARY
 
         public TraceLog Trace => DataBase.Trace;
 
+        public TraceMSG Log;
+
         public DataCursor(string prmSQL, myTuplas prmMask, DataBase prmDataBase)
         {
 
@@ -29,21 +31,35 @@ namespace BlueRocket.LIBRARY
             }
             else
             { Trace.LogData.FailSQLNoDataBase(DataBase.tag, sql, DataBase.erro); Erro = DataBase.erro; }
+
+            Log = Trace.Msg.Clonar();
+
         }
 
         private void SetQuery()
         {
 
-            if (GetRequest(sql, prmTimeOut: DataBase.Connect.timeoutSQL))
+            if (GetRequest(sql))
             {
                 Trace.OnSqlExecutado(DataBase.tag, sql, TimeCursor.Elapsed.milliseconds, TemDados);
             }
             else
-                Trace.OnSqlError(DataBase.tag, sql, Erro);
+                Trace.OnSqlFail(DataBase.tag, sql, Erro);
         }
 
         private string GetTratarSQL(string prmSQL) => Bloco.GetBlocoTroca(prmSQL, prmDelimitadorInicial: "<##>", prmDelimitadorFinal: "<##>", prmDelimitadorNovo: "'");
 
+        private string GetLog()
+        {
+            string log = "";
+
+            if (IsOK)
+            {
+                log = GetCSV();
+            }
+
+            return log;
+        }
     }
 
     public class DataCursorDados : DataCursorReader
@@ -58,10 +74,12 @@ namespace BlueRocket.LIBRARY
 
         public void SetMask(myTuplas prmMask)
         {
-            if (prmMask.IsFull)
-                Mask = new xMask(prmMask);
+            if (prmMask != null)
+                if (prmMask.IsFull)
+                    Mask = new xMask(prmMask);
         }
 
+        public int qtdeColunas => reader.GetFieldCount;
         public bool IsDBNull(int prmIndice) => reader.IsDBNull(prmIndice);
         public string GetName(int prmIndice) => reader.GetName(prmIndice);
         public string GetType(int prmIndice) => reader.GetType(prmIndice);
@@ -105,6 +123,8 @@ namespace BlueRocket.LIBRARY
 
             return (Format.GetDoubleFormat(prmNumber));
         }
+
+        public string GetCSV() => GetCSV(prmSeparador: ",");
         public string GetCSV(string prmSeparador)
         {
             string memo = "";
@@ -114,7 +134,7 @@ namespace BlueRocket.LIBRARY
             if (TemDados)
             {
 
-                for (int cont = 0; cont < reader.GetFieldCount; cont++)
+                for (int cont = 0; cont < qtdeColunas; cont++)
                 {
                     if (IsDBNull(cont))
                         texto = "";
@@ -168,14 +188,14 @@ namespace BlueRocket.LIBRARY
 
         public bool TemDados;
 
-        public bool GetRequest(string prmSQL, int prmTimeOut)
+        public bool GetRequest(string prmSQL)
         {
 
             Erro = null; TemDados = false;
 
             try
             {
-                command = new DataVirtualCommand(prmSQL, DataBase.Conexao, prmTimeOut);
+                command = new DataVirtualCommand(prmSQL, DataBase.Conexao, timeoutSQL);
 
                 TimeCursor.Start();
 
@@ -208,14 +228,14 @@ namespace BlueRocket.LIBRARY
     public class DataCursorCommand : DataCursorBase
     {
 
-        public bool Execute(string prmSQL, int prmTimeOut)
+        public bool Execute(string prmSQL)
         {
 
             Erro = null;
 
             try
             {
-                command = new DataVirtualCommand(prmSQL, DataBase.Conexao, prmTimeOut);
+                command = new DataVirtualCommand(prmSQL, DataBase.Conexao, timeoutSQL);
 
                 TimeCursor.Start();
 
@@ -243,6 +263,8 @@ namespace BlueRocket.LIBRARY
         public DataVirtualCommand command;
 
         internal Cronometro TimeCursor;
+
+        internal int timeoutSQL => DataBase.Connect.timeoutSQL;
 
         public DataCursorBase()
         {

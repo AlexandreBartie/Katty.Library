@@ -38,10 +38,10 @@ namespace BlueRocket.LIBRARY
         public DataConnect(TraceLog prmTrace)
         {
             Trace = prmTrace;
-            
-            Bases = new DataBases(this);
 
-            Format = new DataFormat(this);
+            Format = new DataFormat();
+
+            Bases = new DataBases(this);
 
             Assist = new DataAssist(this);
         }
@@ -56,21 +56,19 @@ namespace BlueRocket.LIBRARY
 
     public class DataFormat
     {
-        private DataConnect Connect;
-
-        public DateTime anchor = DateTime.Now;
-
-        public string formatDateDefault = "DD/MM/AAAA";
-
         public CultureInfo Culture;
 
-        public DataFormat(DataConnect prmConnect)
+        public DateTime dateAnchor;
+
+        public string maskDateDefault;
+
+        public DataFormat()
         {
-            Connect = prmConnect;
+            dateAnchor = DateTime.Now; maskDateDefault = "DD/MM/AAAA"; SetCulture();
         }
 
-        public string GetDateAnchor() => GetDateAnchor(formatDateDefault);
-        public string GetDateAnchor(string prmFormat) => GetDateFormat(anchor, prmFormat);
+        public string GetDateAnchor() => GetDateAnchor(maskDateDefault);
+        public string GetDateAnchor(string prmFormat) => GetDateFormat(dateAnchor, prmFormat);
 
         public string GetTextFormat(string prmText, string prmFormat) => TextToCSV(prmText, prmFormat);
 
@@ -80,7 +78,7 @@ namespace BlueRocket.LIBRARY
             string format = prmFormat;
 
             if (myString.IsEmpty(format))
-                format = formatDateDefault;
+                format = maskDateDefault;
 
             return DateToCSV(prmDate, format);
         }
@@ -90,6 +88,21 @@ namespace BlueRocket.LIBRARY
         private string TextToCSV(string prmText, string prmFormat) => myCSV.TextToCSV(prmText, prmFormat);
         private string DateToCSV(DateTime prmDate, string prmFormat) => myCSV.DateToCSV(prmDate, prmFormat);
         private string DoubleToCSV(Double prmNumber, string prmFormat) => myCSV.DoubleToCSV(prmNumber, prmFormat, prmCulture: Culture);
+
+        public void SetCulture() => SetCulture(prmRegion: "");
+        public void SetCulture(string prmRegion)
+        {
+            Culture = CultureInfo.InvariantCulture;
+
+            if (myString.IsFull(prmRegion))
+            {
+                try
+                { Culture = new CultureInfo(prmRegion); }
+
+                catch
+                { }
+            }
+        }
 
     }
 
@@ -143,6 +156,7 @@ namespace BlueRocket.LIBRARY
 
         public string GetStatus() { if (status == "") Setup(); return status; }
 
+        public DataCursor GetCursor(string prmSQL) => GetCursor(prmSQL, prmMask: null);
         public DataCursor GetCursor(string prmSQL, myTuplas prmMask) => new DataCursor(prmSQL, prmMask, this);
 
         public bool Setup()

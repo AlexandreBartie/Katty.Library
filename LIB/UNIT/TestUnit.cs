@@ -12,13 +12,19 @@ namespace BlueRocket.LIBRARY
         public LinesUTC outputList;
         private LinesUTC resultList;
 
+        private AnaliseUTC Analise;
+
         private string _log;
 
         public void input() => input(prmText: "");
         public void input(string prmText) => inputList.Add(prmText);
+        public void inputLine(string prmText) => inputList.AddLine(prmText);
 
         public void output() => output(prmText: "");
         public void output(string prmText) => outputList.Add(prmText);
+
+        public void outputLine() => output();
+        public void outputLine(string prmText) => outputList.AddLine(prmText);
 
         public string inputTXT => inputList.txt;
         public string outputTXT => outputList.txt;
@@ -28,7 +34,7 @@ namespace BlueRocket.LIBRARY
 
         public UTC()
         {
-            Setup();
+            Analise = new AnaliseUTC(); Setup();
         }
 
         private void Setup()
@@ -43,7 +49,7 @@ namespace BlueRocket.LIBRARY
 
             resultList.Add(prmResult);
 
-            _log = TestUnityLog.GetAnalise(prmGerado: prmResult, prmEsperado: outputTXT);
+            _log = Analise.GetCompare(prmGerado: resultList, prmEsperado: outputList);
 
             // assert
             if (!outputList.IsEqual(resultList.txt))
@@ -60,12 +66,25 @@ namespace BlueRocket.LIBRARY
 
         public string txt => GetTXT();
 
-        public void Add() => Add(prmText: "");
-        public new void Add(string prmText)
+        public string GetLine(int prmIndice)
         {
-            if (prmText != null)
-                base.Add(prmText);
+            if (prmIndice <= this.Count)
+                return this[prmIndice-1];
+            return "";
+        }                
+
+        public void Add() => Add(prmText: "");
+        public new void Add(string prmText) => AddLine(prmText, prmMerge: false);
+        public void AddLine(string prmText) => AddLine(prmText, prmMerge: true);
+        private void AddLine(string prmText, bool prmMerge)
+        {
+            if (prmMerge && this.Count != 0)
+                base[base.Count - 1] += prmText;
+            else
+                if (prmText != null)
+                    base.Add(prmText);
         }
+        
         private string GetTXT()
         {
             string txt = "";
@@ -79,7 +98,7 @@ namespace BlueRocket.LIBRARY
 
     }
 
-    public class xTestCase
+    public class TestCase
     {
         //private String selector;
 

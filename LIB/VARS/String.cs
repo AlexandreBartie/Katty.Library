@@ -61,9 +61,18 @@ namespace BlueRocket.LIBRARY
             return ("");
         }
 
-        public static string GetChar(string prmTexto, int prmIndice) => (GetSubstring(prmTexto, prmIndice, 1));
+        public static char GetChar(string prmTexto, int prmIndice) => GetChar(prmTexto, prmIndice, prmPadrao: new char());
+        public static char GetChar(string prmTexto, int prmIndice, char prmPadrao)
+        {
+            
+            if (prmTexto.Length >= prmIndice)
+                return prmTexto[prmIndice-1];
 
-        public static string GetFirst(string prmTexto) => GetChar(prmTexto, prmIndice: 1);
+            return prmPadrao;
+        }
+        public static string GetUnico(string prmTexto, int prmIndice) => (GetSubstring(prmTexto, prmIndice, 1));
+
+        public static string GetFirst(string prmTexto) => GetUnico(prmTexto, prmIndice: 1);
         public static string GetFirst(string prmTexto, int prmTamanho)
         {
             if (IsFull(prmTexto) && prmTamanho != 0)
@@ -94,7 +103,7 @@ namespace BlueRocket.LIBRARY
         public static string GetLast(string prmTexto)
             {
                 if (IsFull(prmTexto))
-                    return GetChar(prmTexto, prmIndice: prmTexto.Length);
+                    return GetUnico(prmTexto, prmIndice: prmTexto.Length);
 
                 return ("");
 

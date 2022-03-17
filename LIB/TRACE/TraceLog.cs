@@ -6,14 +6,14 @@ using System.Text;
 namespace BlueRocket.LIBRARY
 {
 
-    public delegate void NotifyLOG();
-    public delegate void NotifySQL();
+    public delegate void NotifyLog();
+    public delegate void NotifySql(bool prmError);
 
     public class TraceLog : TraceWrite
     {
 
-        public event NotifyLOG LogExecutado;
-        public event NotifySQL SqlExecutado;
+        public event NotifyLog LogExecutado;
+        public event NotifySql SqlExecutado;
 
         public TraceTipo Geral;
 
@@ -59,15 +59,15 @@ namespace BlueRocket.LIBRARY
 
             Trace.LogData.SQLExecution(prmTag, prmSQL, prmTimeElapsed, prmDados);
 
-            SqlExecutado?.Invoke();
+            SqlExecutado?.Invoke(prmError: !prmDados);
 
         }
-        public void OnSqlError(string prmTag, string prmSQL, Exception prmErro)
+        public void OnSqlFail(string prmTag, string prmSQL, Exception prmErro)
         {
 
             Trace.LogData.FailSQLConnection(prmTag, prmSQL, prmErro);
 
-            SqlExecutado?.Invoke();
+            SqlExecutado?.Invoke(prmError: true);
 
         }
         public bool Exibir(string prmTipo, string prmTrace, string prmSQL, long prmTimeElapsed) => Msg.Exibir(prmTipo, prmTrace, prmSQL, prmTimeElapsed);
@@ -76,9 +76,9 @@ namespace BlueRocket.LIBRARY
 
     public class TraceLogPath : TraceTipo
     {
-        public void SetPath(string prmContexto, string prmPath) => msgDef(String.Format(@"{0,15} -path: {1}", prmContexto, prmPath));
+        public void SetPath(string prmContexto, string prmPath) => msgDef(String.Format(@"{0,20} -path: {1}", prmContexto, prmPath));
 
-        public void SetSubPath(string prmContexto, string prmPath) => msgDef(String.Format(@"{0,15} -subpath: {1}", prmContexto, prmPath));
+        public void SetSubPath(string prmContexto, string prmPath) => msgDef(String.Format(@"{0,20} -subpath: {1}", prmContexto, prmPath));
 
     }
     public class TraceLogFile : TraceTipo
@@ -180,7 +180,7 @@ namespace BlueRocket.LIBRARY
         private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmErro) => msgErro(String.Format(@"{0} >>> tag:[{1}] {2}", prmMSG, prmTag, prmVar), prmErro);
 
         private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, Exception prmErro) => FailConnection(prmMSG, prmTag, prmVar, prmSQL, GetMsgErro(prmErro));
-        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, string prmErro) => msgErroSQL(String.Format(@"{0} ... -error: [{1}] -db[{2}] {3}: {4} ", prmMSG, prmErro, prmTag, prmVar, prmSQL), prmSQL, prmErro);
+        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, string prmErro) => msgErroSQL(String.Format(@"{0} ... -db[{1}] {2}: {3} ", prmMSG, prmTag, prmVar, prmSQL), prmSQL, prmErro);
 
         private string GetMsgErro(Exception prmErro) { if (prmErro != null) return (prmErro.Message); return (""); }
 
@@ -207,22 +207,19 @@ namespace BlueRocket.LIBRARY
     }
     public class TraceErro : TraceWrite
     {
-
         private string GetMsgError(string prmTexto, string prmErro) => String.Format(">>>> [{0}] {1}", prmErro, prmTexto);
-        private string GetTypeError() => "ERRO";
-
-        public void msgErro(string prmTexto) => Message(GetTypeError(), prmTexto);
-        public void msgErro(Exception e) => Message(GetTypeError(), e.Message);
+        public void msgErro(string prmTexto) => Message(GetTypeError, prmTexto);
+        public void msgErro(Exception e) => Message(GetTypeError, e.Message);
 
         public void msgErro(string prmTexto, Exception e) => msgErro(prmTexto, prmErro: e.Message);
-        public void msgErro(string prmTexto, string prmErro) => Message(GetTypeError(), GetMsgError(prmTexto, prmErro));
+        public void msgErro(string prmTexto, string prmErro) => Message(GetTypeError, GetMsgError(prmTexto, prmErro));
 
         public void msgErroSQL(string prmTexto, string prmSQL, string prmErro) => msgErroSQL(prmTexto, prmSQL, prmTimeElapsed: 0, prmErro);
-        public void msgErroSQL(string prmTexto, string prmSQL, long prmTimeElapsed, string prmErro) => Message(GetTypeError(), GetMsgError(prmTexto, prmErro), prmSQL, prmTimeElapsed);
+        public void msgErroSQL(string prmTexto, string prmSQL, long prmTimeElapsed, string prmErro) => Message(prmTipo: GetTypeError, GetMsgError(prmTexto, prmErro), prmSQL, prmTimeElapsed);
 
     }
 
-    public class TraceWrite
+    public class TraceWrite : TraceBase
     {
 
         protected static TraceLog Trace;
@@ -255,58 +252,64 @@ namespace BlueRocket.LIBRARY
 
     }
 
-    public class TraceMSG
+    public class TraceMSG : TraceBase
     {
 
         public string tipo;
-        public string texto;
+        public string msg;
 
         public string sql;
 
         public long time_elapsed;
 
+        private bool error;
+
         public double time_seconds => Convert.ToDouble(time_elapsed) / 1000;
 
         public string elapsed_seconds => myFormat.DoubleToString(time_seconds, prmFormat: "##0.000");
 
-        public string msg => String.Format("[{0,4}] {1} ", tipo, texto);
+        public string title => myBool.IIf(IsErr, "ERRO", tipo);
 
-        public string key => String.Format("[{0,6}] {1} ", time_elapsed, texto);
+        public string key => String.Format("[{0,6}] {1} ", time_elapsed, msg);
+        public string txt => String.Format("[{0,4}] {1} ", title, msg);
 
-        public bool IsHide => (myString.IsEqual(tipo, "CODE") || myString.IsEqual(tipo, "PLAY"));
-        public bool IsErr => IsEqual("ERRO");
+        public bool IsHide => (IsEqual("CODE") || IsEqual("PLAY"));
+        public bool IsErr => error;
         public bool IsEqual(string prmTipo) => myString.IsEqual(tipo, prmTipo);
 
         public TraceMSG()
         {
         }
 
-        public TraceMSG(string prmTipo, string prmTexto)
+        public TraceMSG(string prmTipo, string prmMSG)
         {
-
             tipo = prmTipo;
 
-            texto = prmTexto;
+            msg = prmMSG;
 
+            error = IsEqual(GetTypeError);
         }
 
-        public TraceMSG(string prmTrace, string prmSQL, long prmTimeElapsed)
+        public TraceMSG(string prmMSG, string prmSQL, long prmTimeElapsed, bool prmError)
         {
-
             tipo = "SQL";
 
-            texto = prmTrace;
+            msg = prmMSG;
 
             sql = prmSQL;
 
             time_elapsed = prmTimeElapsed;
 
+            error = prmError;
         }
-        public bool Exibir(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed)
+
+        public TraceMSG Clonar() => new TraceMSG(msg, sql, time_elapsed, error);
+
+        public bool Exibir(string prmTipo, string prmMSG, string prmSQL, long prmTimeElapsed)
         {
 
             tipo = prmTipo;
-            texto = prmTexto;
+            msg = prmMSG;
 
             sql = prmSQL;
 
@@ -316,17 +319,23 @@ namespace BlueRocket.LIBRARY
 
 #if DEBUG
 
-            Debug.WriteLine(msg);
+            Debug.WriteLine(txt);
 
 #else
 
-            System.Console.WriteLine(msg);
+            System.Console.WriteLine(txt);
 
 #endif
 
             return true;
 
         }
+
+    }
+
+    public class TraceBase
+    {
+        public static string GetTypeError => "ERRO";
 
     }
 

@@ -4,33 +4,75 @@ using System.Text;
 
 namespace BlueRocket.LIBRARY
 {
-    public static class TestUnityLog
+    public class AnaliseUTC : MatrizUTC
     {
-        public static string GetAnalise(string prmGerado, string prmEsperado)
+        public string GetCompare(LinesUTC prmGerado, LinesUTC prmEsperado)
         {
-            return string.Format("{4}Gerado: <{1}>{4}{0}{4}Esperado:<{3}>{4}{2}{4}", prmGerado, GetAnaliseTexto(prmGerado), prmEsperado, GetAnaliseTexto(prmEsperado), Environment.NewLine);
+            string gerado = prmGerado.txt; string esperado = prmEsperado.txt;
+
+            return string.Format("{4}Gerado:  <{1}>{4}{0}{4}Esperado:<{3}>{4}{2}{4}Matriz:{4}{5}", gerado, GetCompareLines(prmGerado), esperado, GetCompareLines(prmEsperado), Environment.NewLine, GetMatriz(prmGerado, prmEsperado));
         }
 
-        private static string GetAnaliseTexto(string prmTexto)
+        private string GetCompareLines(LinesUTC prmTexto)
         {
 
             try
             {
-                if (myString.IsFull(prmTexto))
+                if (prmTexto.IsFull)
                 {
-                    string txt = string.Format("[{0}]", prmTexto.Length);
+                    string txt = string.Format("[{0}]", prmTexto.txt.Length);
 
-                    foreach (string linha in new xLista(prmTexto))
+                    foreach (string linha in prmTexto)
                         txt += string.Format(":{0}", linha.Length);
 
                     return txt;
                 }
             }
             catch (Exception e)
-            { return (string.Format("{0} -err: {1}", prmTexto, e.Message)); }            
+            { return (string.Format("{0} -err: {1}", prmTexto, e.Message)); }
 
             return ("");
         }
+   }
+
+    public class MatrizUTC
+    {
+        public string GetMatriz(LinesUTC prmGerado, LinesUTC prmEsperado)
+        {
+            xMemo memo = new xMemo(); string txt;
+
+            for (int cont = 1; cont <= myInt.GetMaior(prmGerado.Count, prmEsperado.Count); cont++)
+            {
+
+                txt = GetDiferencas(prmGerado.GetLine(cont), prmEsperado.GetLine(cont));
+
+                if (myString.IsFull(txt))
+                    memo.Add(String.Format("#{0:D3}: {1}", cont, txt));
+            }
+            return memo.memo;
+        }
+
+        private string GetDiferencas(string prmGerado, string prmEsperado)
+        {
+            char gerado; char esperado; string txt = "";
+
+            if (prmGerado != prmEsperado)
+            {
+                for (int cont = 1; cont <= myInt.GetMaior(prmGerado.Length, prmEsperado.Length); cont++)
+                {
+                    gerado = myString.GetChar(prmGerado, cont, prmPadrao: '#');
+
+                    esperado = myString.GetChar(prmEsperado, cont, prmPadrao: '#');
+
+                    if (gerado == esperado)
+                        txt += ".";
+                    else
+                        txt += esperado;
+                }
+            }
+            return txt;
+        }
 
     }
+
 }

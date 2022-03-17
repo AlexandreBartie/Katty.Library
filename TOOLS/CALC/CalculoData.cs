@@ -161,6 +161,8 @@ namespace BlueRocket.LIBRARY
 
             int _dia; int _mes; int _ano;
 
+            int _hor; int _min; int _seg; int _mil;
+
             if (dia == 0)
                 _dia = prmDataAncora.Day;
             else
@@ -176,6 +178,11 @@ namespace BlueRocket.LIBRARY
             else
                 _ano = ano;
 
+            _hor = prmDataAncora.Hour;
+            _min = prmDataAncora.Minute;
+            _seg = prmDataAncora.Second;
+            _mil = prmDataAncora.Millisecond;
+
             //
             // Manter valores dentro dos intervalos estabelecidos
             //
@@ -186,7 +193,7 @@ namespace BlueRocket.LIBRARY
 
             _dia = myInt.GetIntervalo(prmValor: _dia, prmMinimo: 1, prmMaximo: DateTime.DaysInMonth(_ano, _mes));
 
-            return new System.DateTime(_ano, _mes, _dia);
+            return new System.DateTime(_ano, _mes, _dia, _hor, _min, _seg, _mil);
 
         }
 
@@ -423,7 +430,7 @@ namespace BlueRocket.LIBRARY
             marca = myString.GetNoBlank(prmMarca);
 
             tipo_data = myString.GetFirst(marca);
-            tipo_operador = myString.GetChar(marca, 2);
+            tipo_operador = myString.GetUnico(marca, 2);
 
             if (Rules.IsMarcaOK(tipo_data, tipo_operador))
             {

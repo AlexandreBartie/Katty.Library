@@ -11,9 +11,6 @@ namespace BlueRocket.LIBRARY
 
         private static string mark_csv = @"""";
 
-        private static string mark_random_inicial = "[";
-
-
         public static string TextToString(string prmText, string prmFormat) => myText.Get(prmText, prmFormat);
 
         public static string RandomToString() => RandomToString(prmFormat: "");

@@ -17,5 +17,7 @@ namespace BlueRocket.LIBRARY
 
         }
 
+        public static string GetYesNo(bool prmOpcao) { if (prmOpcao) return "SIM"; return "NAO"; }
+
     }
 }
