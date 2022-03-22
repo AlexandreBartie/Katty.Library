@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Diagnostics;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
     public class myJSON
     {

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
 
     public delegate void NotifyLog();

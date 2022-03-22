@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
 
     public class UTControl

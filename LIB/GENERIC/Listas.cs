@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using System.Linq;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
     public class xLista : List<string>
     {

@@ -4,19 +4,19 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>Rocket.ico</ApplicationIcon>
+    <ApplicationIcon>Dooggy.ico</ApplicationIcon>
     <StartupObject></StartupObject>
     <Authors>Alexandre Bartie</Authors>
-    <Product>BlueRocket.LIBRARY FRAMEWORK</Product>
-    <AssemblyName>BlueRocket.LIBRARY</AssemblyName>
-    <RootNamespace>BlueRocket.LIBRARY</RootNamespace>
+    <Product>Dooggy.LIBRARY FRAMEWORK</Product>
+    <AssemblyName>Dooggy.LIBRARY</AssemblyName>
+    <RootNamespace>Dooggy.LIBRARY</RootNamespace>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <Version>1.0.7.2</Version>
+    <Version>1.0.7.3</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl></PackageProjectUrl>
-    <PackageIcon>Rocket.png</PackageIcon>
+    <PackageIcon>Dooggy.jpg</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/AlexandreBartie/BlueRocket.LIBRARY</RepositoryUrl>
+    <RepositoryUrl>https://github.com/AlexandreBartie/Dooggy.LIBRARY</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Rocket.ico" />
+    <Content Include="Dooggy.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Dooggy.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="Rocket.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

@@ -2,7 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
     static class Program
     {

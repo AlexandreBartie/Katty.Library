@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
 
     public abstract class myThread

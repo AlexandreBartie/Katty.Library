@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
     public class myRegistry
     {

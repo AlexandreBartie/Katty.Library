@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Text;
 using System.IO;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
     public class FileTXT
     {

@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
 
     public class DataConnect

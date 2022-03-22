@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueRocket.LIBRARY
+namespace Dooggy.LIBRARY
 {
     public class myDominio
     {
 
         public string key;
 
-        private xLista lista;
+        public xLista lista;
 
         public string log => GetLog();
 
