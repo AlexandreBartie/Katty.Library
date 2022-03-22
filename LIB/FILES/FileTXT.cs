@@ -85,19 +85,15 @@ namespace BlueRocket.LIBRARY
 
         public string txt()
         {
-            string text = "";
+            xLinhas text = new xLinhas();
 
             if (IsOK)
             {
                 foreach (string line in lines)
-                {
-
-                    text += line + Environment.NewLine;
-
-                }
+                    text.Add(line);
             }
 
-            return (text);
+            return (text.txt);
 
         }
 

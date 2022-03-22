@@ -51,9 +51,9 @@ namespace BlueRocket.LIBRARY
         }
 
         public void SetLista(string prmLista) => lista = new xLista(prmLista);
-        public bool IsContem(string prmItem) => lista.IsContem(prmItem);
 
-        public bool IsEqual(string prmKey) => myString.IsEqual(key, prmKey);
+        public bool IsFind(string prmItem) => lista.IsEqual(prmItem);
+        public bool IsKey(string prmKey) => myString.IsEqual(key, prmKey);
 
         private string GetLog()
         {
@@ -84,24 +84,24 @@ namespace BlueRocket.LIBRARY
         {
             string key = prmItem.key;
 
-            if (FindIt(key))
-                Find(key).SetLista(prmItem.txt);
+            if (IsFind(key))
+                FindKey(key).SetLista(prmItem.txt);
             else
                 Add(prmItem);
         }
 
-        public myDominio Find(string prmKey)
+        public myDominio FindKey(string prmKey)
         {
             foreach (myDominio item in this)
-                if (item.IsEqual(prmKey))
+                if (item.IsKey(prmKey))
                     return item;
             return null;
         }
 
-        public bool FindIt(string prmKey)
+        public bool IsFind(string prmKey)
         {
             foreach (myDominio item in this)
-                if (item.IsEqual(prmKey))
+                if (item.IsKey(prmKey))
                     return true;
             return false;
         }

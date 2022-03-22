@@ -35,7 +35,7 @@ namespace BlueRocket.LIBRARY
 
             separador = prmSeparador;
 
-            if (myString.IsFull(prmLista))
+            if (!myString.IsNull(prmLista))
                 foreach (string item in prmLista.Split(separador))
                 {
                     this.Add(item.Trim());
@@ -193,7 +193,7 @@ namespace BlueRocket.LIBRARY
             foreach (string item in this)
             {
 
-                lista += (aux + item.Trim());
+                lista += (aux + item);
 
                 aux = prmSeparador;
 
@@ -219,13 +219,9 @@ namespace BlueRocket.LIBRARY
     public class xMask
     {
 
-        //private myJSON lista;
-
-        private myTuplas lista;
+        public myTuplas lista;
 
         public bool IsOK { get => (lista.IsFull); }
-
-        // public bool IsOK { get => (lista); }
 
         public xMask(string prmLista)
         {
@@ -233,26 +229,16 @@ namespace BlueRocket.LIBRARY
         }
         public xMask(myTuplas prmLista)
         {
-
-            //string mask = myString.GetJSON(prmMask.mask);
-
-            //lista = new myJSON(prmFlow: mask);
-
             Setup(prmLista);
-
         }
 
         private void Setup(myTuplas prmLista) => lista = prmLista;
-
-        //public string TextToString(string prmKey, string prmText) => myFormat.TextToString(prmText, GetFormat(prmKey));
-
-        //public string GetFormat(string prmKey) => GetFormat(prmKey, prmPadrao: "");
-        //public string GetFormat(string prmKey, string prmPadrao) => lista.GetValor(prmKey, prmPadrao);
-
         public string TextToString(string prmKey, string prmText) => myFormat.TextToString(prmText, GetFormat(prmKey));
 
         public string GetFormat(string prmKey) => GetFormat(prmKey, prmPadrao: "");
         public string GetFormat(string prmKey, string prmPadrao) => lista.GetValue(prmKey, prmPadrao);
+
+        public bool IsFind(string prmKey) => lista.IsFind(prmKey);
 
     }
     public class xLinhas : xMemo

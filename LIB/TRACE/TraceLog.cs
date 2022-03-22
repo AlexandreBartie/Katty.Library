@@ -7,7 +7,8 @@ namespace BlueRocket.LIBRARY
 {
 
     public delegate void NotifyLog();
-    public delegate void NotifySql(bool prmError);
+
+    public delegate void NotifySql(string prmMsgError);
 
     public class TraceLog : TraceWrite
     {
@@ -59,18 +60,19 @@ namespace BlueRocket.LIBRARY
 
             Trace.LogData.SQLExecution(prmTag, prmSQL, prmTimeElapsed, prmDados);
 
-            SqlExecutado?.Invoke(prmError: !prmDados);
+            SqlExecutado?.Invoke(prmMsgError: GetError(prmDados));
 
         }
-        public void OnSqlFail(string prmTag, string prmSQL, Exception prmErro)
+        public void OnSqlError(string prmTag, string prmSQL, Exception prmErro)
         {
 
             Trace.LogData.FailSQLConnection(prmTag, prmSQL, prmErro);
 
-            SqlExecutado?.Invoke(prmError: true);
+            SqlExecutado?.Invoke(prmMsgError: prmErro.Message);
 
         }
-        public bool Exibir(string prmTipo, string prmTrace, string prmSQL, long prmTimeElapsed) => Msg.Exibir(prmTipo, prmTrace, prmSQL, prmTimeElapsed);
+
+        private string GetError(bool prmDados) => myBool.IIf(prmDados, prmTrue: "", prmFalse: "ZERO Results");
 
     }
 
@@ -124,7 +126,6 @@ namespace BlueRocket.LIBRARY
         public void DataFileFormatJSON(string prmConteudo) => msgFile(prmTipo: "JSON", prmConteudo);
 
         public void FailDataFileEncoding(string prmEncoding) => msgErro(String.Format("Formato encoding [{0}] não encontrado ...", prmEncoding));
-        //public void FailDataFileSave(string prmArquivo, string prmPath) => msgErro(String.Format("Falha na criação do arquivo ... -file: {0} -path: {1}", prmArquivo, prmPath));
         public void FailDataFileOpen(FileTXT prmFile) => FailDataFileOpenDefault(prmLocal: String.Format("-file: {0} -path: {1}", prmFile.nome, prmFile.path));
         public void FailJSONFormat(string prmContexto, string prmFlow, Exception prmErro) => msgErro(prmTexto: String.Format(@"Flow JSON: [invalid format] ... contexto: {0} Flow: {1}", prmContexto, prmFlow));
 
@@ -141,7 +142,7 @@ namespace BlueRocket.LIBRARY
     {
 
         public void DBConnection(string prmTag, string prmStatus) => msgData(string.Format("-db[{0}] -status: {1}", prmTag, prmStatus));
-        public void DBSetup(string prmTag, string prmSetup) => msgData(string.Format("-db[{0}] -setup: {1}", prmTag, prmSetup));
+        public void DBSetup(string prmTag, string prmSetup) => msgNoSQL(string.Format("-db[{0}] -setup: {1}", prmTag, prmSetup));
 
         public void SQLExecution(string prmTag, string prmSQL, long prmTimeElapsed, bool prmTemDados) => GetSQLExecution(prmMsg: string.Format(@"-db[{0}] -sql: {1}", prmTag, prmSQL), prmSQL, prmTimeElapsed, prmTemDados);
 
@@ -158,7 +159,7 @@ namespace BlueRocket.LIBRARY
             if (prmTemDados)
                 msgSQL(prmMsg, prmSQL, prmTimeElapsed);
             else
-                msgErroSQL(prmMsg, prmSQL, prmTimeElapsed, prmErro: "ZERO Results");
+                msgErroSQL(prmMsg, prmSQL, prmTimeElapsed, prmMsgError: "ZERO Results");
         }
 
     }
@@ -182,6 +183,9 @@ namespace BlueRocket.LIBRARY
         private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, Exception prmErro) => FailConnection(prmMSG, prmTag, prmVar, prmSQL, GetMsgErro(prmErro));
         private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, string prmErro) => msgErroSQL(String.Format(@"{0} ... -db[{1}] {2}: {3} ", prmMSG, prmTag, prmVar, prmSQL), prmSQL, prmErro);
 
+        public void FailSQLFailInterface(int prmHeaderColumns, int prmSQLColumns) => msgErro(prmTexto: string.Format("Interface SQL com número de colunas incompatível ... -header({0}) -sql({1})", prmHeaderColumns, prmSQLColumns));
+        public void FailSQLFormatFindField(string prmCampo, string prmFormat) => msgErro(prmTexto: string.Format("Coluna SQL informada em Mask não encontrada ... -column: {0} -format: {1}", prmCampo, prmFormat));
+
         private string GetMsgErro(Exception prmErro) { if (prmErro != null) return (prmErro.Message); return (""); }
 
     }
@@ -190,12 +194,17 @@ namespace BlueRocket.LIBRARY
     {
 
         public void msgApp(string prmTrace) => Message(prmTipo: "APP", prmTrace);
+
+        public void msgCFG(string prmTrace) => Message(prmTipo: "CFG", prmTrace);
         public void msgCode(string prmTrace) => Message(prmTipo: "CODE", prmTrace);
-        public void msgDef(string prmTrace) => Message(prmTipo: "DEF", prmTrace, prmPrefixo: "def");
-        public void msgSet(string prmTrace) => Message(prmTipo: "SET", prmTrace, prmPrefixo: "act" );
         public void msgPlay(string prmTrace) => Message(prmTipo: "PLAY", prmTrace);
 
-        public void msgSQL(string prmTrace, string prmSQL, long prmTimeElapsed) => Message(prmTipo: "SQL", prmTrace, prmSQL, prmTimeElapsed);
+        public void msgDef(string prmTrace) => Message(prmTipo: "DEF", prmTrace, prmPrefixo: "def");
+        public void msgSet(string prmTrace) => Message(prmTipo: "SET", prmTrace, prmPrefixo: "act");
+
+        public void msgSQL(string prmTrace, string prmSQL, long prmTimeElapsed) => Message(prmTipo: "SQL", prmTrace, prmSQL, prmTimeElapsed, prmMsgError: null);
+
+        public void msgNoSQL(string prmTrace) => Message(prmTipo: "xSQL", prmTrace, prmPrefixo: "def");
 
         public void msgData(string prmTrace) => Message(prmTipo: "DAT", prmTrace, prmPrefixo: "act");
 
@@ -207,15 +216,15 @@ namespace BlueRocket.LIBRARY
     }
     public class TraceErro : TraceWrite
     {
-        private string GetMsgError(string prmTexto, string prmErro) => String.Format(">>>> [{0}] {1}", prmErro, prmTexto);
+        private string GetMsgError(string prmTexto, string prmMsgError) => String.Format(">>>> [{0}] {1}", prmMsgError, prmTexto);
         public void msgErro(string prmTexto) => Message(GetTypeError, prmTexto);
         public void msgErro(Exception e) => Message(GetTypeError, e.Message);
 
-        public void msgErro(string prmTexto, Exception e) => msgErro(prmTexto, prmErro: e.Message);
-        public void msgErro(string prmTexto, string prmErro) => Message(GetTypeError, GetMsgError(prmTexto, prmErro));
+        public void msgErro(string prmTexto, Exception e) => msgErro(prmTexto, prmMsgError: e.Message);
+        public void msgErro(string prmTexto, string prmMsgError) => Message(GetTypeError, GetMsgError(prmTexto, prmMsgError));
 
-        public void msgErroSQL(string prmTexto, string prmSQL, string prmErro) => msgErroSQL(prmTexto, prmSQL, prmTimeElapsed: 0, prmErro);
-        public void msgErroSQL(string prmTexto, string prmSQL, long prmTimeElapsed, string prmErro) => Message(prmTipo: GetTypeError, GetMsgError(prmTexto, prmErro), prmSQL, prmTimeElapsed);
+        public void msgErroSQL(string prmTexto, string prmSQL, string prmMsgError) => msgErroSQL(prmTexto, prmSQL, prmTimeElapsed: 0, prmMsgError);
+        public void msgErroSQL(string prmTexto, string prmSQL, long prmTimeElapsed, string prmMsgError) => Message(prmTipo: GetTypeError, GetMsgError(prmTexto, prmMsgError), prmSQL, prmTimeElapsed, prmMsgError);
 
     }
 
@@ -229,30 +238,30 @@ namespace BlueRocket.LIBRARY
             Trace = prmTrace;
         }
 
-        protected void Message(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed) => Message(prmTipo, prmTexto, prmPrefixo: "", prmSQL, prmTimeElapsed);
+        protected void Message(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed, string prmMsgError) => Message(prmTipo, prmTexto, prmPrefixo: "", prmSQL, prmTimeElapsed, prmMsgError);
         protected void Message(string prmTipo, string prmTexto) => Message(prmTipo, prmTexto, prmPrefixo: "");
-        protected void Message(string prmTipo, string prmTexto, string prmPrefixo) => Message(prmTipo, prmTexto, prmPrefixo, prmSQL: "", prmTimeElapsed: 0);
-        protected void Message(string prmTipo, string prmTexto, string prmPrefixo, string prmSQL, long prmTimeElapsed)
+        protected void Message(string prmTipo, string prmTexto, string prmPrefixo) => Message(prmTipo, prmTexto, prmPrefixo, prmSQL: "", prmTimeElapsed: 0, prmMsgError: null);
+        protected void Message(string prmTipo, string prmTexto, string prmPrefixo, string prmSQL, long prmTimeElapsed, string prmMsgError)
         {
             string texto = prmTexto;
 
             if (prmPrefixo != "")
                 texto = prmPrefixo + "# " + texto;
 
-            LogTrace(prmTipo, texto, prmSQL, prmTimeElapsed);
+            LogTrace(prmTipo, texto, prmSQL, prmTimeElapsed, prmMsgError);
 
         }
 
-        private void LogTrace(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed)
+        private void LogTrace(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed, string prmMsgError)
         {
 
-            if (Trace.Exibir(prmTipo, prmTexto, prmSQL, prmTimeElapsed))
+            if (Trace.Msg.Exibir(prmTipo, prmTexto, prmSQL, prmTimeElapsed, prmMsgError))
                 Trace.OnLogExecutado();
         }
 
     }
 
-    public class TraceMSG : TraceBase
+    public class TraceMSG : TraceHide
     {
 
         public string tipo;
@@ -262,35 +271,34 @@ namespace BlueRocket.LIBRARY
 
         public long time_elapsed;
 
-        private bool error;
+        public string msgError;
 
         public double time_seconds => Convert.ToDouble(time_elapsed) / 1000;
 
         public string elapsed_seconds => myFormat.DoubleToString(time_seconds, prmFormat: "##0.000");
 
-        public string title => myBool.IIf(IsErr, "ERRO", tipo);
+        public string title => myBool.IIf(IsError, "ERRO", tipo);
 
         public string key => String.Format("[{0,6}] {1} ", time_elapsed, msg);
         public string txt => String.Format("[{0,4}] {1} ", title, msg);
+        public string txt_sql => String.Format("[{0,4}] {1} ", title, sql);
 
-        public bool IsHide => (IsEqual("CODE") || IsEqual("PLAY"));
-        public bool IsErr => error;
+        public bool IsError => (IsEqual(GetTypeError) || myString.IsFull(msgError));
+
+        public bool IsHide => Hide.IsFind(tipo);
         public bool IsEqual(string prmTipo) => myString.IsEqual(tipo, prmTipo);
 
         public TraceMSG()
-        {
-        }
+        { }
 
         public TraceMSG(string prmTipo, string prmMSG)
         {
             tipo = prmTipo;
 
             msg = prmMSG;
-
-            error = IsEqual(GetTypeError);
         }
 
-        public TraceMSG(string prmMSG, string prmSQL, long prmTimeElapsed, bool prmError)
+        public TraceMSG(string prmMSG, string prmSQL, long prmTimeElapsed, string prmMsgError)
         {
             tipo = "SQL";
 
@@ -300,12 +308,12 @@ namespace BlueRocket.LIBRARY
 
             time_elapsed = prmTimeElapsed;
 
-            error = prmError;
+            msgError = prmMsgError;
         }
 
-        public TraceMSG Clonar() => new TraceMSG(msg, sql, time_elapsed, error);
+        public TraceMSG Clonar() => new TraceMSG(msg, sql, time_elapsed, msgError);
 
-        public bool Exibir(string prmTipo, string prmMSG, string prmSQL, long prmTimeElapsed)
+        public bool Exibir(string prmTipo, string prmMSG, string prmSQL, long prmTimeElapsed, string prmMsgError)
         {
 
             tipo = prmTipo;
@@ -314,6 +322,8 @@ namespace BlueRocket.LIBRARY
             sql = prmSQL;
 
             time_elapsed = prmTimeElapsed;
+
+            msgError = prmMsgError;
 
             if (IsHide) return false;
 
@@ -333,10 +343,23 @@ namespace BlueRocket.LIBRARY
 
     }
 
+    public class TraceHide : TraceBase
+    {
+        public myDominio Hide;
+
+        private string lista = "CFG,CODE,PLAY,DEF,xSQL";
+
+        public TraceHide()
+        {
+            SetupHide(lista);
+        }
+        public void SetupHide(string prmLista) { Hide = new myDominio(prmLista); }
+    }
+
     public class TraceBase
     {
         public static string GetTypeError => "ERRO";
 
     }
 
-}
+}   

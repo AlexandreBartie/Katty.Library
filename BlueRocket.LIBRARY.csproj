@@ -11,7 +11,7 @@
     <AssemblyName>BlueRocket.LIBRARY</AssemblyName>
     <RootNamespace>BlueRocket.LIBRARY</RootNamespace>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <Version>1.0.3</Version>
+    <Version>1.0.7.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageIcon>Rocket.png</PackageIcon>

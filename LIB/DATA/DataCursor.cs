@@ -44,7 +44,7 @@ namespace BlueRocket.LIBRARY
                 Trace.OnSqlExecutado(DataBase.tag, sql, TimeCursor.Elapsed.milliseconds, TemDados);
             }
             else
-                Trace.OnSqlFail(DataBase.tag, sql, Erro);
+                Trace.OnSqlError(DataBase.tag, sql, Erro);
         }
 
         private string GetTratarSQL(string prmSQL) => Bloco.GetBlocoTroca(prmSQL, prmDelimitadorInicial: "<##>", prmDelimitadorFinal: "<##>", prmDelimitadorNovo: "'");
@@ -55,7 +55,7 @@ namespace BlueRocket.LIBRARY
 
             if (IsOK)
             {
-                log = GetCSV();
+                log = csv();
             }
 
             return log;
@@ -65,12 +65,16 @@ namespace BlueRocket.LIBRARY
     public class DataCursorDados : DataCursorReader
     {
         
-       public DataFormat Format => DataBase.Connect.Format;
+        public DataFormat Format => DataBase.Connect.Format;
 
         private DataTypesField DataTypes => DataBase.Connect.DataTypes;
 
+        private TraceLog Trace => DataBase.Trace;
+
         private xMask Mask;
-        public bool IsMask { get => (Mask != null); }
+        public bool TemMask { get => (Mask != null); }
+
+        public myTuplas GetMask() => Mask.lista;
 
         public void SetMask(myTuplas prmMask)
         {
@@ -79,102 +83,93 @@ namespace BlueRocket.LIBRARY
                     Mask = new xMask(prmMask);
         }
 
-        public int qtdeColunas => reader.GetFieldCount;
+        public int qtdeColumns => reader.GetFieldCount;
+
+        public bool IsFind(string prmColumn) => reader.IsFind(prmColumn);
         public bool IsDBNull(int prmIndice) => reader.IsDBNull(prmIndice);
         public string GetName(int prmIndice) => reader.GetName(prmIndice);
         public string GetType(int prmIndice) => reader.GetType(prmIndice);
         public string GetValor(int prmIndice) => GetValorTratado(prmIndice);
-        public string GetValor(string prmCampo) => GetValorTratado(prmCampo);
+        public string GetValor(string prmColumn) => GetValorTratado(prmColumn);
 
-        private string GetValorTratado(string prmCampo) => GetValorTratado(prmIndice: reader.GetIndex(prmCampo));
+        private string GetValorTratado(string prmColumn) => GetValorTratado(prmIndice: reader.GetIndex(prmColumn));
         private string GetValorTratado(int prmIndice)
         {
             string tipo = GetType(prmIndice);
 
-            string campo = GetName(prmIndice);
+            string column = GetName(prmIndice);
+
+            if (IsDBNull(prmIndice))
+                return "";
 
             if (DataTypes.IsTypeDate(tipo))
-                return GetMaskDate(campo, prmDate: reader.GetDateTime(prmIndice));
+                return GetMaskDate(column, prmDate: reader.GetDateTime(prmIndice));
 
             if (DataTypes.IsTypeDouble(tipo))
-               return GetMaskDouble(campo, prmNumber: reader.GetDouble(prmIndice));
+               return GetMaskDouble(column, prmNumber: reader.GetDouble(prmIndice));
 
-            return GetMask(campo, prmText: reader.GetString(prmIndice));
+            return GetMaskText(column, prmText: reader.GetString(prmIndice));
         }
 
-        private string GetMask(string prmCampo, string prmText)
+        private string GetMaskText(string prmColumn, string prmText)
         {
-            if (IsMask)
-                return Format.GetTextFormat(prmText, Mask.GetFormat(prmCampo));
+            if (TemMask)
+                return Format.GetTextFormat(prmText, Mask.GetFormat(prmColumn));
 
             return (prmText);
         }
-        private string GetMaskDate(string prmCampo, DateTime prmDate)
+        private string GetMaskDate(string prmColumn, DateTime prmDate)
         {
-            if (IsMask)
-                return Format.GetDateFormat(prmDate, Mask.GetFormat(prmCampo)); 
+            if (TemMask)
+                return Format.GetDateFormat(prmDate, Mask.GetFormat(prmColumn)); 
 
             return (Format.GetDateFormat(prmDate));
         }
-        private string GetMaskDouble(string prmCampo, Double prmNumber)
+        private string GetMaskDouble(string prmColumn, Double prmNumber)
         {
-            if (IsMask)
-                return Format.GetDoubleFormat(prmNumber, Mask.GetFormat(prmCampo));
+            if (TemMask)
+                return Format.GetDoubleFormat(prmNumber, Mask.GetFormat(prmColumn));
 
             return (Format.GetDoubleFormat(prmNumber));
         }
 
-        public string GetCSV() => GetCSV(prmSeparador: ",");
-        public string GetCSV(string prmSeparador)
+        public string csv() => csv(prmSeparador: ",");
+        public string csv(string prmSeparador)
         {
-            string memo = "";
-            string texto = "";
-            string separador = "";
+            xMemo memo = new xMemo(prmSeparador); string texto = "";
 
             if (TemDados)
             {
 
-                for (int cont = 0; cont < qtdeColunas; cont++)
+                for (int cont = 0; cont < qtdeColumns; cont++)
                 {
                     if (IsDBNull(cont))
                         texto = "";
                     else
                         texto = GetValor(cont);
 
-                    memo += separador + texto;
-
-                    separador = prmSeparador;
-
+                    memo.Add(texto);
                 }
 
             }
 
-            return memo;
+            return memo.txt;
 
         }
-        public string GetJSON()
+        public string json() 
         {
-            string memo = "";
-            string separador = "";
-
             if (TemDados)
             {
-                for (int cont = 0; cont < reader.GetFieldCount; cont++)
+                xMemo memo = new xMemo(prmSeparador: ", ");
+
+                for (int cont = 0; cont < qtdeColumns; cont++)
                 {
                     if (!IsDBNull(cont))
-                    {
-
-                        memo += separador + GetTupla(cont);
-
-                        separador = ", ";
-
-                    }
-
+                          memo.Add(GetTupla(cont));
                 }
 
-                return ("{ " + memo + " }");
+                return ("{ " + memo.txt + " }");
             }
-
             return ("{ }");
         }
         public string GetTupla(int prmIndice) => string.Format("'{0}': '{1}'", GetName(prmIndice), GetValor(prmIndice));

@@ -68,7 +68,8 @@ namespace BlueRocket.LIBRARY
 
         public bool IsDBNull(int prmIndice) => reader.IsDBNull(prmIndice);
 
-        public int GetIndex(string prmName) => reader.GetOrdinal(prmName);
+        public bool IsFind(string prmName) => (GetIndex(prmName) != -1);
+        public int GetIndex(string prmName) => GetOrdinal(prmName);
         public string GetName(int prmIndice) => reader.GetName(prmIndice);
         public string GetType(int prmIndice) => reader.GetDataTypeName(prmIndice).ToLower();
         public DateTime GetDateTime(int prmIndice) => reader.GetDateTime(prmIndice);
@@ -81,7 +82,14 @@ namespace BlueRocket.LIBRARY
         public bool Next() => reader.Read();
         public void Close() => reader.Close();
 
+        private int GetOrdinal(string prmName)
+        {
+            try
+            { return reader.GetOrdinal(prmName); }
+
+            catch
+            { return -1; }
+
+        }
     }
-
-
 }

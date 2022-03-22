@@ -6,11 +6,12 @@ namespace BlueRocket.LIBRARY
 {
     public class AnaliseUTC : MatrizUTC
     {
+        public string GetCompare(string prmGerado, string prmEsperado) => GetCompare(new LinesUTC(prmGerado), new LinesUTC(prmEsperado));
         public string GetCompare(LinesUTC prmGerado, LinesUTC prmEsperado)
         {
             string gerado = prmGerado.txt; string esperado = prmEsperado.txt;
 
-            return string.Format("{4}Gerado:  <{1}>{4}{0}{4}Esperado:<{3}>{4}{2}{4}Matriz:{4}{5}", gerado, GetCompareLines(prmGerado), esperado, GetCompareLines(prmEsperado), Environment.NewLine, GetMatriz(prmGerado, prmEsperado));
+            return string.Format("{4}Gerado:  <{1}>{4}{0}{4}Esperado:<{3}>{4}{2}{4}Sobreposição:{4}{5}", gerado, GetCompareLines(prmGerado), esperado, GetCompareLines(prmEsperado), Environment.NewLine, GetSobreposicao(prmGerado, prmEsperado));
         }
 
         private string GetCompareLines(LinesUTC prmTexto)
@@ -37,7 +38,7 @@ namespace BlueRocket.LIBRARY
 
     public class MatrizUTC
     {
-        public string GetMatriz(LinesUTC prmGerado, LinesUTC prmEsperado)
+        public string GetSobreposicao(LinesUTC prmGerado, LinesUTC prmEsperado)
         {
             xMemo memo = new xMemo(); string txt;
 
@@ -47,7 +48,8 @@ namespace BlueRocket.LIBRARY
                 txt = GetDiferencas(prmGerado.GetLine(cont), prmEsperado.GetLine(cont));
 
                 if (myString.IsFull(txt))
-                    memo.Add(String.Format("#{0:D3}: {1}", cont, txt));
+                    memo.Add(String.Format("{0:D3} {1}", cont, txt));
+
             }
             return memo.memo;
         }

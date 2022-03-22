@@ -17,19 +17,14 @@ namespace BlueRocket.LIBRARY
         private string _name;
         private string _value;
 
-        private string _tag;
+        private string _alias;
         private string _format;
 
-        private string _bruto;
-
         public string name => _name;
-        public string tag => _tag;
+        public string alias => _alias;
 
         private string format => _format;
         public string value => _value;
-
-
-        public string bruto => _bruto;
 
         public string name_sql => GetSQL();
         public string var_sql => String.Format("#({0})", name);
@@ -39,11 +34,13 @@ namespace BlueRocket.LIBRARY
 
         public bool TemKey => myString.IsFull(name);
         public bool TemValue => !IsNull;
-        public bool TemVariavel => TemValue || TemTag;
+        public bool TemVariavel => TemValue || TemAlias;
         private bool TemDados => TemKey & TemValue;
-        
-        private bool TemTag => (tag != "");
+
+        private bool TemAlias => (alias != "");
         private bool TemFormat => (format != "");
+
+        private bool TemDetalhe => TemAlias || TemFormat;
         public bool IsNull => myString.IsNull(value);
 
         public bool IsMatch(string prmName) => (TemKey && myString.IsEqual(name, prmName));
@@ -61,32 +58,22 @@ namespace BlueRocket.LIBRARY
 
         }
 
-        public void Parse(string prmTexto)
+        public void Parse(string prmTexto) { ParseDefinicao(prmTexto); ParseDetalhamento(prmTexto); }
+
+        private void ParseDefinicao(string prmTexto)
         {
-
-            string destaque;
-
+            
             //
-            // Get destaque Tupla (estão entre delimitadores pré-definidos)
+            // Get DEFINICAO da Tupla (isolar "name" e "valor")
             //
 
-            destaque = Bloco.GetBloco(prmTexto, delimitadorInicial, delimitadorFinal).Trim();
-
-            _tag = myString.GetFirst(destaque, prmDelimitador: delimitadorDestaque);
-
-            _format = myString.GetLast(destaque, prmDelimitador: delimitadorDestaque);
+            string definicao = Bloco.GetBlocoRemove(prmTexto, delimitadorInicial, delimitadorFinal);
 
             //
-            // Remove descricao da Tupla (para permitir identificar "tag" e "valor")
+            // Identifica "name" e "valor"
             //
 
-            _bruto = Bloco.GetBlocoRemove(prmTexto, delimitadorInicial, delimitadorFinal);
-
-            //
-            // Identifica "tag" e "valor"
-            //
-
-            xLista lista = new xLista(bruto, separador);
+            xLista lista = new xLista(definicao, separador);
 
             _name = lista.first;
 
@@ -94,6 +81,25 @@ namespace BlueRocket.LIBRARY
                 SetValue(prmValue: null);
             else
                 SetValue(prmValue: lista.last);
+
+        }
+
+        private void ParseDetalhamento(string prmTexto)
+        {
+
+            //
+            // Get DETALHE Tupla (estão entre os delimitadores '[' e ']' )
+            //
+
+            string detalhe = BlocoParametro.GetParametro(prmTexto);
+
+            //
+            // Identifica "alias" e "format"
+            //
+
+            _alias = BlocoParametro.GetPrefixoDestaque(detalhe);
+
+            _format = BlocoParametro.GetSufixoDestaque(detalhe);
 
         }
 
@@ -114,16 +120,10 @@ namespace BlueRocket.LIBRARY
             if (TemKey)
                 log += name + @": '" + value + "'";
 
-            //if (TemDados)
-              //  log += @": '" + value+ "'";
+            if (TemDetalhe)
+                log += " [" + GetDetalhe() + "]";
 
-            if (TemTag)
-                log += " <" + tag + ">";
-
-            if (TemFormat)
-                log += " <" + format + ">";
-
-            return log.Trim();
+            return log;
         }
 
         private string GetSQL()
@@ -138,7 +138,7 @@ namespace BlueRocket.LIBRARY
         {
             if (TemValue) return value;
 
-            if (TemTag) return tag;
+            if (TemAlias) return alias;
 
             return "''";
         }
@@ -148,6 +148,22 @@ namespace BlueRocket.LIBRARY
             if (TemFormat) return string.Format("{0} = {1}", name, format);
 
             return "";
+        }
+
+        private string GetDetalhe()
+        {
+            string txt = "";
+
+            if (TemDetalhe)
+            {
+                if (TemAlias && TemFormat)
+                    txt = alias + ":" + format;
+                else if (TemAlias)
+                    txt = alias;
+                else
+                    txt = format;
+            }
+            return txt;
         }
     }
 
@@ -160,13 +176,15 @@ namespace BlueRocket.LIBRARY
 
         public string group;
 
+        public int qtde => this.Count;
         public bool IsFull => !IsEmpty;
         public bool IsEmpty => (Count == 0);
 
-        public string txt { get => GetTXT(); }
-        public string sql { get => GetSQL(); }
         public string log { get => GetLOG(); }
+        public string sql { get => GetSQL(); }
         public string mask { get => GetMask(); }
+
+        public string names { get => GetTXT(); }
 
         public bool IsMatch(string prmKey) => (myString.IsEqual(key, prmKey));
         public bool IsGroup(string prmGroup) => (myString.IsEqual(group, prmGroup));
@@ -211,13 +229,13 @@ namespace BlueRocket.LIBRARY
                     this.Add(prmTupla);
         }
 
-        public void SetValues(string prmValores)
+        public void SetValues(string prmValues)
         {
 
-            if (myString.IsFull(prmValores))
+            if (myString.IsFull(prmValues))
             {
                 int cont = 0;
-                foreach (string item in new xLista(prmValores, separador))
+                foreach (string item in new xLista(prmValues, separador))
                 {
                     if (this.Count == cont) break;
 
@@ -265,17 +283,18 @@ namespace BlueRocket.LIBRARY
             }
             return tuplas;
         }
-        public bool IsContem(string prmItem)
+        public bool IsFind(string prmName)
         {
 
             foreach (myTupla tupla in this)
             {
-                if (prmItem.ToLower().Contains(tupla.bruto.ToLower()))
+                if (tupla.IsMatch(prmName))
                     return true;
             }
 
             return (false);
         }
+
         private string GetTXT()
         {
             xLista text = new xLista();
@@ -324,9 +343,10 @@ namespace BlueRocket.LIBRARY
         public string name;
 
         public string header => name + "," + columns;
-        public string columns => GetTXT();
+        public string columns => GetNames();
         public string columns_sql => GetSQL();
         public string mask => GetMask();
+        public int qtde => GetQtde();
 
         public myTuplas AddItem(string prmKey) => AddItem(prmKey, prmGroup: "main");
         public myTuplas AddItem(string prmKey, string prmGroup) => AddItem(new myTuplas().SetKey(prmKey, prmGroup));
@@ -361,13 +381,13 @@ namespace BlueRocket.LIBRARY
 
             return false;
         }
-        private string GetTXT()
+        private string GetNames()
         {
             xLista text = new xMemo();
 
             foreach (myTuplas Tuplas in this)
                 if (Tuplas.IsFull)
-                    text.Add(Tuplas.txt);
+                    text.Add(Tuplas.names);
 
             return text.txt;
         }
@@ -391,6 +411,18 @@ namespace BlueRocket.LIBRARY
 
             return text.csv;
         }
+
+        private int GetQtde()
+        {
+            int qtde = 0;
+
+            foreach (myTuplas Tuplas in this)
+                if (Tuplas.IsFull)
+                    qtde += Tuplas.qtde;
+
+            return qtde;
+        }
+
     }
 
 }

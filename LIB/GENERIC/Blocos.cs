@@ -146,6 +146,22 @@ namespace BlueRocket.LIBRARY
         public static string GetPrefixo(string prmTexto) => Bloco.GetBlocoAntes(prmTexto, prmDelimitador: "[");
         public static string GetSufixo(string prmTexto) => Bloco.GetBlocoDepois(prmTexto, prmDelimitador: "]");
 
+        public static string GetPrefixoDestaque(string prmTexto) => myString.GetFirst(prmTexto, prmDelimitador: ":").Trim();
+
+        public static string GetSufixoDestaque(string prmTexto) => myString.GetLast(prmTexto, prmDelimitador: ":").Trim();
+
+    }
+
+    public static class BlocoDes
+    {
+
+        public static bool TemParametro(string prmTexto) => myString.IsFull(GetParametro(prmTexto));
+
+        public static string GetParametro(string prmTexto) => Bloco.GetBloco(prmTexto, prmDelimitadorInicial: "[", prmDelimitadorFinal: "]").Trim();
+
+        public static string GetPrefixo(string prmTexto) => Bloco.GetBlocoAntes(prmTexto, prmDelimitador: "[");
+        public static string GetSufixo(string prmTexto) => Bloco.GetBlocoDepois(prmTexto, prmDelimitador: "]");
+
     }
 
     public static class Prefixo

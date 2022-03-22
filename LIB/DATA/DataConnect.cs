@@ -156,7 +156,7 @@ namespace BlueRocket.LIBRARY
 
         public string GetStatus() { if (status == "") Setup(); return status; }
 
-        public DataCursor GetCursor(string prmSQL) => GetCursor(prmSQL, prmMask: null);
+        public DataCursor GetCursor(string prmSQL, string prmMask) => GetCursor(prmSQL, prmMask: new myTuplas(prmMask));
         public DataCursor GetCursor(string prmSQL, myTuplas prmMask) => new DataCursor(prmSQL, prmMask, this);
 
         public bool Setup()
@@ -294,8 +294,8 @@ namespace BlueRocket.LIBRARY
             TypesDouble = new myDominio(prmKey: "number", prmLista: "double");
         }
 
-        public bool IsTypeDate(string prmType) => TypesDate.IsContem(prmType);
-        public bool IsTypeDouble(string prmType) => TypesDouble.IsContem(prmType);
+        public bool IsTypeDate(string prmType) => TypesDate.IsFind(prmType);
+        public bool IsTypeDouble(string prmType) => TypesDouble.IsFind(prmType);
 
     }
 

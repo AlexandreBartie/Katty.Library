@@ -15,7 +15,7 @@ namespace BlueRocket.LIBRARY
             return (false);
              
         }
-        //public static bool IsFullEx(string prmTexto) => (GetCount(prmTexto) > 0);
+
         public static bool IsNull(string prmTexto) => (prmTexto == null);
         public static bool IsEmpty(string prmTexto) => !(IsFull(prmTexto));
 

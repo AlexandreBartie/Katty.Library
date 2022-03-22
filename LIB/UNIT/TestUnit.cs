@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace BlueRocket.LIBRARY
 {
 
-    public class UTC
+    public class UTControl
     {
-        
+
         public LinesUTC inputList;
         public LinesUTC outputList;
         private LinesUTC resultList;
@@ -17,22 +17,26 @@ namespace BlueRocket.LIBRARY
         private string _log;
 
         public void input() => input(prmText: "");
-        public void input(string prmText) => inputList.Add(prmText);
-        public void inputLine(string prmText) => inputList.AddLine(prmText);
+        public void input(string prmText) => input(prmText, prmCondicao: true);
+        public void input(string prmText, bool prmCondicao) { if (prmCondicao) inputList.Add(prmText); }
+
+        public void inputText(string prmText) => inputText(prmText, prmCondicao: true);
+        public void inputText(string prmText, bool prmCondicao) { if (prmCondicao) inputList.AddText(prmText); }
 
         public void output() => output(prmText: "");
         public void output(string prmText) => outputList.Add(prmText);
+        public void output(string prmText, bool prmEnd) { output(prmText); if (prmEnd) output(); }
 
-        public void outputLine() => output();
-        public void outputLine(string prmText) => outputList.AddLine(prmText);
+        public void outputText() => output();
+        public void outputText(string prmText) => outputText(prmText, prmEnter: false);
+        public void outputText(string prmText, bool prmEnter) { outputList.AddText(prmText); if (prmEnter) output(); }
 
-        public string inputTXT => inputList.txt;
-        public string outputTXT => outputList.txt;
-
-        public string resultTXT => resultList.txt;
+        public string GetInput() => inputList.txt;
+        public string GetOutput() => outputList.txt;
+        public string GetResult() => resultList.txt;
         public string log => _log;
 
-        public UTC()
+        public UTControl()
         {
             Analise = new AnaliseUTC(); Setup();
         }
@@ -66,17 +70,36 @@ namespace BlueRocket.LIBRARY
 
         public string txt => GetTXT();
 
+        public LinesUTC()
+        { }
+
+        public LinesUTC(string prmText)
+        {
+            Add(prmText);
+        }
         public string GetLine(int prmIndice)
         {
             if (prmIndice <= this.Count)
                 return this[prmIndice-1];
             return "";
-        }                
+        }
 
-        public void Add() => Add(prmText: "");
-        public new void Add(string prmText) => AddLine(prmText, prmMerge: false);
-        public void AddLine(string prmText) => AddLine(prmText, prmMerge: true);
-        private void AddLine(string prmText, bool prmMerge)
+        public void Add() => AddLine(prmText: "");
+        public new void Add(string prmText) => AddLine(prmText);
+
+        private void AddLine(string prmText)
+        {
+            int a = 0;
+            
+            if (prmText == "")
+                a = 1;
+            
+            foreach (string line in new xLinhas(prmText))
+                AddText(line, prmMerge: false);
+        }
+        public void AddText(string prmText) => AddText(prmText, prmMerge: true);
+
+        private void AddText(string prmText, bool prmMerge)
         {
             if (prmMerge && this.Count != 0)
                 base[base.Count - 1] += prmText;
@@ -98,35 +121,35 @@ namespace BlueRocket.LIBRARY
 
     }
 
-    public class TestCase
-    {
-        //private String selector;
+//    public class TestCase
+//    {
+//        //private String selector;
 
-        //public TestCase(String selector)
-        //{
-        //    this.selector = selector;
-        //}
+//        //public TestCase(String selector)
+//        //{
+//        //    this.selector = selector;
+//        //}
 
-        /// Run whatever code you need to get ready for the test to run.
-        protected void setUp() { }
+//        /// Run whatever code you need to get ready for the test to run.
+//        protected void setUp() { }
 
-        /// Release whatever resources you used for the test.
-        protected void tearDown() { }
-        /// Run the selected method and register the result.
-/*        public void Run(TestResult result)
-        {
-            //try
-            //{
-               // Run();
-            }
-            //catch (Throwable e)
-            //{
-            //    result.error(this, e);
-            //    return;
-            //}
-            //result.pass(this);
-        }*/
-    }
+//        /// Release whatever resources you used for the test.
+//        protected void tearDown() { }
+//        /// Run the selected method and register the result.
+///*        public void Run(TestResult result)
+//        {
+//            //try
+//            //{
+//               // Run();
+//            }
+//            //catch (Throwable e)
+//            //{
+//            //    result.error(this, e);
+//            //    return;
+//            //}
+//            //result.pass(this);
+//        }*/
+//    }
     
 /*    public class TestRobotSuite
     {
