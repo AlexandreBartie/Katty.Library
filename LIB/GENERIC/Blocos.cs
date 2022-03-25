@@ -5,6 +5,61 @@ using System.Text;
 namespace Dooggy.LIBRARY
 {
 
+    public class BlocoColchetes : BlocoGenerico
+    {
+        public BlocoColchetes() : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmDelimitadorDestaque: ":") { }
+    }
+
+    public class BlocoChaves : BlocoGenerico
+    {
+        public BlocoChaves() : base(prmDelimitadorInicial: "{", prmDelimitadorFinal: "}", prmDelimitadorDestaque: "=") { }
+    }
+
+    public class BlocoParenteses : BlocoGenerico
+    {
+        public BlocoParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmDelimitadorDestaque: ":") { }
+    }
+
+    public class BlocoTags : BlocoGenerico
+    {
+        public BlocoTags() : base(prmDelimitadorInicial: "<", prmDelimitadorFinal: ">", prmDelimitadorDestaque: "|") { }
+    }
+
+    public class BlocoGenerico
+    {
+
+        private string delimitadorInicial;
+        private string delimitadorFinal;
+
+        private string delimitadorDestaque;
+
+        public BlocoGenerico(string prmDelimitadorInicial, string prmDelimitadorFinal, string prmDelimitadorDestaque)
+        {
+            delimitadorInicial = prmDelimitadorInicial;
+            delimitadorFinal = prmDelimitadorFinal;
+
+            delimitadorDestaque = prmDelimitadorDestaque;
+        }
+
+        public bool TemParametro(string prmTexto) => myString.IsFull(GetParametro(prmTexto));
+
+        public string GetParametro(string prmTexto) => Bloco.GetBloco(prmTexto, delimitadorInicial, delimitadorFinal).Trim();
+
+        public string GetRemove(string prmTexto) => Bloco.GetBlocoRemove(prmTexto, delimitadorInicial, delimitadorFinal);
+
+        public string GetPrefixo(string prmTexto) => GetPrefixo(prmTexto, prmTRIM: false);
+        public string GetPrefixo(string prmTexto, bool prmTRIM) => Bloco.GetBlocoAntes(prmTexto, delimitadorInicial, prmTRIM);
+
+        public string GetSufixo(string prmTexto) => GetSufixo(prmTexto, prmTRIM: false);
+        public string GetSufixo(string prmTexto, bool prmTRIM) => Bloco.GetBlocoDepois(prmTexto, delimitadorFinal, prmTRIM);
+
+        public string GetPrefixoDestaque(string prmTexto) => GetPrefixoDestaque(prmTexto, delimitadorDestaque);
+        public string GetPrefixoDestaque(string prmTexto, string prmDelimitador) => myString.GetFirst(prmTexto, prmDelimitador).Trim();
+
+        public string GetSufixoDestaque(string prmTexto) => GetSufixoDestaque(prmTexto, delimitadorDestaque);
+        public string GetSufixoDestaque(string prmTexto, string prmDelimitador) => myString.GetLast(prmTexto, prmDelimitador).Trim();
+
+    }
     public static class Bloco
     {
 
@@ -135,47 +190,15 @@ namespace Dooggy.LIBRARY
         }
 
     }
-
-    public static class BlocoParametro
-    {
-
-        public static bool TemParametro(string prmTexto) => myString.IsFull(GetParametro(prmTexto));
-
-        public static string GetParametro(string prmTexto) => Bloco.GetBloco(prmTexto, prmDelimitadorInicial: "[", prmDelimitadorFinal: "]").Trim();
-
-        public static string GetPrefixo(string prmTexto) => Bloco.GetBlocoAntes(prmTexto, prmDelimitador: "[");
-        public static string GetSufixo(string prmTexto) => Bloco.GetBlocoDepois(prmTexto, prmDelimitador: "]");
-
-        public static string GetPrefixoDestaque(string prmTexto) => myString.GetFirst(prmTexto, prmDelimitador: ":").Trim();
-
-        public static string GetSufixoDestaque(string prmTexto) => myString.GetLast(prmTexto, prmDelimitador: ":").Trim();
-
-    }
-
-    public static class BlocoDes
-    {
-
-        public static bool TemParametro(string prmTexto) => myString.IsFull(GetParametro(prmTexto));
-
-        public static string GetParametro(string prmTexto) => Bloco.GetBloco(prmTexto, prmDelimitadorInicial: "[", prmDelimitadorFinal: "]").Trim();
-
-        public static string GetPrefixo(string prmTexto) => Bloco.GetBlocoAntes(prmTexto, prmDelimitador: "[");
-        public static string GetSufixo(string prmTexto) => Bloco.GetBlocoDepois(prmTexto, prmDelimitador: "]");
-
-    }
-
-    public static class Prefixo
+    public static class BlocoPrefixo
     {
         public static bool IsPrefixo(string prmTexto, string prmPrefixo) => (myString.GetFirst(prmTexto, prmTamanho: prmPrefixo.Length) == prmPrefixo);
         public static bool IsPrefixo(string prmTexto, string prmPrefixo, string prmDelimitador) => (GetPrefixo(prmTexto, prmPrefixo, prmDelimitador) != "");
 
-        public static string GetPrefixo(string prmTexto, string prmPrefixo) => GetPrefixo(prmTexto, prmPrefixo, prmDelimitador:"");
-
+        public static string GetPrefixo(string prmTexto, string prmPrefixo) => GetPrefixo(prmTexto, prmPrefixo, prmDelimitador: "");
         public static string GetPrefixo(string prmTexto, string prmPrefixo, string prmDelimitador) => GetPrefixo(prmTexto, prmPrefixo, prmDelimitador, prmPreserve: false);
         public static string GetPrefixo(string prmTexto, string prmPrefixo, string prmDelimitador, bool prmPreserve)
         {
-
-
             string retorno = "";
 
             if (myString.IsFull(prmTexto) && IsPrefixo(prmTexto, prmPrefixo))
@@ -190,9 +213,7 @@ namespace Dooggy.LIBRARY
                     retorno = prmPrefixo + retorno + prmDelimitador;
 
             }
-
             return (retorno.Trim());
-
         }
 
         public static string GetPrefixoRemove(string prmTexto, string prmPrefixo) => GetPrefixoRemove(prmTexto, prmPrefixo, prmDelimitador: "");
@@ -215,5 +236,6 @@ namespace Dooggy.LIBRARY
         }
 
     }
+
 
 }

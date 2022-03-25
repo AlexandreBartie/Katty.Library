@@ -290,8 +290,8 @@ namespace Dooggy.LIBRARY
 
         public DataTypesField()
         {
-            TypesDate = new myDominio(prmKey: "date", prmLista: "date");
-            TypesDouble = new myDominio(prmKey: "number", prmLista: "double");
+            TypesDate = new myDominio(prmName: "date", prmLista: "date");
+            TypesDouble = new myDominio(prmName: "number", prmLista: "double");
         }
 
         public bool IsTypeDate(string prmType) => TypesDate.IsFind(prmType);

@@ -7,6 +7,7 @@ namespace Dooggy.LIBRARY
     public static class myBool
     {
 
+        public static string IIf(bool prmCondicao, string prmTrue) => IIf(prmCondicao, prmTrue, prmFalse: "");
         public static string IIf(bool prmCondicao, string prmTrue, string prmFalse)
         {
 

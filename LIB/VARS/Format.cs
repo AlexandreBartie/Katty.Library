@@ -20,10 +20,12 @@ namespace Dooggy.LIBRARY
 
             string prefixo = ""; string parametro; int tamanho;
 
-            if (BlocoParametro.TemParametro(prmFormat))
+            BlocoColchetes Bloco = new BlocoColchetes();
+
+            if (Bloco.TemParametro(prmFormat))
             {
-                prefixo = BlocoParametro.GetPrefixo(prmFormat);
-                parametro = BlocoParametro.GetParametro(prmFormat);
+                prefixo = Bloco.GetPrefixo(prmFormat);
+                parametro = Bloco.GetParametro(prmFormat);
             }
             else
                 parametro = prmFormat;
@@ -125,21 +127,46 @@ namespace Dooggy.LIBRARY
         private static string GetFormat(string prmText, string prmFormat)
         {
 
-            string format;  
+            string format; string effect; string text;
 
-            format = Bloco.GetBloco(prmFormat, prmDelimitadorInicial: "(", prmDelimitadorFinal: ")");
+            BlocoParenteses bloco = new BlocoParenteses();
+
+            format = bloco.GetParametro(prmFormat);
+
+            effect = bloco.GetSufixoDestaque(prmFormat);
+
+            // aplicar tratamentos no texto
+
+            text = GetEfeito(prmText, effect);
 
             if (myString.GetFind(format, "+"))
-                return GetSubstring(prmText, format);
+                return GetSubstring(text, format);
 
             if (myString.GetFind(format, "*"))
-                return GetSubPosicao(prmText, format);
+                return GetSubPosicao(text, format);
 
             if (myInt.IsNumero(format))
-                return myString.GetFirst(prmText, prmTamanho: myInt.GetNumero(format));
+                return myString.GetFirst(text, prmTamanho: myInt.GetNumero(format));
 
-            return ("");
+            return (text);
         }
+
+        private static string GetEfeito(string prmText, string prmFormat)
+        {
+
+            switch (prmFormat.ToLower())
+            {
+                case "upper":
+                    return prmText.ToUpper();
+
+                case "lower":
+                    return prmText.ToLower();
+            }
+
+            return prmText;
+
+        }
+
 
         private static string GetSubstring(string prmText, string prmFormat)
         {

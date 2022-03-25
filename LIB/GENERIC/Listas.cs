@@ -100,8 +100,6 @@ namespace Dooggy.LIBRARY
             else
                 return ("");
         }
-
-        public bool IsEqual(string prmTexto) => (GetEqual(prmTexto));
         public bool IsContem(string prmTexto) => (GetContem(prmTexto) != 0);
 
         public string GetRemove() => GetRemove(prmIndice: 1);
@@ -134,7 +132,7 @@ namespace Dooggy.LIBRARY
             }
             return ("");
         }
-        public bool GetEqual(string prmTexto)
+        public bool IsFind(string prmTexto)
         {
             foreach (string vlItem in this)
             {

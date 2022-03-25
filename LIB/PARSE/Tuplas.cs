@@ -6,12 +6,6 @@ namespace Dooggy.LIBRARY
 {
     public class myTupla
     {
-
-        private string delimitadorInicial = "[";
-        private string delimitadorFinal = "]";
-
-        private string delimitadorDestaque = ":";
-
         private string separador = "=";
 
         private string _name;
@@ -62,12 +56,12 @@ namespace Dooggy.LIBRARY
 
         private void ParseDefinicao(string prmTexto)
         {
-            
+
             //
             // Get DEFINICAO da Tupla (isolar "name" e "valor")
             //
 
-            string definicao = Bloco.GetBlocoRemove(prmTexto, delimitadorInicial, delimitadorFinal);
+            string definicao = new BlocoColchetes().GetRemove(prmTexto);
 
             //
             // Identifica "name" e "valor"
@@ -87,19 +81,21 @@ namespace Dooggy.LIBRARY
         private void ParseDetalhamento(string prmTexto)
         {
 
+            BlocoColchetes Bloco = new BlocoColchetes();
+
             //
             // Get DETALHE Tupla (estão entre os delimitadores '[' e ']' )
             //
 
-            string detalhe = BlocoParametro.GetParametro(prmTexto);
+            string detalhe = Bloco.GetParametro(prmTexto);
 
             //
             // Identifica "alias" e "format"
             //
 
-            _alias = BlocoParametro.GetPrefixoDestaque(detalhe);
+            _alias = Bloco.GetPrefixoDestaque(detalhe);
 
-            _format = BlocoParametro.GetSufixoDestaque(detalhe);
+            _format = Bloco.GetSufixoDestaque(detalhe);
 
         }
 

@@ -7,61 +7,87 @@ namespace Dooggy.LIBRARY
     public class myDominio
     {
 
-        public string key;
+        public string name;
 
-        public xLista lista;
+        public xLista Opcoes;
+
+        public string padrao;
+
+
+        public string name_ext => name + padrao_ext;
+
+        public string padrao_ext => myBool.IIf(TemPadrao, string.Format("[{0}]", padrao));
 
         public string log => GetLog();
+        public string txt => Opcoes.txt;
 
-        public string txt => lista.txt;
+        public bool IsEqual(string prmName) => myString.IsEqual(name, prmName);
 
-        public bool TemKey => myString.IsFull(key);
-        public bool TemLista => lista.IsFull;
-
-        private string key_start = "[";
-        private string key_finish = "]";
+        public bool TemName => myString.IsFull(name);
+        public bool TemPadrao => myString.IsFull(padrao);
+        public bool TemOpcoes => Opcoes.IsFull;
 
         public myDominio(string prmLista)
         {
             Parse(prmLista);
         }
         
-        public myDominio(string prmKey, string prmLista)
+        public myDominio(string prmName, string prmLista)
         {
-            Parse(prmKey, prmLista);
+            Parse(prmName, prmLista);
         }
 
-        private void Parse(string prmTexto)
+        private void Parse(string prmSintaxe)
         {
-            string texto;
+            string opcoes;
 
-            key = Bloco.GetBloco(prmTexto, key_start, key_finish).Trim();
+            name = new BlocoChaves().GetPrefixo(prmSintaxe, prmTRIM: true);
 
-            if (TemKey)
-                texto = Bloco.GetBlocoDepois(prmTexto, key_finish, prmTRIM: true);
+            opcoes = new BlocoChaves().GetParametro(prmSintaxe);
+
+            Parse(name, opcoes);
+        }
+
+        private void Parse(string prmName, string prmLista)
+        {
+           // Definição da lista de opções - executado primeiro, para garantir a existência do padrão ...
+
+            if (myString.IsFull(prmLista))
+                SetOpcoes(prmLista);
             else
-                texto = prmTexto;
+                SetOpcoes();
 
-            Parse(key, texto);
+            // Definição do nome e do padrão (deve 
+
+            name = new BlocoColchetes().GetPrefixo(prmName, prmTRIM: true);
+
+            padrao = GetValidDefault(prmDefault: new BlocoColchetes().GetParametro(prmName));
+
         }
 
-        private void Parse(string prmKey, string prmLista)
+        private string GetValidDefault(string prmDefault)
         {
-            key = prmKey; SetLista(prmLista);
+            if (myInt.IsNumero(prmDefault))
+                return Opcoes.Get(prmIndice: myInt.GetNumero(prmDefault));
+
+            if (Opcoes.IsFind(prmDefault))
+                return prmDefault;
+
+            return "";
         }
+        
+        public bool IsFind(string prmItem) => Opcoes.IsFind(prmItem);
 
-        public void SetLista(string prmLista) => lista = new xLista(prmLista);
-
-        public bool IsFind(string prmItem) => lista.IsEqual(prmItem);
-        public bool IsKey(string prmKey) => myString.IsEqual(key, prmKey);
+        private void SetOpcoes() => SetOpcoes(prmLista: null);
+        public void SetOpcoes(string prmLista) => Opcoes = new xLista(prmLista);
 
         private string GetLog()
         {
-            if (TemKey)
-                if (TemLista)
-                    return (string.Format("{0}: {1}", key, txt).Trim());
+            if (TemName)
+                if (TemOpcoes)
+                    return (string.Format("{0}: {1}", name_ext, txt));
                 else
-                    return key;
+                    return name;
 
             return txt;
         }
@@ -82,10 +108,10 @@ namespace Dooggy.LIBRARY
 
         private void AddNew(myDominio prmItem)
         {
-            string key = prmItem.key;
+            string name = prmItem.name;
 
-            if (IsFind(key))
-                FindKey(key).SetLista(prmItem.txt);
+            if (IsFind(name))
+                FindKey(name).SetOpcoes(prmItem.txt);
             else
                 Add(prmItem);
         }
@@ -93,7 +119,7 @@ namespace Dooggy.LIBRARY
         public myDominio FindKey(string prmKey)
         {
             foreach (myDominio item in this)
-                if (item.IsKey(prmKey))
+                if (item.IsEqual(prmKey))
                     return item;
             return null;
         }
@@ -101,19 +127,19 @@ namespace Dooggy.LIBRARY
         public bool IsFind(string prmKey)
         {
             foreach (myDominio item in this)
-                if (item.IsKey(prmKey))
+                if (item.IsEqual(prmKey))
                     return true;
             return false;
         }
 
         private string GetLOG()
         {
-            string txt = "";
+            xLinhas memo = new xLinhas();
 
             foreach (myDominio item in this)
-                txt += item.log + Environment.NewLine;
+                memo.Add(item.log);
 
-            return txt;
+            return memo.txt;
         }
 
     }

@@ -25,7 +25,6 @@ namespace Dooggy.LIBRARY
 
         public void output() => output(prmText: "");
         public void output(string prmText) => outputList.Add(prmText);
-        public void output(string prmText, bool prmEnd) { output(prmText); if (prmEnd) output(); }
 
         public void outputText() => output();
         public void outputText(string prmText) => outputText(prmText, prmEnter: false);
@@ -88,12 +87,7 @@ namespace Dooggy.LIBRARY
         public new void Add(string prmText) => AddLine(prmText);
 
         private void AddLine(string prmText)
-        {
-            int a = 0;
-            
-            if (prmText == "")
-                a = 1;
-            
+        {          
             foreach (string line in new xLinhas(prmText))
                 AddText(line, prmMerge: false);
         }
