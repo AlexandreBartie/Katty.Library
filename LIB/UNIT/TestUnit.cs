@@ -55,7 +55,7 @@ namespace Dooggy.LIBRARY
             _log = Analise.GetCompare(prmGerado: resultList, prmEsperado: outputList);
 
             // assert
-            if (!outputList.IsEqual(resultList.txt))
+            if (!outputList.IsMatch(resultList.txt))
                 Assert.Fail(log);
         }
 
@@ -65,7 +65,7 @@ namespace Dooggy.LIBRARY
     {
 
         public bool IsFull => (this.Count > 0);
-        public bool IsEqual(string prmText) => (txt == prmText);
+        public bool IsMatch(string prmText) => (txt == prmText);
 
         public string txt => GetTXT();
 

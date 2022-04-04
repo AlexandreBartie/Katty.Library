@@ -117,7 +117,7 @@ namespace Dooggy.LIBRARY
         internal static string Get(string prmText, string prmFormat)
         {
 
-            if (myString.IsEqual(myString.GetFirst(prmFormat), "x"))
+            if (myString.IsMatch(myString.GetFirst(prmFormat), "x"))
                 return GetFormat(prmText, prmFormat);
 
             return GetMask(prmText, prmFormat);

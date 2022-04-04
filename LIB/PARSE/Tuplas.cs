@@ -37,7 +37,7 @@ namespace Dooggy.LIBRARY
         private bool TemDetalhe => TemAlias || TemFormat;
         public bool IsNull => myString.IsNull(value);
 
-        public bool IsMatch(string prmName) => (TemKey && myString.IsEqual(name, prmName));
+        public bool IsMatch(string prmName) => (TemKey && myString.IsMatch(name, prmName));
 
         public myTupla(string prmTexto)
         {
@@ -182,8 +182,8 @@ namespace Dooggy.LIBRARY
 
         public string names { get => GetTXT(); }
 
-        public bool IsMatch(string prmKey) => (myString.IsEqual(key, prmKey));
-        public bool IsGroup(string prmGroup) => (myString.IsEqual(group, prmGroup));
+        public bool IsMatch(string prmKey) => (myString.IsMatch(key, prmKey));
+        public bool IsGroup(string prmGroup) => (myString.IsMatch(group, prmGroup));
 
         public myTuplas()
         {

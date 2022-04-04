@@ -82,7 +82,7 @@ namespace Dooggy.LIBRARY
         public string Get(int prmIndice) => Get(prmIndice, prmPadrao: "");
         public string Get(int prmIndice, string prmPadrao)
         {
-            if (prmIndice <= qtde)
+            if (myInt.IsIntervalo(prmIndice, 1, qtde))
                 return (this[prmIndice - 1]);
             return prmPadrao;
         }
@@ -136,7 +136,7 @@ namespace Dooggy.LIBRARY
         {
             foreach (string vlItem in this)
             {
-                if (myString.IsEqual(vlItem, prmTexto))
+                if (myString.IsMatch(vlItem, prmTexto))
                 { return true; }
             }
             return (false);

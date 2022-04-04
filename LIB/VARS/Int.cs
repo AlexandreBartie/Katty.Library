@@ -86,6 +86,10 @@ namespace Dooggy.LIBRARY
 
         }
 
+        public static bool IsIntervalo(int prmValor, int prmMinimo, int prmMaximo)
+        {
+            return ((prmMinimo <= prmValor) && (prmValor <= prmMaximo));
+        }
 
     }
 }

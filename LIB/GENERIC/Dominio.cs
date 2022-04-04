@@ -13,16 +13,17 @@ namespace Dooggy.LIBRARY
 
         public string padrao;
 
-
-        public string name_ext => name + padrao_ext;
-
-        public string padrao_ext => myBool.IIf(TemPadrao, string.Format("[{0}]", padrao));
-
+        private string name_ext => GetNameExtendido();
         public string log => GetLog();
         public string txt => Opcoes.txt;
 
-        public bool IsEqual(string prmName) => myString.IsEqual(name, prmName);
-
+        public bool IsMatch(string prmName) => myString.IsMatch(name, prmName);
+        public bool IsPadrao(string prmValue)
+        {
+            if (TemPadrao)
+                return myString.IsMatch(padrao, prmValue);
+            return false;
+        }
         public bool TemName => myString.IsFull(name);
         public bool TemPadrao => myString.IsFull(padrao);
         public bool TemOpcoes => Opcoes.IsFull;
@@ -85,13 +86,19 @@ namespace Dooggy.LIBRARY
         {
             if (TemName)
                 if (TemOpcoes)
-                    return (string.Format("{0}: {1}", name_ext, txt));
+                    return (string.Format("{0,25}: {1}", name_ext, txt));
                 else
                     return name;
 
             return txt;
         }
 
+        private string GetNameExtendido()
+        {
+            if (TemPadrao)
+                return string.Format("{0}[{1}]", name, padrao);
+            return name;
+        }
     }
 
     public class myDominios : List<myDominio>
@@ -104,7 +111,7 @@ namespace Dooggy.LIBRARY
                 AddItem(linha);
         }
         public void AddItem(string prmLista) => AddNew(new myDominio(prmLista));
-        public void AddItem(string prmKey, string prmLista) => AddNew(new myDominio(prmKey, prmLista));
+        public void AddItem(string prmName, string prmLista) => AddNew(new myDominio(prmName, prmLista));
 
         private void AddNew(myDominio prmItem)
         {
@@ -116,22 +123,22 @@ namespace Dooggy.LIBRARY
                 Add(prmItem);
         }
 
-        public myDominio FindKey(string prmKey)
+        public myDominio FindKey(string prmName)
         {
             foreach (myDominio item in this)
-                if (item.IsEqual(prmKey))
+                if (item.IsMatch(prmName))
                     return item;
             return null;
         }
 
-        public bool IsFind(string prmKey)
+        public bool IsFind(string prmName)
         {
             foreach (myDominio item in this)
-                if (item.IsEqual(prmKey))
+                if (item.IsMatch(prmName))
                     return true;
             return false;
         }
-
+       
         private string GetLOG()
         {
             xLinhas memo = new xLinhas();

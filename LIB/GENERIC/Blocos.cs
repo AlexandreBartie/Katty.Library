@@ -17,7 +17,7 @@ namespace Dooggy.LIBRARY
 
     public class BlocoParenteses : BlocoGenerico
     {
-        public BlocoParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmDelimitadorDestaque: ":") { }
+        public BlocoParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmDelimitadorDestaque: "@") { }
     }
 
     public class BlocoTags : BlocoGenerico

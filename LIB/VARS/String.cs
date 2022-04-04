@@ -15,12 +15,11 @@ namespace Dooggy.LIBRARY
             return (false);
              
         }
-
         public static bool IsNull(string prmTexto) => (prmTexto == null);
         public static bool IsEmpty(string prmTexto) => !(IsFull(prmTexto));
 
-        public static bool IsEqual(string prmTextoA, string prmTextoB) => GetLower(prmTextoA) == GetLower(prmTextoB);
-        public static bool IsNoEqual(string prmTextoA, string prmTextoB) => !IsEqual(prmTextoA,prmTextoB);
+        public static bool IsMatch(string prmTextoA, string prmTextoB) => GetLower(prmTextoA) == GetLower(prmTextoB);
+        public static bool IsNoEqual(string prmTextoA, string prmTextoB) => !IsMatch(prmTextoA,prmTextoB);
 
 
         public static bool IsStartsWith(string prmTextoA, string prmTextoB) => GetLower(prmTextoA).StartsWith(GetLower(prmTextoB));

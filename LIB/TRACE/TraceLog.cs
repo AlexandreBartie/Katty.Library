@@ -283,10 +283,10 @@ namespace Dooggy.LIBRARY
         public string txt => String.Format("[{0,4}] {1} ", title, msg);
         public string txt_sql => String.Format("[{0,4}] {1} ", title, sql);
 
-        public bool IsError => (IsEqual(GetTypeError) || myString.IsFull(msgError));
+        public bool IsError => (IsMatch(GetTypeError) || myString.IsFull(msgError));
 
         public bool IsHide => Hide.IsFind(tipo);
-        public bool IsEqual(string prmTipo) => myString.IsEqual(tipo, prmTipo);
+        public bool IsMatch(string prmTipo) => myString.IsMatch(tipo, prmTipo);
 
         public TraceMSG()
         { }
@@ -347,7 +347,7 @@ namespace Dooggy.LIBRARY
     {
         public myDominio Hide;
 
-        private string lista = "CFG,CODE,PLAY,DEF,xSQL";
+        private string lista = "{ CFG,CODE,PLAY,DEF,xSQL }";
 
         public TraceHide()
         {
