@@ -30,7 +30,7 @@ namespace Dooggy.LIBRARY
             Dominio = prmDominio;
 
             foreach (string item in prmDominio.Opcoes)
-                Add(new myTagOption(prmValue: item, this));
+                Add(new myTagOption(this, prmValue: item));
         }
         public bool IsFind(string prmName)
         {
@@ -47,12 +47,12 @@ namespace Dooggy.LIBRARY
             return false;
         }
 
-        public void SetAtivado(string prmOption, bool prmAtivo)
-        {
-            foreach (myTagOption Option in this)
-                if (Option.IsMatch(prmOption))
-                { Option.SetAtivo(prmAtivo); break; }
-        }
+        //public void SetAtivado(string prmOption, bool prmAtivo)
+        //{
+        //    foreach (myTagOption Option in this)
+        //        if (Option.IsMatch(prmOption))
+        //        { Option.SetAtivo(prmAtivo); break; }
+        //}
 
         private string GetValue()
         {
@@ -67,7 +67,7 @@ namespace Dooggy.LIBRARY
     public class myTags : List<myTag>
     {
 
-        public myTagOptions Ativos => GetAtivos();
+        public myTagOptions Options => GetAll();
 
         public string txt => GetTXT();
         public string log => GetLOG();
@@ -79,12 +79,6 @@ namespace Dooggy.LIBRARY
                 return false;
 
             base.Add(new myTag(prmDominio)); return true;
-        }
-        public void SetAtivado(string prmName, string prmOption, bool prmAtivo)
-        {
-            foreach (myTag Tag in this)
-                if (Tag.IsMatch(prmName))
-                { Tag.SetAtivado(prmOption, prmAtivo); break; }
         }
 
         public bool IsFind(string prmName)
@@ -101,14 +95,13 @@ namespace Dooggy.LIBRARY
                     return Tag;
             return null;
         }
-        private myTagOptions GetAtivos()
+        public myTagOptions GetAll()
         {
             myTagOptions itens = new myTagOptions();
 
             foreach (myTag Tag in this)
                 foreach (myTagOption item in Tag)
-                    if (item.ativo)
-                        itens.Add(item);
+                    itens.Add(item);
             return itens;
         }
         private string GetTXT()
@@ -142,9 +135,7 @@ namespace Dooggy.LIBRARY
 
         public string value;
 
-        public bool ativo;
-
-        private string name => Tag.Dominio.name;
+        public string name => Tag.Dominio.name;
         public bool IsPadrao => Tag.Dominio.IsPadrao(value);
 
         public bool IsMatch(string prmName, string prmValue) => IsMatchName(prmName) && IsMatchValue(prmValue);
@@ -153,24 +144,30 @@ namespace Dooggy.LIBRARY
         private bool IsMatchName(string prmName) => myString.IsMatch(name, prmName);
         private bool IsMatchValue(string prmValue) => myString.IsMatch(value, prmValue);
 
-        public myTagOption(string prmValue, myTag prmTag)
+        public myTagOption(myTag prmTag, string prmValue)
         {
             Tag = prmTag;
 
             value = prmValue;
         }
-        public void SetAtivo(bool prmAtivo) => ativo = prmAtivo;
-
+     
     }
 
     public class myTagOptions : List<myTagOption>
     {
-        public bool IsFind(string prmTag, string prmOption)
+        public bool IsFind(string prmTag, string prmValue)
         {
             foreach (myTagOption Option in this)
-                if (Option.IsMatch(prmTag, prmOption))
+                if (Option.IsMatch(prmTag, prmValue))
                     return true;
             return false;
+        }
+        public myTagOption Find(string prmName, string prmValue)
+        {
+            foreach (myTagOption Option in this)
+                if (Option.IsMatch(prmName, prmValue))
+                    return Option;
+            return null;
         }
 
     }

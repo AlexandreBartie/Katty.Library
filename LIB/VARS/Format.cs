@@ -11,6 +11,8 @@ namespace Dooggy.LIBRARY
 
         private static string mark_csv = @"""";
 
+        public static string GetKey(int prmId, int prmTamanho) => DoubleToString(prmNumber: (double)prmId, prmFormat: myString.GetRepetir("0", prmTamanho));
+
         public static string TextToString(string prmText, string prmFormat) => myText.Get(prmText, prmFormat);
 
         public static string RandomToString() => RandomToString(prmFormat: "");
@@ -40,6 +42,8 @@ namespace Dooggy.LIBRARY
 
         public static string DateToString(string prmFormat) => DateToString(prmDate: DateTime.Now, prmFormat);
         public static string DateToString(DateTime prmDate, string prmFormat) => prmDate.ToString(GetDateFormat(prmFormat));
+
+        public static string MilisecondsToString(Double prmMiliseconds) => myFormat.DoubleToString(prmMiliseconds, "##0.000");
 
         public static string DoubleToString(Double prmNumber) => DoubleToString(prmNumber, prmCulture: CultureInfo.InvariantCulture);
         public static string DoubleToString(Double prmNumber, CultureInfo prmCulture) => DoubleToString(prmNumber, prmFormat: "", prmCulture);

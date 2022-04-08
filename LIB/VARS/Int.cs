@@ -27,6 +27,8 @@ namespace Dooggy.LIBRARY
 
         }
 
+        public static bool IsNoZero(int prmValor) => (prmValor != 0);
+
         public static int GetInverter(bool prmCondicao, int prmValor)
         {
 
@@ -85,7 +87,6 @@ namespace Dooggy.LIBRARY
             return (prmValor);
 
         }
-
         public static bool IsIntervalo(int prmValor, int prmMinimo, int prmMaximo)
         {
             return ((prmMinimo <= prmValor) && (prmValor <= prmMaximo));

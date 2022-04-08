@@ -15,6 +15,8 @@ namespace Dooggy.LIBRARY
             return (false);
              
         }
+
+        public static string Texting(string prmText, bool prmCondition) => myBool.IIf(prmCondition, prmText, "-");
         public static bool IsNull(string prmTexto) => (prmTexto == null);
         public static bool IsEmpty(string prmTexto) => !(IsFull(prmTexto));
 
