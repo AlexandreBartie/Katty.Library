@@ -2,27 +2,29 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public class BlocoColchetes : BlocoGenerico
     {
-        public BlocoColchetes() : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmDelimitadorDestaque: ":") { }
+        public BlocoColchetes() : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmConector: "=") { }
+
+        public BlocoColchetes(string prmConector) : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmConector) { }
     }
 
     public class BlocoChaves : BlocoGenerico
     {
-        public BlocoChaves() : base(prmDelimitadorInicial: "{", prmDelimitadorFinal: "}", prmDelimitadorDestaque: "=") { }
+        public BlocoChaves() : base(prmDelimitadorInicial: "{", prmDelimitadorFinal: "}", prmConector: "=") { }
     }
 
     public class BlocoParenteses : BlocoGenerico
     {
-        public BlocoParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmDelimitadorDestaque: "@") { }
+        public BlocoParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmConector: "@") { }
     }
 
     public class BlocoTags : BlocoGenerico
     {
-        public BlocoTags() : base(prmDelimitadorInicial: "<", prmDelimitadorFinal: ">", prmDelimitadorDestaque: "|") { }
+        public BlocoTags() : base(prmDelimitadorInicial: "<", prmDelimitadorFinal: ">", prmConector: "|") { }
     }
 
     public class BlocoGenerico
@@ -31,14 +33,14 @@ namespace Dooggy.LIBRARY
         private string delimitadorInicial;
         private string delimitadorFinal;
 
-        private string delimitadorDestaque;
+        private string conector;
 
-        public BlocoGenerico(string prmDelimitadorInicial, string prmDelimitadorFinal, string prmDelimitadorDestaque)
+        public BlocoGenerico(string prmDelimitadorInicial, string prmDelimitadorFinal, string prmConector)
         {
             delimitadorInicial = prmDelimitadorInicial;
             delimitadorFinal = prmDelimitadorFinal;
 
-            delimitadorDestaque = prmDelimitadorDestaque;
+            conector = prmConector;
         }
 
         public bool TemParametro(string prmTexto) => myString.IsFull(GetParametro(prmTexto));
@@ -53,12 +55,19 @@ namespace Dooggy.LIBRARY
         public string GetSufixo(string prmTexto) => GetSufixo(prmTexto, prmTRIM: false);
         public string GetSufixo(string prmTexto, bool prmTRIM) => Bloco.GetBlocoDepois(prmTexto, delimitadorFinal, prmTRIM);
 
-        public string GetPrefixoDestaque(string prmTexto) => GetPrefixoDestaque(prmTexto, delimitadorDestaque);
-        public string GetPrefixoDestaque(string prmTexto, string prmDelimitador) => myString.GetFirst(prmTexto, prmDelimitador).Trim();
+        public string GetPrefixoConector(string prmTexto) => GetPrefixoConector(prmTexto, conector);
+        public string GetPrefixoConector(string prmTexto, string prmConector) => myString.GetFirst(prmTexto, prmConector).Trim();
 
-        public string GetSufixoDestaque(string prmTexto) => GetSufixoDestaque(prmTexto, delimitadorDestaque);
-        public string GetSufixoDestaque(string prmTexto, string prmDelimitador) => myString.GetLast(prmTexto, prmDelimitador).Trim();
+        public string GetSufixoConector(string prmTexto) => GetSufixoConector(prmTexto, prmNull: false);
+        public string GetSufixoConector(string prmTexto, bool prmNull) => GetSufixoConector(prmTexto, conector, prmNull);
+        public string GetSufixoConector(string prmTexto, string prmConector) => GetSufixoConector(prmTexto, prmConector, prmNull: false);
+        public string GetSufixoConector(string prmTexto, string prmConector, bool prmNull)
+        {
+            if (prmNull && !myString.GetFind(prmTexto, prmConector))
+                return null;
 
+            return myString.GetLast(prmTexto, prmConector).Trim();
+        }
     }
     public static class Bloco
     {

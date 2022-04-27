@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public static class myBool
     {
@@ -18,7 +18,8 @@ namespace Dooggy.LIBRARY
 
         }
 
-        public static string GetYesNo(bool prmOpcao) { if (prmOpcao) return "SIM"; return "NAO"; }
+        public static bool GetYesNo(string prmOpcao) => (myString.IsMatch(prmOpcao, "Yes"));
+        public static string GetYesNo(bool prmOpcao) { if (prmOpcao) return "Yes"; return "No"; }
 
     }
 }

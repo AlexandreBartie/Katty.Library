@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public class myTupla
     {
-        private string separador = "=";
+        private string conector = "=";
+        private string conector_interno = ":";
 
         private string _name;
         private string _value;
@@ -19,6 +20,7 @@ namespace Dooggy.LIBRARY
 
         private string format => _format;
         public string value => _value;
+        public string valueEx => GetValueEx();
 
         public string name_sql => GetSQL();
         public string var_sql => String.Format("#({0})", name);
@@ -38,18 +40,18 @@ namespace Dooggy.LIBRARY
         public bool IsNull => myString.IsNull(value);
 
         public bool IsMatch(string prmName) => (TemKey && myString.IsMatch(name, prmName));
+        public bool IsAlias(string prmName) => myString.IsMatch(GetAlias(), prmName);
+        public bool IsMatchEx(string prmName) => IsMatch(prmName) || IsAlias(prmName);
 
         public myTupla(string prmTexto)
         {
             Parse(prmTexto);
         }
-        public myTupla(string prmTexto, string prmSeparador)
+        public myTupla(string prmTexto, string prmConector)
         {
-
-            separador = prmSeparador;
+            conector = prmConector;
 
             Parse(prmTexto);
-
         }
 
         public void Parse(string prmTexto) { ParseDefinicao(prmTexto); ParseDetalhamento(prmTexto); }
@@ -57,34 +59,30 @@ namespace Dooggy.LIBRARY
         private void ParseDefinicao(string prmTexto)
         {
 
+            BlocoColchetes Bloco = new BlocoColchetes(conector);
+
             //
-            // Get DEFINICAO da Tupla (isolar "name" e "valor")
+            // Get DEFINICAO da Tupla (isolar "name" <conector> "valor")
             //
 
-            string definicao = new BlocoColchetes().GetRemove(prmTexto);
+            string definicao = Bloco.GetRemove(prmTexto);
 
             //
             // Identifica "name" e "valor"
             //
 
-            xLista lista = new xLista(definicao, separador);
+            _name = Bloco.GetPrefixoConector(definicao);
 
-            _name = lista.first;
-
-            if (lista.IsUnico)
-                SetValue(prmValue: null);
-            else
-                SetValue(prmValue: lista.last);
-
+            _value = Bloco.GetSufixoConector(definicao, prmNull: true);
         }
 
         private void ParseDetalhamento(string prmTexto)
         {
 
-            BlocoColchetes Bloco = new BlocoColchetes();
+            BlocoColchetes Bloco = new BlocoColchetes(conector_interno);
 
             //
-            // Get DETALHE Tupla (estão entre os delimitadores '[' e ']' )
+            // Get DETALHE Tupla (estão entre os delimitadores '[' <conector> ']' )
             //
 
             string detalhe = Bloco.GetParametro(prmTexto);
@@ -93,9 +91,9 @@ namespace Dooggy.LIBRARY
             // Identifica "alias" e "format"
             //
 
-            _alias = Bloco.GetPrefixoDestaque(detalhe);
+            _alias = Bloco.GetPrefixoConector(detalhe);
 
-            _format = Bloco.GetSufixoDestaque(detalhe);
+            _format = Bloco.GetSufixoConector(detalhe);
 
         }
 
@@ -114,7 +112,7 @@ namespace Dooggy.LIBRARY
             string log = "";
 
             if (TemKey)
-                log += name + @": '" + value + "'";
+                log += name + @":= '" + value + "'";
 
             if (TemDetalhe)
                 log += " [" + GetDetalhe() + "]";
@@ -139,6 +137,13 @@ namespace Dooggy.LIBRARY
             return "''";
         }
 
+        private string GetValueEx()
+        {
+            if (TemValue)
+                return value;
+
+            return format;
+        }
         private string GetMask()
         {
             if (TemFormat) return string.Format("{0} = {1}", name, format);
@@ -161,12 +166,23 @@ namespace Dooggy.LIBRARY
             }
             return txt;
         }
+
+        private string GetAlias()
+        {
+            if (TemAlias)
+                return alias;
+
+            return name;
+        }
+
     }
 
     public class myTuplas : List<myTupla>
     {
 
         private string separador = ",";
+
+        private string conector = "=";
 
         public string key;
 
@@ -196,21 +212,34 @@ namespace Dooggy.LIBRARY
         {
             Parse(prmTuplas, prmSeparador);
         }
-        public myTuplas SetKey(string prmKey, string prmGroup) { key = prmKey; group = prmGroup;  return this; }
-        public myTuplas SetSeparador(string prmSeparador) { separador = prmSeparador; return this; }
+        public myTuplas(string prmTuplas, string prmSeparador, string prmConector)
+        {
+            Parse(prmTuplas, prmSeparador, prmConector);
+        }
+        public myTuplas(myTuplas prmTuplas)
+        {
+            Parse(prmTuplas);
+        }
+        public myTuplas SetKey(string prmKey, string prmGroup) { key = prmKey; group = prmGroup; return this; }
 
-        public myTuplas Parse(string prmLista, string prmSeparador) { separador = prmSeparador; return Parse(prmLista); }
+        public myTuplas SetSeparador(string prmSeparador) => SetSintaxe(prmSeparador, prmConector: conector);
+        public myTuplas SetConector(string prmConector) => SetSintaxe(prmSeparador: separador, prmConector);
+        public myTuplas SetSintaxe(string prmSeparador, string prmConector) { separador = prmSeparador; conector = prmConector; return this; }
 
-        public myTuplas Parse(string prmLista)
+        public myTuplas Parse(string prmLista) => Parse(prmLista, prmSeparador: separador);
+        public myTuplas Parse(string prmLista, string prmSeparador) => Parse(prmLista, prmSeparador, prmConector: conector);
+        public myTuplas Parse(string prmLista, string prmSeparador, string prmConector) { SetSintaxe(prmSeparador, prmConector); return Import(prmLista); }
+
+        private myTuplas Import(string prmLista)
         {
             if (myString.IsFull(prmLista))
             {
                 foreach (string item in new xLista(prmLista, separador))
-                    AddTupla(new myTupla(item));
+                    AddTupla(new myTupla(item, conector));
             }
             return (this);
         }
-        public myTuplas Parse(myTuplas prmTuplas)
+        private myTuplas Parse(myTuplas prmTuplas)
         {
             foreach (myTupla tupla in prmTuplas)
                 AddTupla(tupla);
@@ -262,15 +291,15 @@ namespace Dooggy.LIBRARY
         {
             foreach (myTupla Tupla in this)
             {
-                if (Tupla.IsMatch(prmName))
-                    return Tupla.value;
+                if (Tupla.IsMatchEx(prmName))
+                    return Tupla.valueEx;
             }
             return (prmPadrao);
         }
         
         public myTuplas GetVariavel()
         {
-            myTuplas tuplas = new myTuplas();
+            myTuplas tuplas = new myTuplas().SetSintaxe(separador, conector);
 
             foreach (myTupla tupla in this)
             {
@@ -281,7 +310,6 @@ namespace Dooggy.LIBRARY
         }
         public bool IsFind(string prmName)
         {
-
             foreach (myTupla tupla in this)
             {
                 if (tupla.IsMatch(prmName))

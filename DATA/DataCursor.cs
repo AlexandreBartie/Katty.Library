@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public class DataCursor : DataCursorDados
@@ -18,7 +18,7 @@ namespace Dooggy.LIBRARY
 
         public TraceMSG Log;
 
-        public DataCursor(string prmSQL, myTuplas prmMask, DataBase prmDataBase)
+        public DataCursor(string prmSQL, myMasks prmMask, DataBase prmDataBase)
         {
 
             DataBase = prmDataBase;
@@ -27,7 +27,7 @@ namespace Dooggy.LIBRARY
 
             if (DataBase.IsOK)
             {
-                SetQuery(); SetMask(prmMask);
+                SetQuery(); SetMasks(prmMask);
             }
             else
             { Trace.LogData.FailSQLNoDataBase(DataBase.tag, sql, DataBase.erro); Erro = DataBase.erro; }
@@ -71,16 +71,14 @@ namespace Dooggy.LIBRARY
 
         private TraceLog Trace => DataBase.Trace;
 
-        private xMask Mask;
-        public bool TemMask { get => (Mask != null); }
+        public myMasks Masks;
+        public bool HasMasks => Masks.IsFull;
 
-        public myTuplas GetMask() => Mask.lista;
-
-        public void SetMask(myTuplas prmMask)
+        public void SetMasks(myMasks prmMasks)
         {
-            if (prmMask != null)
-                if (prmMask.IsFull)
-                    Mask = new xMask(prmMask);
+            if (prmMasks != null)
+                if (prmMasks.IsFull)
+                    Masks = new myMasks(prmMasks);
         }
 
         public int qtdeColumns => reader.GetFieldCount;
@@ -89,11 +87,11 @@ namespace Dooggy.LIBRARY
         public bool IsDBNull(int prmIndice) => reader.IsDBNull(prmIndice);
         public string GetName(int prmIndice) => reader.GetName(prmIndice);
         public string GetType(int prmIndice) => reader.GetType(prmIndice);
-        public string GetValor(int prmIndice) => GetValorTratado(prmIndice);
-        public string GetValor(string prmColumn) => GetValorTratado(prmColumn);
+        public string GetValor(int prmIndice) => GetFormat(prmIndice);
+        public string GetValor(string prmColumn) => GetFormat(prmColumn);
 
-        private string GetValorTratado(string prmColumn) => GetValorTratado(prmIndice: reader.GetIndex(prmColumn));
-        private string GetValorTratado(int prmIndice)
+        private string GetFormat(string prmColumn) => GetFormat(prmIndice: reader.GetIndex(prmColumn));
+        private string GetFormat(int prmIndice)
         {
             string tipo = GetType(prmIndice);
 
@@ -113,22 +111,22 @@ namespace Dooggy.LIBRARY
 
         private string GetMaskText(string prmColumn, string prmText)
         {
-            if (TemMask)
-                return Format.GetTextFormat(prmText, Mask.GetFormat(prmColumn));
+            if (HasMasks)
+                return Format.GetTextFormat(prmText, Masks.GetFormat(prmColumn));
 
             return (prmText);
         }
         private string GetMaskDate(string prmColumn, DateTime prmDate)
         {
-            if (TemMask)
-                return Format.GetDateFormat(prmDate, Mask.GetFormat(prmColumn)); 
+            if (HasMasks)
+                return Format.GetDateFormat(prmDate, Masks.GetFormat(prmColumn)); 
 
             return (Format.GetDateFormat(prmDate));
         }
         private string GetMaskDouble(string prmColumn, Double prmNumber)
         {
-            if (TemMask)
-                return Format.GetDoubleFormat(prmNumber, Mask.GetFormat(prmColumn));
+            if (HasMasks)
+                return Format.GetDoubleFormat(prmNumber, Masks.GetFormat(prmColumn));
 
             return (Format.GetDoubleFormat(prmNumber));
         }

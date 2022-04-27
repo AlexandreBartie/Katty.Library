@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public class Path

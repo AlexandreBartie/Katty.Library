@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public class FileJUNIT : FileTXT
     {

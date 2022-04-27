@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Text;
 using System.IO;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public class FileTXT
     {

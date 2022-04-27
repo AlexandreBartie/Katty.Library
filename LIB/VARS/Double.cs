@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public static class myDouble
     {

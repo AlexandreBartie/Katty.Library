@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public enum eTipoMarcaData { dia, mes, ano }
 

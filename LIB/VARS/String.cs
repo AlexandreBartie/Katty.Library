@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public static class myString
     {
@@ -92,7 +92,7 @@ namespace Dooggy.LIBRARY
                 int indice = GetPosicao(prmTexto, prmDelimitador);
 
                 if (indice != 0)
-                    return GetSubstring(prmTexto, prmIndice: 1, prmTamanho: indice-1);
+                    return GetSubstring(prmTexto, prmIndice: 1, prmTamanho: indice-prmDelimitador.Length);
     
                 return (prmTexto);
 

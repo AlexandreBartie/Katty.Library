@@ -2,7 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     static class Program
     {

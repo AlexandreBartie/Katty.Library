@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public class DataVirtualConnect
     {
@@ -20,9 +20,9 @@ namespace Dooggy.LIBRARY
 
         public void Close() => conexao.Close();
 
-        public bool Execute(string prmNoSQL, int prmTimeOut)
+        public bool Execute(string prmSQL, int prmTimeOut)
         {
-            DataVirtualCommand Command = new DataVirtualCommand(prmNoSQL, this, prmTimeOut);
+            DataVirtualCommand Command = new DataVirtualCommand(prmSQL, this, prmTimeOut);
 
             return Command.GetNoResults();
         }

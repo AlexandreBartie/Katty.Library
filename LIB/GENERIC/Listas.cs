@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.VisualBasic.FileIO;
 using System.Linq;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public class xLista : List<string>
     {
@@ -182,21 +182,15 @@ namespace Dooggy.LIBRARY
         public string memo => Export(prmSeparador: Environment.NewLine);
         public string txt => Export(separador);
         public string csv => Export(", ");
+
         public string Export(string prmSeparador)
         {
-
-            string lista = "";
-            string aux = "";
+            string lista = ""; string aux = "";
 
             foreach (string item in this)
             {
-
-                lista += (aux + item);
-
-                aux = prmSeparador;
-
+                lista += (aux + item); aux = prmSeparador;
             }
-
             return lista;
         }
 
@@ -212,31 +206,6 @@ namespace Dooggy.LIBRARY
         { separador = prmSeparador; Parse(prmTexto); }
 
         public string memo_ext => memo + Environment.NewLine;
-
-    }
-    public class xMask
-    {
-
-        public myTuplas lista;
-
-        public bool IsOK { get => (lista.IsFull); }
-
-        public xMask(string prmLista)
-        {
-            Setup(new myTuplas(prmLista));
-        }
-        public xMask(myTuplas prmLista)
-        {
-            Setup(prmLista);
-        }
-
-        private void Setup(myTuplas prmLista) => lista = prmLista;
-        public string TextToString(string prmKey, string prmText) => myFormat.TextToString(prmText, GetFormat(prmKey));
-
-        public string GetFormat(string prmKey) => GetFormat(prmKey, prmPadrao: "");
-        public string GetFormat(string prmKey, string prmPadrao) => lista.GetValue(prmKey, prmPadrao);
-
-        public bool IsFind(string prmKey) => lista.IsFind(prmKey);
 
     }
     public class xLinhas : xMemo

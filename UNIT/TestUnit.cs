@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public class UTControl
@@ -30,6 +30,7 @@ namespace Dooggy.LIBRARY
         public void outputText(string prmText) => outputText(prmText, prmEnter: false);
         public void outputText(string prmText, bool prmEnter) { outputList.AddText(prmText); if (prmEnter) output(); }
 
+        public string GetRaw() => inputList.raw;
         public string GetInput() => inputList.txt;
         public string GetOutput() => outputList.txt;
         public string GetResult() => resultList.txt;
@@ -67,6 +68,7 @@ namespace Dooggy.LIBRARY
         public bool IsFull => (this.Count > 0);
         public bool IsMatch(string prmText) => (txt == prmText);
 
+        public string raw => GetRAW();
         public string txt => GetTXT();
 
         public LinesUTC()
@@ -102,17 +104,16 @@ namespace Dooggy.LIBRARY
                     base.Add(prmText);
         }
         
-        private string GetTXT()
+        private string GetRAW()
         {
-            string txt = "";
+            xLinhas linhas = new xLinhas();
 
             foreach (string texto in this)
-                txt += texto + Environment.NewLine;
+                linhas.Add(texto);
 
-            return txt;
+            return linhas.txt;
         }
-
-
+        private string GetTXT() => raw + Environment.NewLine;
     }
 
 //    public class TestCase

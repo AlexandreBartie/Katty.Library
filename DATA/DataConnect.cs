@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public class DataConnect
@@ -156,8 +156,8 @@ namespace Dooggy.LIBRARY
 
         public string GetStatus() { if (status == "") Setup(); return status; }
 
-        public DataCursor GetCursor(string prmSQL, string prmMask) => GetCursor(prmSQL, prmMask: new myTuplas(prmMask));
-        public DataCursor GetCursor(string prmSQL, myTuplas prmMask) => new DataCursor(prmSQL, prmMask, this);
+        public DataCursor GetCursor(string prmSQL, string prmMask) => GetCursor(prmSQL, prmMask: new myMasks(prmMask));
+        public DataCursor GetCursor(string prmSQL, myMasks prmMask) => new DataCursor(prmSQL, prmMask, this);
 
         public bool Setup()
         {
@@ -190,15 +190,15 @@ namespace Dooggy.LIBRARY
 
             return (false);
         }
-        public bool ExecuteNoSQL(string prmNoSQL, int prmTimeOut)
+        public bool Execute(string prmCommand, int prmTimeOut)
         {
 
-            if (Conexao.Execute(prmNoSQL, prmTimeOut))
+            if (Conexao.Execute(prmCommand, prmTimeOut))
             {
-                Trace.LogData.DBSetup(tag, prmNoSQL); return true;
+                Trace.LogData.DBSetup(tag, prmCommand); return true;
             }
 
-            Trace.LogData.FailDBSetup(tag, prmNoSQL);
+            Trace.LogData.FailDBSetup(tag, prmCommand);
 
             return false;
         }
@@ -252,7 +252,7 @@ namespace Dooggy.LIBRARY
             return IsConnected;
         }
 
-        public bool ExecuteNoSQL(string prmNoSQL, int prmTimeOut) => Corrente.ExecuteNoSQL(prmNoSQL, prmTimeOut);
+        public bool Execute(string prmCommand, int prmTimeOut) => Corrente.Execute(prmCommand, prmTimeOut);
 
         private bool GetIsOK()
         {

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Diagnostics;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
     public class myJSON
     {

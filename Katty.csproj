@@ -4,19 +4,19 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>Dooggy.ico</ApplicationIcon>
+    <ApplicationIcon>Katty.ico</ApplicationIcon>
     <StartupObject></StartupObject>
     <Authors>Alexandre Bartie</Authors>
-    <Product>Dooggy.LIBRARY FRAMEWORK</Product>
-    <AssemblyName>Dooggy.LIBRARY</AssemblyName>
-    <RootNamespace>Dooggy.LIBRARY</RootNamespace>
+    <Product>Katty LIBRARY</Product>
+    <AssemblyName>KATTY</AssemblyName>
+    <RootNamespace>KATTY</RootNamespace>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <Version>1.0.7.9</Version>
+    <Version>1.0.7.11</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl></PackageProjectUrl>
-    <PackageIcon>Dooggy.jpg</PackageIcon>
+    <PackageIcon>Katty.png</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/AlexandreBartie/Dooggy.LIBRARY</RepositoryUrl>
+    <RepositoryUrl>https://github.com/AlexandreBartie/Katty</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
@@ -25,17 +25,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Dooggy.ico" />
+    <Content Include="Katty.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.50" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Dooggy.jpg">
+    <None Update="Katty.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

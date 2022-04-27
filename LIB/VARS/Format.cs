@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public static class myFormat
@@ -14,28 +14,6 @@ namespace Dooggy.LIBRARY
         public static string GetKey(int prmId, int prmTamanho) => DoubleToString(prmNumber: (double)prmId, prmFormat: myString.GetRepetir("0", prmTamanho));
 
         public static string TextToString(string prmText, string prmFormat) => myText.Get(prmText, prmFormat);
-
-        public static string RandomToString() => RandomToString(prmFormat: "");
-        public static string RandomToString(string prmFormat) => RandomToString(prmDate: DateTime.Now, prmFormat);
-        public static string RandomToString(DateTime prmDate, string prmFormat)
-        {
-
-            string prefixo = ""; string parametro; int tamanho;
-
-            BlocoColchetes Bloco = new BlocoColchetes();
-
-            if (Bloco.TemParametro(prmFormat))
-            {
-                prefixo = Bloco.GetPrefixo(prmFormat);
-                parametro = Bloco.GetParametro(prmFormat);
-            }
-            else
-                parametro = prmFormat;
-
-            tamanho = myInt.GetNumero(parametro, prmPadrao: 0);
-
-            return prefixo + prmDate.ToString(GetRandomFormat(tamanho));
-        }
 
         public static string TimeToString(string prmFormat) => TimeToString(prmDate: DateTime.Now, prmFormat);
         public static string TimeToString(DateTime prmDate, string prmFormat) => prmDate.ToString(GetTimeFormat(prmFormat));
@@ -87,17 +65,8 @@ namespace Dooggy.LIBRARY
 
         }
 
-        private static string GetRandomFormat(int prmTamanho)
-        {
-            string formato = "fffssmmhhddMMyyyy";
-
-            if (prmTamanho != 0)
-                return myString.GetFirst(formato, prmTamanho);
-
-            return (formato);
-        }
-
     }
+    
     public static class myCSV
     {
 
@@ -137,7 +106,7 @@ namespace Dooggy.LIBRARY
 
             format = bloco.GetParametro(prmFormat);
 
-            effect = bloco.GetSufixoDestaque(prmFormat);
+            effect = bloco.GetSufixoConector(prmFormat);
 
             // aplicar tratamentos no texto
 

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dooggy.LIBRARY
+namespace Katty
 {
 
     public delegate void NotifyLog();
@@ -142,7 +142,7 @@ namespace Dooggy.LIBRARY
     {
 
         public void DBConnection(string prmTag, string prmStatus) => msgData(string.Format("-db[{0}] -status: {1}", prmTag, prmStatus));
-        public void DBSetup(string prmTag, string prmSetup) => msgNoSQL(string.Format("-db[{0}] -setup: {1}", prmTag, prmSetup));
+        public void DBSetup(string prmTag, string prmCommand) => msgNoSQL(string.Format("-db[{0}] -setup: {1}", prmTag, prmCommand));
 
         public void SQLExecution(string prmTag, string prmSQL, long prmTimeElapsed, bool prmTemDados) => GetSQLExecution(prmMsg: string.Format(@"-db[{0}] -sql: {1}", prmTag, prmSQL), prmSQL, prmTimeElapsed, prmTemDados);
 
@@ -347,7 +347,8 @@ namespace Dooggy.LIBRARY
     {
         public myDominio Hide;
 
-        private string lista = "{ CFG,CODE,PLAY,DEF,xSQL }";
+        //private string lista = "{ CFG,CODE,PLAY,DEF,xSQL }";
+        private string lista = "{ CFG,CODE,DEF,xSQL }";
 
         public TraceHide()
         {
