@@ -127,7 +127,7 @@ namespace Katty
 
         private string GetInput()
         {
-            xLista txt = new xLista();
+            myList txt = new myList();
 
             if (TemKey)
                 txt.Add(name);
@@ -158,7 +158,7 @@ namespace Katty
         internal string value;
         internal bool IsMain { get; }
 
-        private BlocoColchetes Bloco;
+        private myBrickColchetes myBrick;
 
         internal bool TemKey => myString.IsFull(name);
         internal bool IsMatch(string prmName) => (TemKey && myString.IsMatch(name, prmName));
@@ -170,21 +170,21 @@ namespace Katty
 
         internal void Parse(string prmText)
         {
-            Bloco = new BlocoColchetes(conector);
+            myBrick = new myBrickColchetes(conector);
 
             //
             // Main: 'name <conector> valor' or Spot: '[name <conector> valor]'
             //
 
-            string param = Bloco.GetExtract(prmText, IsMain);
+            string param = myBrick.GetExtract(prmText, IsMain);
 
             //
             // Identifica "name" e "valor"
             //
 
-            name = Bloco.GetPrefixoConector(param);
+            name = myBrick.GetPrefixoConector(param);
 
-            value = Bloco.GetSufixoConector(param, prmNull: IsMain);
+            value = myBrick.GetSufixoConector(param, prmNull: IsMain);
         }
 
     }
@@ -246,7 +246,7 @@ namespace Katty
         {
             if (myString.IsFull(prmLista))
             {
-                foreach (string item in new xLista(prmLista, separador))
+                foreach (string item in new myList(prmLista, separador))
                     AddTupla(new myTupla(item, conector));
             }
             return (this);
@@ -272,7 +272,7 @@ namespace Katty
             if (myString.IsFull(prmValues))
             {
                 int cont = 0;
-                foreach (string item in new xLista(prmValues, separador))
+                foreach (string item in new myList(prmValues, separador))
                 {
                     if (this.Count == cont) break;
 
@@ -333,7 +333,7 @@ namespace Katty
 
         private string GetTXT()
         {
-            xLista text = new xLista();
+            myList text = new myList();
 
             foreach (myTupla tupla in this)
             {
@@ -343,7 +343,7 @@ namespace Katty
         }
         private string GetSQL()
         {
-            xLista text = new xLista();
+            myList text = new myList();
 
             foreach (myTupla tupla in this)
             {
@@ -353,7 +353,7 @@ namespace Katty
         }
         private string GetLOG()
         {
-            xMemo text = new xMemo();
+            myMemo text = new myMemo();
 
             foreach (myTupla tupla in this)
                 text.Add(tupla.log);
@@ -362,7 +362,7 @@ namespace Katty
         }
         private string GetMask()
         {
-            xMemo text = new xMemo();
+            myMemo text = new myMemo();
 
             foreach (myTupla tupla in this)
             {

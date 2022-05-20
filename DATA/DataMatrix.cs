@@ -4,23 +4,33 @@ using System.Text;
 
 namespace Katty
 {
-    public class DataSet
+    public class DataMatrix
     {
-        public DataViews Groups { get; }
+        public DataViews Views { get; }
 
-        public string log => Groups.log;
+        public string log => GetLog();
 
-        public DataSet()
+        public DataMatrix()
         {
-            Groups = new DataViews();
+            Views = new DataViews();
         }
 
-        public DataSet(string prmList)
+        public DataMatrix(string prmList)
         {
-            Groups = new DataViews().Add(prmList);
+            Views = new DataViews().Add(prmList);
         }
 
-        public void AddGroups(string prmLista) => Groups.Add(prmLista);
+        public void AddViews(string prmLista) => Views.Add(prmLista);
+
+        private string GetLog()
+        {
+            myLines memo = new myLines();
+
+            foreach (DataView View in Views)
+                memo.Add(View.name);
+
+            return memo.memo;
+        }
 
     }
 
@@ -30,7 +40,7 @@ namespace Katty
 
         public DataViews Add(string prmLista)
         {
-            foreach (string name in new xLista(prmLista))
+            foreach (string name in new myList(prmLista))
                 Add(new DataView(name));
 
             return this;
@@ -38,7 +48,7 @@ namespace Katty
 
         private string GetLog()
         {
-            xLinhas memo = new xLinhas();
+            myLines memo = new myLines();
 
             foreach (DataView View in this)
                 memo.Add(View.log);
@@ -66,7 +76,7 @@ namespace Katty
 
         private string GetLog()
         {
-            xLista list = new xLista();
+            myList list = new myList();
 
             foreach (DataInput Input in this)
                 list.Add(Input.log);
@@ -86,7 +96,7 @@ namespace Katty
 
         public DataFlows Add(string prmFlows)
         {
-            foreach (string line in new xLinhas(prmFlows))
+            foreach (string line in new myLines(prmFlows))
                 Add(new myTuplas(line));
 
             return this;
@@ -99,7 +109,7 @@ namespace Katty
         }
         private string GetLog()
         {
-            xMemo txt = new xMemo();
+            myMemo txt = new myMemo();
 
             foreach (DataFlow Flow in this)
                 txt.Add(Flow.log);
@@ -135,10 +145,10 @@ namespace Katty
 
         private string GetLog()
         {
-            xLinhas memo = new xLinhas();
+            myLines memo = new myLines();
 
-            memo.Add(Inputs.log);
-            memo.Add(Flows.log);
+            memo.Add(Inputs.log, prmNotEmpty: true);
+            memo.Add(Flows.log, prmNotEmpty: true);
 
             return memo.memo;
         }

@@ -7,7 +7,7 @@ namespace Katty
     public class myJSON
     {
 
-        public JSON_Control Controle;
+        public myJSON_Control Controle;
 
         private bool _IsOK;
 
@@ -23,13 +23,13 @@ namespace Katty
 
         public myJSON()
         {
-            Controle = new JSON_Control(this);
+            Controle = new myJSON_Control(this);
 
         }
         public myJSON(string prmFlow)
         {
 
-            Controle = new JSON_Control(this);
+            Controle = new myJSON_Control(this);
 
             Parse(prmFlow);
 
@@ -71,7 +71,7 @@ namespace Katty
         public JsonProperty GetProperty (string prmKey) => Controle.GetProperty(prmKey);
 
     }
-    public class JSON_Control
+    public class myJSON_Control
     {
 
         private myJSON JSON;
@@ -86,7 +86,7 @@ namespace Katty
 
         public Exception erro;
 
-        private JSON_Flows Flows;
+        private myJSON_Flows Flows;
 
         private JsonElement root { get => doc.RootElement; }
 
@@ -97,7 +97,7 @@ namespace Katty
         private JsonElement.ObjectEnumerator Propriedades { get => item.EnumerateObject(); }
 
 
-        public JSON_Control(myJSON prmJSON)
+        public myJSON_Control(myJSON prmJSON)
         {
             
             JSON = prmJSON;
@@ -109,7 +109,7 @@ namespace Katty
         private void Setup()
         {
 
-            Flows = new JSON_Flows(JSON);
+            Flows = new myJSON_Flows(JSON);
 
         }
 
@@ -147,7 +147,7 @@ namespace Katty
 
             // Lista acomodara o Flow Combinado
 
-            xMemo Memo = new xMemo(";");
+            myMemo Memo = new myMemo(";");
 
             // Sobrepor valores do MESTRE que estão presentes no Flow
 
@@ -266,7 +266,7 @@ namespace Katty
         private string GetTuplas()
         {
 
-            xMemo linhas = new xMemo();
+            myMemo linhas = new myMemo();
 
             foreach (JsonElement item in Corpo)
 
@@ -287,12 +287,12 @@ namespace Katty
         }
 
     }
-    internal class JSON_Flows : xMemo
+    internal class myJSON_Flows : myMemo
     {
 
         private myJSON JSON;
 
-        public JSON_Flows(myJSON prmJSON)
+        public myJSON_Flows(myJSON prmJSON)
         {
 
             JSON = prmJSON;

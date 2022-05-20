@@ -40,13 +40,13 @@ namespace Katty
 
             if (GetRequest(sql))
             {
-                Trace.OnSqlExecutado(DataBase.tag, sql, TimeCursor.Elapsed.milliseconds, TemDados);
+                Trace.OnSqlExecutado(DataBase.tag, sql, Timer.Elapsed.milliseconds, TemDados);
             }
             else
                 Trace.OnSqlError(DataBase.tag, sql, Erro);
         }
 
-        private string GetTratarSQL(string prmSQL) => Bloco.GetBlocoTroca(prmSQL, prmDelimitadorInicial: "<##>", prmDelimitadorFinal: "<##>", prmDelimitadorNovo: "'");
+        private string GetTratarSQL(string prmSQL) => myBrick.GetmyBrickTroca(prmSQL, prmDelimitadorInicial: "<##>", prmDelimitadorFinal: "<##>", prmDelimitadorNovo: "'");
 
         private string GetLog()
         {
@@ -111,21 +111,21 @@ namespace Katty
         private string GetMaskText(string prmColumn, string prmText)
         {
             if (HasMasks)
-                return Format.GetTextFormat(prmText, Masks.GetFormat(prmColumn));
+                return Format.GetTextFormat(prmText, Masks.GetMask(prmColumn));
 
             return (prmText);
         }
         private string GetMaskDate(string prmColumn, DateTime prmDate)
         {
             if (HasMasks)
-                return Format.GetDateFormat(prmDate, Masks.GetFormat(prmColumn)); 
+                return Format.GetDateFormat(prmDate, Masks.GetMask(prmColumn)); 
 
             return (Format.GetDateFormat(prmDate));
         }
         private string GetMaskDouble(string prmColumn, Double prmNumber)
         {
             if (HasMasks)
-                return Format.GetDoubleFormat(prmNumber, Masks.GetFormat(prmColumn));
+                return Format.GetDoubleFormat(prmNumber, Masks.GetMask(prmColumn));
 
             return (Format.GetDoubleFormat(prmNumber));
         }
@@ -133,7 +133,7 @@ namespace Katty
         public string csv() => csv(prmSeparador: ",");
         public string csv(string prmSeparador)
         {
-            xMemo memo = new xMemo(prmSeparador); string texto = "";
+            myMemo memo = new myMemo(prmSeparador); string texto = "";
 
             if (TemDados)
             {
@@ -157,7 +157,7 @@ namespace Katty
         {
             if (TemDados)
             {
-                xMemo memo = new xMemo(prmSeparador: ", ");
+                myMemo memo = new myMemo(prmSeparador: ", ");
 
                 for (int cont = 0; cont < qtdeColumns; cont++)
                 {
@@ -196,7 +196,7 @@ namespace Katty
             {
                 command = new DataVirtualCommand(prmSQL, DataBase.Conexao, timeoutSQL);
 
-                TimeCursor.Start();
+                Timer.Start();
 
                 reader = command.GetReader();
 
@@ -207,7 +207,7 @@ namespace Katty
 
             finally
             {
-                TimeCursor.Stop(); 
+                Timer.Stop(); 
             }
 
             return (IsOK);
@@ -236,7 +236,7 @@ namespace Katty
             {
                 command = new DataVirtualCommand(prmSQL, DataBase.Conexao, timeoutSQL);
 
-                TimeCursor.Start();
+                Timer.Start();
 
                 command.GetNoResults();
 
@@ -246,7 +246,7 @@ namespace Katty
 
             finally
             {
-                TimeCursor.Stop();
+                Timer.Stop();
             }
 
             return (IsOK);
@@ -261,13 +261,13 @@ namespace Katty
 
         public DataVirtualCommand command;
 
-        internal Cronometro TimeCursor;
+        internal myTimer Timer;
 
         internal int timeoutSQL => DataBase.Connect.timeoutSQL;
 
         public DataCursorBase()
         {
-            TimeCursor = new Cronometro();
+            Timer = new myTimer();
         }
 
     }

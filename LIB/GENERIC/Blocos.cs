@@ -5,29 +5,29 @@ using System.Text;
 namespace Katty
 {
 
-    public class BlocoColchetes : BlocoGenerico
+    public class myBrickColchetes : myBrickGenerico
     {
-        public BlocoColchetes() : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmConector: "=") { }
+        public myBrickColchetes() : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmConector: "=") { }
 
-        public BlocoColchetes(string prmConector) : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmConector) { }
+        public myBrickColchetes(string prmConector) : base(prmDelimitadorInicial: "[", prmDelimitadorFinal: "]", prmConector) { }
     }
 
-    public class BlocoChaves : BlocoGenerico
+    public class myBrickChaves : myBrickGenerico
     {
-        public BlocoChaves() : base(prmDelimitadorInicial: "{", prmDelimitadorFinal: "}", prmConector: "=") { }
+        public myBrickChaves() : base(prmDelimitadorInicial: "{", prmDelimitadorFinal: "}", prmConector: "=") { }
     }
 
-    public class BlocoParenteses : BlocoGenerico
+    public class myBrickParenteses : myBrickGenerico
     {
-        public BlocoParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmConector: "@") { }
+        public myBrickParenteses() : base(prmDelimitadorInicial: "(", prmDelimitadorFinal: ")", prmConector: "@") { }
     }
 
-    public class BlocoTags : BlocoGenerico
+    public class myBrickTags : myBrickGenerico
     {
-        public BlocoTags() : base(prmDelimitadorInicial: "<", prmDelimitadorFinal: ">", prmConector: "|") { }
+        public myBrickTags() : base(prmDelimitadorInicial: "<", prmDelimitadorFinal: ">", prmConector: "|") { }
     }
 
-    public class BlocoGenerico
+    public class myBrickGenerico
     {
 
         private string delimitadorInicial;
@@ -35,7 +35,7 @@ namespace Katty
 
         private string conector;
 
-        public BlocoGenerico(string prmDelimitadorInicial, string prmDelimitadorFinal, string prmConector)
+        public myBrickGenerico(string prmDelimitadorInicial, string prmDelimitadorFinal, string prmConector)
         {
             delimitadorInicial = prmDelimitadorInicial;
             delimitadorFinal = prmDelimitadorFinal;
@@ -47,15 +47,15 @@ namespace Katty
 
         public string GetExtract(string prmText, bool prmIsMain) { if (prmIsMain) return GetMain(prmText); return GetSpot(prmText); }
 
-        public string GetMain(string prmText) => Bloco.GetBlocoRemove(prmText, delimitadorInicial, delimitadorFinal);
-        public string GetSpot(string prmText) => Bloco.GetBloco(prmText, delimitadorInicial, delimitadorFinal).Trim();
+        public string GetMain(string prmText) => myBrick.GetmyBrickRemove(prmText, delimitadorInicial, delimitadorFinal);
+        public string GetSpot(string prmText) => myBrick.GetmyBrick(prmText, delimitadorInicial, delimitadorFinal).Trim();
 
 
         public string GetPrefixo(string prmText) => GetPrefixo(prmText, prmTRIM: false);
-        public string GetPrefixo(string prmText, bool prmTRIM) => Bloco.GetBlocoAntes(prmText, delimitadorInicial, prmTRIM);
+        public string GetPrefixo(string prmText, bool prmTRIM) => myBrick.GetmyBrickAntes(prmText, delimitadorInicial, prmTRIM);
 
         public string GetSufixo(string prmText) => GetSufixo(prmText, prmTRIM: false);
-        public string GetSufixo(string prmText, bool prmTRIM) => Bloco.GetBlocoDepois(prmText, delimitadorFinal, prmTRIM);
+        public string GetSufixo(string prmText, bool prmTRIM) => myBrick.GetmyBrickDepois(prmText, delimitadorFinal, prmTRIM);
 
         public string GetPrefixoConector(string prmTexto) => GetPrefixoConector(prmTexto, conector);
         public string GetPrefixoConector(string prmTexto, string prmConector) => myString.GetFirst(prmTexto, prmConector).Trim();
@@ -71,13 +71,13 @@ namespace Katty
             return myString.GetLast(prmTexto, prmConector).Trim();
         }
     }
-    public static class Bloco
+    public static class myBrick
     {
 
-        public static string GetBloco(string prmTexto, string prmDelimitador) => GetBloco(prmTexto, prmDelimitador, prmDelimitador);
-        public static string GetBloco(string prmTexto, string prmDelimitador, bool prmPreserve) => GetBloco(prmTexto, prmDelimitador, prmDelimitador, prmPreserve);
-        public static string GetBloco(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal) => GetBloco(prmTexto, prmDelimitadorInicial, prmDelimitadorFinal, prmPreserve: false);
-        public static string GetBloco(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, bool prmPreserve)
+        public static string GetmyBrick(string prmTexto, string prmDelimitador) => GetmyBrick(prmTexto, prmDelimitador, prmDelimitador);
+        public static string GetmyBrick(string prmTexto, string prmDelimitador, bool prmPreserve) => GetmyBrick(prmTexto, prmDelimitador, prmDelimitador, prmPreserve);
+        public static string GetmyBrick(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal) => GetmyBrick(prmTexto, prmDelimitadorInicial, prmDelimitadorFinal, prmPreserve: false);
+        public static string GetmyBrick(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, bool prmPreserve)
         {
 
             string retorno = "";
@@ -103,13 +103,13 @@ namespace Katty
 
         }
 
-        public static string GetBlocoRemove(string prmText, string prmDelimitadorInicial, string prmDelimitadorFinal) => GetBlocoRemove(prmText, prmDelimitadorInicial, prmDelimitadorFinal, prmTRIM: false);
-        public static string GetBlocoRemove(string prmText, string prmDelimitadorInicial, string prmDelimitadorFinal, bool prmTRIM)
+        public static string GetmyBrickRemove(string prmText, string prmDelimitadorInicial, string prmDelimitadorFinal) => GetmyBrickRemove(prmText, prmDelimitadorInicial, prmDelimitadorFinal, prmTRIM: false);
+        public static string GetmyBrickRemove(string prmText, string prmDelimitadorInicial, string prmDelimitadorFinal, bool prmTRIM)
         {
-            string retorno = GetBloco(prmText, prmDelimitadorInicial, prmDelimitadorFinal, prmPreserve: true);
+            string retorno = GetmyBrick(prmText, prmDelimitadorInicial, prmDelimitadorFinal, prmPreserve: true);
 
-            string parte_inicial = Bloco.GetBlocoAntes(prmText, retorno);
-            string parte_final = Bloco.GetBlocoDepois(prmText, retorno);
+            string parte_inicial = myBrick.GetmyBrickAntes(prmText, retorno);
+            string parte_final = myBrick.GetmyBrickDepois(prmText, retorno);
 
             if (prmTRIM)
                 return (parte_inicial.Trim() + " " + parte_final.Trim()).Trim();
@@ -117,8 +117,8 @@ namespace Katty
             return (parte_inicial + parte_final);
         }
 
-        public static string GetBlocoAntes(string prmTexto, string prmDelimitador) => GetBlocoAntes(prmTexto, prmDelimitador, prmTRIM: false);
-        public static string GetBlocoAntes(string prmTexto, string prmDelimitador, bool prmTRIM)
+        public static string GetmyBrickAntes(string prmTexto, string prmDelimitador) => GetmyBrickAntes(prmTexto, prmDelimitador, prmTRIM: false);
+        public static string GetmyBrickAntes(string prmTexto, string prmDelimitador, bool prmTRIM)
         {
 
             if (myString.IsFull(prmTexto))
@@ -145,8 +145,8 @@ namespace Katty
             return ("");
 
         }
-        public static string GetBlocoDepois(string prmTexto, string prmDelimitador) => GetBlocoDepois(prmTexto, prmDelimitador, prmTRIM: false);
-        public static string GetBlocoDepois(string prmTexto, string prmDelimitador, bool prmTRIM)
+        public static string GetmyBrickDepois(string prmTexto, string prmDelimitador) => GetmyBrickDepois(prmTexto, prmDelimitador, prmTRIM: false);
+        public static string GetmyBrickDepois(string prmTexto, string prmDelimitador, bool prmTRIM)
         {
 
             if (myString.IsFull(prmTexto) && myString.IsFull(prmDelimitador))
@@ -171,9 +171,9 @@ namespace Katty
             return ("");
 
         }
-        public static string GetBlocoTroca(string prmTexto, string prmDelimitador, string prmDelimitadorNovo) => GetBlocoTroca(prmTexto, prmDelimitador, prmDelimitador, prmDelimitadorNovo);
-        public static string GetBlocoTroca(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, string prmDelimitadorNovo) => GetBlocoTroca(prmTexto, prmDelimitadorInicial, prmDelimitadorFinal, prmDelimitadorNovo, prmDelimitadorNovo);
-        public static string GetBlocoTroca(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, string prmDelimitadorInicialNovo, string prmDelimitadorFinalNovo)
+        public static string GetmyBrickTroca(string prmTexto, string prmDelimitador, string prmDelimitadorNovo) => GetmyBrickTroca(prmTexto, prmDelimitador, prmDelimitador, prmDelimitadorNovo);
+        public static string GetmyBrickTroca(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, string prmDelimitadorNovo) => GetmyBrickTroca(prmTexto, prmDelimitadorInicial, prmDelimitadorFinal, prmDelimitadorNovo, prmDelimitadorNovo);
+        public static string GetmyBrickTroca(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, string prmDelimitadorInicialNovo, string prmDelimitadorFinalNovo)
         {
 
             string texto = prmTexto;
@@ -181,14 +181,14 @@ namespace Katty
             while (true)
             {
 
-                string bloco = GetBloco(texto, prmDelimitadorInicial, prmDelimitadorFinal);
+                string myBrick = GetmyBrick(texto, prmDelimitadorInicial, prmDelimitadorFinal);
 
-                if (bloco == "")
+                if (myBrick == "")
                     break;
 
-                string trecho_velho = prmDelimitadorInicial + bloco + prmDelimitadorFinal;
+                string trecho_velho = prmDelimitadorInicial + myBrick + prmDelimitadorFinal;
 
-                string trecho_novo = prmDelimitadorInicialNovo + bloco + prmDelimitadorFinalNovo;
+                string trecho_novo = prmDelimitadorInicialNovo + myBrick + prmDelimitadorFinalNovo;
 
                 texto = texto.Replace(trecho_velho, trecho_novo);
 
@@ -199,7 +199,7 @@ namespace Katty
         }
 
     }
-    public static class BlocoPrefixo
+    public static class myBrickPrefixo
     {
         public static bool IsPrefixo(string prmTexto, string prmPrefixo) => (myString.GetFirst(prmTexto, prmTamanho: prmPrefixo.Length) == prmPrefixo);
         public static bool IsPrefixo(string prmTexto, string prmPrefixo, string prmDelimitador) => (GetPrefixo(prmTexto, prmPrefixo, prmDelimitador) != "");
@@ -214,7 +214,7 @@ namespace Katty
             {
 
                 if (myString.GetFind(prmTexto, prmDelimitador))
-                    retorno = Bloco.GetBloco(prmTexto, prmPrefixo, prmDelimitador);
+                    retorno = myBrick.GetmyBrick(prmTexto, prmPrefixo, prmDelimitador);
                 else
                     retorno = myString.GetLast(prmTexto, prmTamanho: -prmPrefixo.Length);
 

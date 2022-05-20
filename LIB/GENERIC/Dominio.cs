@@ -9,7 +9,7 @@ namespace Katty
 
         public string name;
 
-        public xLista Opcoes;
+        public myList Opcoes;
 
         public string padrao;
 
@@ -42,9 +42,9 @@ namespace Katty
         {
             string opcoes;
 
-            name = new BlocoChaves().GetPrefixo(prmSintaxe, prmTRIM: true);
+            name = new myBrickChaves().GetPrefixo(prmSintaxe, prmTRIM: true);
 
-            opcoes = new BlocoChaves().GetSpot(prmSintaxe);
+            opcoes = new myBrickChaves().GetSpot(prmSintaxe);
 
             Parse(name, opcoes);
         }
@@ -60,9 +60,9 @@ namespace Katty
 
             // Definição do nome e do padrão (deve 
 
-            name = new BlocoColchetes().GetPrefixo(prmName, prmTRIM: true);
+            name = new myBrickColchetes().GetPrefixo(prmName, prmTRIM: true);
 
-            padrao = GetValidDefault(prmDefault: new BlocoColchetes().GetSpot(prmName));
+            padrao = GetValidDefault(prmDefault: new myBrickColchetes().GetSpot(prmName));
 
         }
 
@@ -80,7 +80,7 @@ namespace Katty
         public bool IsFind(string prmItem) => Opcoes.IsFind(prmItem);
 
         private void SetOpcoes() => SetOpcoes(prmLista: null);
-        public void SetOpcoes(string prmLista) => Opcoes = new xLista(prmLista);
+        public void SetOpcoes(string prmLista) => Opcoes = new myList(prmLista);
 
         private string GetLog()
         {
@@ -141,7 +141,7 @@ namespace Katty
        
         private string GetLOG()
         {
-            xLinhas memo = new xLinhas();
+            myLines memo = new myLines();
 
             foreach (myDominio item in this)
                 memo.Add(item.log);

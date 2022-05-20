@@ -273,7 +273,7 @@ namespace Katty
         }
         public string log()
         {
-            xMemo lista = new xMemo(prmSeparador: ", ");
+            myMemo lista = new myMemo(prmSeparador: ", ");
 
             foreach (DataBase db in this)
                 lista.Add(db.log);

@@ -10,14 +10,14 @@ namespace Katty
         public static string Next(string prmFormat)
         {
 
-            string prefixo = ""; string parametro; int tamanho; BlocoColchetes Bloco;
+            string prefixo = ""; string parametro; int tamanho; myBrickColchetes myBrick;
 
-            Bloco = new BlocoColchetes();
+            myBrick = new myBrickColchetes();
 
-            if (Bloco.HasSpot(prmFormat))
+            if (myBrick.HasSpot(prmFormat))
             {
-                prefixo = Bloco.GetPrefixo(prmFormat);
-                parametro = Bloco.GetSpot(prmFormat);
+                prefixo = myBrick.GetPrefixo(prmFormat);
+                parametro = myBrick.GetSpot(prmFormat);
             }
             else
                 parametro = prmFormat;
@@ -47,14 +47,14 @@ namespace Katty
         public static string Next(DateTime prmDate, string prmFormat)
         {
 
-            string prefixo = ""; string parametro; int tamanho; BlocoColchetes Bloco;
+            string prefixo = ""; string parametro; int tamanho; myBrickColchetes myBrick;
 
-            Bloco = new BlocoColchetes();
+            myBrick = new myBrickColchetes();
 
-            if (Bloco.HasSpot(prmFormat))
+            if (myBrick.HasSpot(prmFormat))
             {
-                prefixo = Bloco.GetPrefixo(prmFormat);
-                parametro = Bloco.GetSpot(prmFormat);
+                prefixo = myBrick.GetPrefixo(prmFormat);
+                parametro = myBrick.GetSpot(prmFormat);
             }
             else
                 parametro = prmFormat;

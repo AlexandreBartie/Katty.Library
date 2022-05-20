@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Katty
 {
-    public class myArgs: xMemo
+    public class myArgs: myMemo
     {
         public string sql { get => Export(" and "); }
 

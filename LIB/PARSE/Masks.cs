@@ -12,8 +12,10 @@ namespace Katty
  
         public myMasks SetGroup(string prmKey, string prmGroup) { SetKey(prmKey, prmGroup); return this; }
 
-        public string GetFormat(string prmKey) => GetFormat(prmKey, prmPadrao: "");
-        public string GetFormat(string prmKey, string prmPadrao) => GetValue(prmKey, prmPadrao);
+        public string GetMask(string prmKey) => GetMask(prmKey, prmPadrao: "");
+        public string GetMask(string prmKey, string prmPadrao) => GetValue(prmKey, prmPadrao);
+
+        public string GetFormat(string prmKey, string prmText) => myFormat.TextToString(prmText, GetMask(prmKey));
 
     }
     public class myBoxMasks : List<myMasks>
@@ -62,7 +64,7 @@ namespace Katty
         }
         private string GetNames()
         {
-            xLista text = new xMemo();
+            myList text = new myMemo();
 
             foreach (myTuplas Tuplas in this)
                 if (Tuplas.IsFull)
@@ -72,7 +74,7 @@ namespace Katty
         }
         private string GetSQL()
         {
-            xLista text = new xMemo();
+            myList text = new myMemo();
 
             foreach (myTuplas Tuplas in this)
                 if (Tuplas.IsFull)
@@ -82,7 +84,7 @@ namespace Katty
         }
         private string GetMasks()
         {
-            xLista text = new xMemo();
+            myList text = new myMemo();
 
             foreach (myTuplas Tuplas in this)
                 if (Tuplas.IsFull)

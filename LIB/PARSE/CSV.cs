@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Katty
 {
-    public class xParseCSV : xMemo
+    public class myParseCSV : myMemo
     {
 
         public string delimitador = "\"";
 
-        public xParseCSV()
+        public myParseCSV()
         { }
-        public xParseCSV(string prmTexto)
-        { new xParseCSV(prmTexto, separador); }
+        public myParseCSV(string prmTexto)
+        { new myParseCSV(prmTexto, separador); }
 
-        public xParseCSV(string prmTexto, string prmSeparador)
+        public myParseCSV(string prmTexto, string prmSeparador)
         { separador = prmSeparador; Parse(prmTexto); }
 
         public override void Parse(string prmLista) => Parse(prmLista, separador, delimitador);
@@ -93,7 +93,7 @@ namespace Katty
                             if ((IsDetectStart & !IsDetectEnd))
 
                             //sinalizar INICIAR CICLO (apenas se localizador delimitador FINAL no futuro)
-                            IsCycleBegin = ExisteDelimitadorEND(resto);
+                            IsCycleBegin = HasEND(resto);
 
                     }
 
@@ -143,7 +143,7 @@ namespace Katty
             return "";
         }
 
-        private bool ExisteDelimitadorEND(string prmTexto)
+        private bool HasEND(string prmTexto)
         {
             string texto = prmTexto.Replace(" ", "");
             string alvo = delimitador + separador;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Katty
 {
-    public enum eTipoMarcaData { dia, mes, ano }
+    public enum eDataMember { dia, mes, ano }
 
     public class DynamicDate
     {
@@ -416,7 +416,7 @@ namespace Katty
         private void ParseMarcas(string prmParametro)
         {
 
-            foreach (string item in new xLista(prmParametro, "|"))
+            foreach (string item in new myList(prmParametro, "|"))
 
                 AtualizarMarca(prmMarca: item);
 
@@ -465,11 +465,11 @@ namespace Katty
         public void ParseRestricao(string prmParametro)
         { ; }
 
-        private string ObterParametroAnalise(string prmSintaxe) => Bloco.GetBlocoAntes(prmSintaxe, prmDelimitador: ":");
+        private string ObterParametroAnalise(string prmSintaxe) => myBrick.GetmyBrickAntes(prmSintaxe, prmDelimitador: ":");
 
-        private string ObterParametroFormat(string prmSintaxe) => Bloco.GetBlocoDepois(prmSintaxe, prmDelimitador: ":");
+        private string ObterParametroFormat(string prmSintaxe) => myBrick.GetmyBrickDepois(prmSintaxe, prmDelimitador: ":");
 
-        private string ObterParametroRestricao(string prmSintaxe) => Bloco.GetBlocoDepois(prmSintaxe, prmDelimitador: ":");
+        private string ObterParametroRestricao(string prmSintaxe) => myBrick.GetmyBrickDepois(prmSintaxe, prmDelimitador: ":");
 
     }
     public class DynamicDateExport

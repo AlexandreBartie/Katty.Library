@@ -151,7 +151,7 @@ namespace Katty
         private string GetLista()
         {
 
-            xMemo memo = new xMemo();
+            myMemo memo = new myMemo();
 
             foreach (Arquivo file in this)
                 memo.Add(file.nome);
@@ -162,7 +162,7 @@ namespace Katty
         private string GetLinhas()
         {
 
-            xMemo memo = new xMemo();
+            myMemo memo = new myMemo();
 
             foreach (Arquivo file in this)
                 memo.Add(String.Format("#{0}", file.qtde_linhas));
@@ -191,7 +191,7 @@ namespace Katty
 
         public FileInfo info;
 
-        public FileTXT file = new FileTXT();
+        public myFileTXT file = new myFileTXT();
 
         public string nome { get => info.Name; }
         public string nome_curto { get => myString.GetRemove(nome, prmParte: extensao); }

@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Katty
 {
-    public class FileTXT
+    public class myFileTXT
     {
 
         public string[] lines;
@@ -85,7 +85,7 @@ namespace Katty
 
         public string txt()
         {
-            xLinhas text = new xLinhas();
+            myLines text = new myLines();
 
             if (IsOK)
             {

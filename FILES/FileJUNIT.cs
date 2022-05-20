@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Katty
 {
-    public class FileJUNIT : FileTXT
+    public class myFileJUNIT : myFileTXT
     {
 
         private TestCasesJUnit Cases;
@@ -56,13 +56,13 @@ namespace Katty
     public class TestCasesJUnit
     {
 
-        private FileJUNIT File;
+        private myFileJUNIT File;
 
         internal List<TestCaseJUnit> TestCases;
 
         private TestCaseJUnit TestCaseCurrent ;
 
-        public TestCasesJUnit(FileJUNIT prmFile)
+        public TestCasesJUnit(myFileJUNIT prmFile)
         {
 
             File = prmFile;
@@ -124,7 +124,7 @@ namespace Katty
     public class TestCaseJUnit
     {
 
-        public FileJUNIT File;
+        public myFileJUNIT File;
 
         public TestDataJUnit Flows;
 
@@ -134,7 +134,7 @@ namespace Katty
 
         public string separador { get => File.separador; }
 
-        public TestCaseJUnit(string prmLine, FileJUNIT prmFile)
+        public TestCaseJUnit(string prmLine, myFileJUNIT prmFile)
         {
 
             File = prmFile;
@@ -153,19 +153,19 @@ namespace Katty
 
         public string nome;
 
-        private xMemo Lista;
+        private myMemo Lista;
 
         public TestParametersJUnit(TestCaseJUnit prmTestCase, string prmLine)
         {
 
             TestCase = prmTestCase;
 
-            Lista = new xMemo(prmLine, TestCase.separador);
+            Lista = new myMemo(prmLine, TestCase.separador);
 
             nome = Lista.GetRemove();
 
         }
-        public string GetJSON(xMemo prmFlow)
+        public string GetJSON(myMemo prmFlow)
         {
 
             string lista = "";
@@ -196,21 +196,21 @@ namespace Katty
 
         private TestCaseJUnit TestCase;
 
-        public List<xMemo> Dados;
+        public List<myMemo> Dados;
 
         public TestDataJUnit(TestCaseJUnit prmTestCase)
         {
 
             TestCase = prmTestCase;
 
-            Dados = new List<xMemo>();
+            Dados = new List<myMemo>();
 
         }
 
         public void Add(string prmLine)
         {
 
-            xParseCSV item = new xParseCSV(prmLine);
+            myParseCSV item = new myParseCSV(prmLine);
 
             item.GetRemove();
 
@@ -222,16 +222,16 @@ namespace Katty
     public class TestJSONJUnit
     {
 
-        private FileJUNIT File;
+        private myFileJUNIT File;
 
-        public List<xMemo> Dados;
+        public List<myMemo> Dados;
 
-        public TestJSONJUnit(FileJUNIT prmFile)
+        public TestJSONJUnit(myFileJUNIT prmFile)
         {
 
             File = prmFile;
 
-            Dados =  new List<xMemo>();
+            Dados =  new List<myMemo>();
 
             GetJSON();
 
@@ -243,7 +243,7 @@ namespace Katty
             foreach (TestCaseJUnit teste in File.TestCases)
             {
 
-                foreach (xMemo Flow in teste.Flows.Dados)
+                foreach (myMemo Flow in teste.Flows.Dados)
                 {
 
                     Debug.WriteLine(  teste.Parametros.GetJSON(Flow));
@@ -259,7 +259,7 @@ namespace Katty
             string lista = "";
             string aux = "";
 
-            foreach (xMemo Flow in Dados)
+            foreach (myMemo Flow in Dados)
             {
 
                 lista += aux + (Flow.Export(File.separador));

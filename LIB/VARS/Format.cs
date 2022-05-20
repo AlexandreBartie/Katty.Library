@@ -66,7 +66,7 @@ namespace Katty
         }
 
     }
-    
+   
     public static class myCSV
     {
 
@@ -102,11 +102,11 @@ namespace Katty
 
             string format; string effect; string text;
 
-            BlocoParenteses bloco = new BlocoParenteses();
+            myBrickParenteses myBrick = new myBrickParenteses();
 
-            format = bloco.GetSpot(prmFormat);
+            format = myBrick.GetSpot(prmFormat);
 
-            effect = bloco.GetSufixoConector(prmFormat);
+            effect = myBrick.GetSufixoConector(prmFormat);
 
             // aplicar tratamentos no texto
 
@@ -146,9 +146,9 @@ namespace Katty
 
             string arg_indice; string arg_tamanho;
 
-            arg_indice = Bloco.GetBlocoAntes(prmFormat, prmDelimitador: "+");
+            arg_indice = myBrick.GetmyBrickAntes(prmFormat, prmDelimitador: "+");
 
-            arg_tamanho = Bloco.GetBlocoDepois(prmFormat, prmDelimitador: "+");
+            arg_tamanho = myBrick.GetmyBrickDepois(prmFormat, prmDelimitador: "+");
 
             if (myInt.IsNumero(arg_indice) && myInt.IsNumero(arg_tamanho))
                 return myString.GetSubstring(prmText, prmIndice: myInt.GetNumero(arg_indice), prmTamanho: myInt.GetNumero(arg_tamanho));
@@ -160,9 +160,9 @@ namespace Katty
 
             string arg_indice; string arg_final;
 
-            arg_indice = Bloco.GetBlocoAntes(prmFormat, prmDelimitador: "*");
+            arg_indice = myBrick.GetmyBrickAntes(prmFormat, prmDelimitador: "*");
 
-            arg_final = Bloco.GetBlocoDepois(prmFormat, prmDelimitador: "*");
+            arg_final = myBrick.GetmyBrickDepois(prmFormat, prmDelimitador: "*");
 
             if (myInt.IsNumero(arg_indice) && myInt.IsNumero(arg_final))
                 return myString.GetSubPosicao(prmText, prmIndice: myInt.GetNumero(arg_indice), prmIndiceFinal: myInt.GetNumero(arg_final));

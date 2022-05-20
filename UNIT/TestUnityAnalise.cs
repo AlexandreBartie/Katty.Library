@@ -6,11 +6,11 @@ namespace Katty
 {
     public class TestUnitAnalyze : TestUnitMatrix
     {
-        public string GetCompare(string prmResult, string prmExpected) => GetCompare(prmResult, prmExpected, prmRaw: false);
-        public string GetCompare(string prmResult, string prmExpected, bool prmRaw) => GetCompare(new TestLines(prmResult), new TestLines(prmExpected), prmRaw);
-        public string GetCompare(TestLines prmResult, TestLines prmExpected, bool prmRaw)
+        public string GetCompare(string prmResult, string prmExpected) => GetCompare(prmResult, prmExpected, prmExt: false);
+        public string GetCompare(string prmResult, string prmExpected, bool prmExt) => GetCompare(new TestLines(prmResult), new TestLines(prmExpected), prmExt);
+        public string GetCompare(TestLines prmResult, TestLines prmExpected, bool prmExt)
         {
-            string result = prmResult.txt; string expected = prmExpected.output(prmRaw);
+            string result = prmResult.txt; string expected = prmExpected.output(prmExt);
 
             string format = "{4}Result:  <{1}>{4}{0}{4}Expected:<{3}>{4}{2}{4}Differences:{4}{5}";
 
@@ -43,7 +43,7 @@ namespace Katty
     {
         public string GetAnalyses(TestLines prmGerado, TestLines prmEsperado)
         {
-            xMemo memo = new xMemo(); string txt;
+            myMemo memo = new myMemo(); string txt;
 
             for (int cont = 1; cont <= myInt.GetMaior(prmGerado.Count, prmEsperado.Count); cont++)
             {

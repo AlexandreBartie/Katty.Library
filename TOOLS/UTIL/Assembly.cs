@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BlueRocket
 {
-    public static class Assembly
+    public static class myAssembly
     {
 
         public static string AssemblyTitle

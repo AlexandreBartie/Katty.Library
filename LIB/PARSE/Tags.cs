@@ -107,7 +107,7 @@ namespace Katty
         private string GetTXT()
         {
 
-            xMemo txt = new xMemo();
+            myMemo txt = new myMemo();
 
             foreach (myTag Tag in this)
                 txt.Add(Tag.txt);
@@ -118,7 +118,7 @@ namespace Katty
         private string GetLOG()
         {
 
-            xMemo log = new xMemo();
+            myMemo log = new myMemo();
 
             foreach (myTag Tag in this)
                 log.Add(Tag.log);

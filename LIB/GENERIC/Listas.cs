@@ -7,22 +7,22 @@ using System.Linq;
 
 namespace Katty
 {
-    public class xLista : List<string>
+    public class myList : List<string>
     {
 
         public string separador = ",";
 
-        public xLista()
+        public myList()
         {
 
         }
 
-        public xLista(string prmLista)
+        public myList(string prmLista)
         {
             Parse(prmLista);
         }
 
-        public xLista(string prmLista, string prmSeparador)
+        public myList(string prmLista, string prmSeparador)
         {
             separador = prmSeparador;
 
@@ -86,12 +86,21 @@ namespace Katty
                 return (this[prmIndice - 1]);
             return prmPadrao;
         }
-        public void Add(int prmIndice, string prmTexto)
+
+        public void Add(string prmText, bool prmNotEmpty)
+        {
+            if (prmNotEmpty)
+                if (myString.IsEmpty(prmText)) 
+                    return;
+
+            Add(prmText);
+        }
+        public void Add(string prmText, int prmIndice)
         {
             if (prmIndice <= qtde)
-                (this[prmIndice - 1]) = prmTexto;
+                (this[prmIndice - 1]) = prmText;
             else
-                Add(prmTexto);
+                Add(prmText);
         }
         public string Item(int prmIndice)
         {
@@ -194,26 +203,26 @@ namespace Katty
         }
 
     }
-    public class xMemo : xLista
+    public class myMemo : myList
     {
-        public xMemo()
+        public myMemo()
         { }
-        public xMemo(string prmSeparador)
+        public myMemo(string prmSeparador)
         { separador = prmSeparador; }
 
-        public xMemo(string prmTexto, string prmSeparador)
+        public myMemo(string prmTexto, string prmSeparador)
         { separador = prmSeparador; Parse(prmTexto); }
 
         public string memo_ext => memo + Environment.NewLine;
 
     }
-    public class xLinhas : xMemo
+    public class myLines : myMemo
     {
 
-        public xLinhas()
+        public myLines()
         { Setup(); }
 
-        public xLinhas(string prmTexto)
+        public myLines(string prmTexto)
         {
 
             Setup();

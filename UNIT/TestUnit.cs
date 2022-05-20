@@ -34,8 +34,8 @@ namespace Katty
         public string GetOutput() => outputList.txt;
         public string GetResult() => resultList.txt;
 
-        public string GetInputRaw() => inputList.raw;
-        public string GetOutputRaw() => outputList.raw;
+        public string GetInputExt() => inputList.ext;
+        public string GetOutputExt() => outputList.ext;
 
         public string log => _log;
 
@@ -51,15 +51,15 @@ namespace Katty
             resultList = new TestLines();
         }
 
-        public void AssertTestFail(string prmResult) => AssertTest(prmResult, prmRaw: false, prmFail: true);
-        public void AssertTestRaw(string prmResult) => AssertTest(prmResult, prmRaw: true, prmFail: false);
-        public void AssertTest(string prmResult) => AssertTest(prmResult, prmRaw: false, prmFail: false);
-        public void AssertTest(string prmResult, bool prmRaw, bool prmFail)
+        public void AssertTestNoFail(string prmResult) => AssertTest(prmResult, prmExt: false, prmFail: false);
+        public void AssertTestExt(string prmResult) => AssertTest(prmResult, prmExt: true, prmFail: true);
+        public void AssertTest(string prmResult) => AssertTest(prmResult, prmExt: false, prmFail: true);
+        public void AssertTest(string prmResult, bool prmExt, bool prmFail)
         {
 
             resultList.Add(prmResult);
 
-            _log = Analyse.GetCompare(prmResult: resultList, prmExpected: outputList, prmRaw);
+            _log = Analyse.GetCompare(prmResult: resultList, prmExpected: outputList, prmExt);
 
             // assert
             if (!outputList.IsMatch(resultList.txt) && prmFail)
@@ -73,9 +73,9 @@ namespace Katty
         public bool IsFull => (this.Count > 0);
         public bool IsMatch(string prmText) => (txt == prmText);
 
-        public string raw => GetRAW();
         public string txt => GetTXT();
-        public string output(bool prmRaw) { if (prmRaw) return raw; return txt; }
+        public string ext => txt + Environment.NewLine;
+        public string output(bool prmEXT) { if (prmEXT) return ext; return txt; }
 
         public TestLines()
         { }
@@ -96,7 +96,7 @@ namespace Katty
 
         private void AddLine(string prmText)
         {
-            foreach (string line in new xLinhas(prmText))
+            foreach (string line in new myLines(prmText))
                 AddText(line, prmMerge: false);
         }
         public void AddText(string prmText) => AddText(prmText, prmMerge: true);
@@ -110,16 +110,15 @@ namespace Katty
                 base.Add(prmText);
         }
 
-        private string GetRAW()
+        private string GetTXT()
         {
-            xLinhas linhas = new xLinhas();
+            myLines linhas = new myLines();
 
             foreach (string texto in this)
                 linhas.Add(texto);
 
             return linhas.memo;
         }
-        private string GetTXT() => raw + Environment.NewLine;
     }
 
     //    public class TestCase

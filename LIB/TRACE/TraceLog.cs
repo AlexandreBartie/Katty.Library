@@ -86,14 +86,14 @@ namespace Katty
     public class TraceLogFile : TraceTipo
     {
 
-        public void DataFileOpen(FileTXT prmFile) => DataFileAction(prmAcao: "OPEN", prmContexto: "Importado com sucesso", prmFile);
+        public void DataFileOpen(myFileTXT prmFile) => DataFileAction(prmAcao: "OPEN", prmContexto: "Importado com sucesso", prmFile);
 
-        public void DataFileSave(FileTXT prmFile) => DataFileAction(prmAcao: "CODE", prmContexto: "Script salvo com sucesso", prmFile, prmEncoding: "default");
-        public void DataFileSave(FileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "SAVE", prmContexto: "Salvo com sucesso", prmFile, prmEncoding);
-        public void DataFileMute(FileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "MUTE", prmContexto: "Silenciado com sucesso", prmFile, prmEncoding);
+        public void DataFileSave(myFileTXT prmFile) => DataFileAction(prmAcao: "CODE", prmContexto: "Script salvo com sucesso", prmFile, prmEncoding: "default");
+        public void DataFileSave(myFileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "SAVE", prmContexto: "Salvo com sucesso", prmFile, prmEncoding);
+        public void DataFileMute(myFileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "MUTE", prmContexto: "Silenciado com sucesso", prmFile, prmEncoding);
 
-        private void DataFileAction(string prmAcao, string prmContexto, FileTXT prmFile) => DataFileAction(prmAcao, prmContexto, prmFile, prmEncoding: "");
-        private void DataFileAction(string prmAcao, string prmContexto, FileTXT prmFile, string prmEncoding)
+        private void DataFileAction(string prmAcao, string prmContexto, myFileTXT prmFile) => DataFileAction(prmAcao, prmContexto, prmFile, prmEncoding: "");
+        private void DataFileAction(string prmAcao, string prmContexto, myFileTXT prmFile, string prmEncoding)
         {
 
             string txt;
@@ -126,7 +126,7 @@ namespace Katty
         public void DataFileFormatJSON(string prmConteudo) => msgFile(prmTipo: "JSON", prmConteudo);
 
         public void FailDataFileEncoding(string prmEncoding) => msgErro(String.Format("Formato encoding [{0}] não encontrado ...", prmEncoding));
-        public void FailDataFileOpen(FileTXT prmFile) => FailDataFileOpenDefault(prmLocal: String.Format("-file: {0} -path: {1}", prmFile.nome, prmFile.path));
+        public void FailDataFileOpen(myFileTXT prmFile) => FailDataFileOpenDefault(prmLocal: String.Format("-file: {0} -path: {1}", prmFile.nome, prmFile.path));
         public void FailJSONFormat(string prmContexto, string prmFlow, Exception prmErro) => msgErro(prmTexto: String.Format(@"Flow JSON: [invalid format] ... contexto: {0} Flow: {1}", prmContexto, prmFlow));
 
         private void FailDataFileOpenDefault(string prmLocal) => msgErro(String.Format("Falha na abertura do arquivo ... {0}", prmLocal));
