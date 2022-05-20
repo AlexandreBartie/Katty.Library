@@ -14,10 +14,10 @@ namespace Katty
 
             Bloco = new BlocoColchetes();
 
-            if (Bloco.TemParametro(prmFormat))
+            if (Bloco.HasSpot(prmFormat))
             {
                 prefixo = Bloco.GetPrefixo(prmFormat);
-                parametro = Bloco.GetParametro(prmFormat);
+                parametro = Bloco.GetSpot(prmFormat);
             }
             else
                 parametro = prmFormat;
@@ -51,10 +51,10 @@ namespace Katty
 
             Bloco = new BlocoColchetes();
 
-            if (Bloco.TemParametro(prmFormat))
+            if (Bloco.HasSpot(prmFormat))
             {
                 prefixo = Bloco.GetPrefixo(prmFormat);
-                parametro = Bloco.GetParametro(prmFormat);
+                parametro = Bloco.GetSpot(prmFormat);
             }
             else
                 parametro = prmFormat;

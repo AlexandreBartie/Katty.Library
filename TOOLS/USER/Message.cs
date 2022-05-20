@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace BlueRocket
 {
-    public static class Message
+    public static class myMessage
     {
 
         public static bool ToConfirm(string prmText, string prmLabel)

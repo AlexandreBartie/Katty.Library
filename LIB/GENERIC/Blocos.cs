@@ -43,17 +43,19 @@ namespace Katty
             conector = prmConector;
         }
 
-        public bool TemParametro(string prmTexto) => myString.IsFull(GetParametro(prmTexto));
+        public bool HasSpot(string prmText) => myString.IsFull(GetSpot(prmText));
 
-        public string GetParametro(string prmTexto) => Bloco.GetBloco(prmTexto, delimitadorInicial, delimitadorFinal).Trim();
+        public string GetExtract(string prmText, bool prmIsMain) { if (prmIsMain) return GetMain(prmText); return GetSpot(prmText); }
 
-        public string GetRemove(string prmTexto) => Bloco.GetBlocoRemove(prmTexto, delimitadorInicial, delimitadorFinal);
+        public string GetMain(string prmText) => Bloco.GetBlocoRemove(prmText, delimitadorInicial, delimitadorFinal);
+        public string GetSpot(string prmText) => Bloco.GetBloco(prmText, delimitadorInicial, delimitadorFinal).Trim();
 
-        public string GetPrefixo(string prmTexto) => GetPrefixo(prmTexto, prmTRIM: false);
-        public string GetPrefixo(string prmTexto, bool prmTRIM) => Bloco.GetBlocoAntes(prmTexto, delimitadorInicial, prmTRIM);
 
-        public string GetSufixo(string prmTexto) => GetSufixo(prmTexto, prmTRIM: false);
-        public string GetSufixo(string prmTexto, bool prmTRIM) => Bloco.GetBlocoDepois(prmTexto, delimitadorFinal, prmTRIM);
+        public string GetPrefixo(string prmText) => GetPrefixo(prmText, prmTRIM: false);
+        public string GetPrefixo(string prmText, bool prmTRIM) => Bloco.GetBlocoAntes(prmText, delimitadorInicial, prmTRIM);
+
+        public string GetSufixo(string prmText) => GetSufixo(prmText, prmTRIM: false);
+        public string GetSufixo(string prmText, bool prmTRIM) => Bloco.GetBlocoDepois(prmText, delimitadorFinal, prmTRIM);
 
         public string GetPrefixoConector(string prmTexto) => GetPrefixoConector(prmTexto, conector);
         public string GetPrefixoConector(string prmTexto, string prmConector) => myString.GetFirst(prmTexto, prmConector).Trim();
@@ -101,20 +103,18 @@ namespace Katty
 
         }
 
-        public static string GetBlocoRemove(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal) => GetBlocoRemove(prmTexto, prmDelimitadorInicial, prmDelimitadorFinal, prmTRIM: false);
-        public static string GetBlocoRemove(string prmTexto, string prmDelimitadorInicial, string prmDelimitadorFinal, bool prmTRIM)
+        public static string GetBlocoRemove(string prmText, string prmDelimitadorInicial, string prmDelimitadorFinal) => GetBlocoRemove(prmText, prmDelimitadorInicial, prmDelimitadorFinal, prmTRIM: false);
+        public static string GetBlocoRemove(string prmText, string prmDelimitadorInicial, string prmDelimitadorFinal, bool prmTRIM)
         {
+            string retorno = GetBloco(prmText, prmDelimitadorInicial, prmDelimitadorFinal, prmPreserve: true);
 
-            string retorno = GetBloco(prmTexto, prmDelimitadorInicial, prmDelimitadorFinal, prmPreserve: true);
-
-            string parte_inicial = Bloco.GetBlocoAntes(prmTexto, retorno);
-            string parte_final = Bloco.GetBlocoDepois(prmTexto, retorno);
+            string parte_inicial = Bloco.GetBlocoAntes(prmText, retorno);
+            string parte_final = Bloco.GetBlocoDepois(prmText, retorno);
 
             if (prmTRIM)
                 return (parte_inicial.Trim() + " " + parte_final.Trim()).Trim();
 
             return (parte_inicial + parte_final);
-
         }
 
         public static string GetBlocoAntes(string prmTexto, string prmDelimitador) => GetBlocoAntes(prmTexto, prmDelimitador, prmTRIM: false);

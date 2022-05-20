@@ -156,8 +156,9 @@ namespace Katty
 
         public string GetStatus() { if (status == "") Setup(); return status; }
 
-        public DataCursor GetCursor(string prmSQL, string prmMask) => GetCursor(prmSQL, prmMask: new myMasks(prmMask));
-        public DataCursor GetCursor(string prmSQL, myMasks prmMask) => new DataCursor(prmSQL, prmMask, this);
+        public DataCursor GetCursor(string prmSQL) => GetCursor(prmSQL, prmMasks: "");
+        public DataCursor GetCursor(string prmSQL, string prmMasks) => GetCursor(prmSQL, prmMasks: new myMasks(prmMasks));
+        public DataCursor GetCursor(string prmSQL, myMasks prmMasks) => new DataCursor(prmSQL, prmMasks, this);
 
         public bool Setup()
         {

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 namespace Katty
 {
 
-    public class UTControl
+    public class TestUnit
     {
 
-        public LinesUTC inputList;
-        public LinesUTC outputList;
-        private LinesUTC resultList;
+        public TestLines inputList;
+        public TestLines outputList;
+        private TestLines resultList;
 
-        private AnaliseUTC Analise;
+        private TestUnitAnalyze Analyse;
 
         private string _log;
 
@@ -30,39 +30,44 @@ namespace Katty
         public void outputText(string prmText) => outputText(prmText, prmEnter: false);
         public void outputText(string prmText, bool prmEnter) { outputList.AddText(prmText); if (prmEnter) output(); }
 
-        public string GetRaw() => inputList.raw;
         public string GetInput() => inputList.txt;
         public string GetOutput() => outputList.txt;
         public string GetResult() => resultList.txt;
+
+        public string GetInputRaw() => inputList.raw;
+        public string GetOutputRaw() => outputList.raw;
+
         public string log => _log;
 
-        public UTControl()
+        public TestUnit()
         {
-            Analise = new AnaliseUTC(); Setup();
+            Analyse = new TestUnitAnalyze(); Setup();
         }
 
         private void Setup()
         {
-            inputList = new LinesUTC();
-            outputList = new LinesUTC();
-            resultList = new LinesUTC();
+            inputList = new TestLines();
+            outputList = new TestLines();
+            resultList = new TestLines();
         }
 
-        public void AssertTest(string prmResult)
+        public void AssertTestFail(string prmResult) => AssertTest(prmResult, prmRaw: false, prmFail: true);
+        public void AssertTestRaw(string prmResult) => AssertTest(prmResult, prmRaw: true, prmFail: false);
+        public void AssertTest(string prmResult) => AssertTest(prmResult, prmRaw: false, prmFail: false);
+        public void AssertTest(string prmResult, bool prmRaw, bool prmFail)
         {
 
             resultList.Add(prmResult);
 
-            _log = Analise.GetCompare(prmGerado: resultList, prmEsperado: outputList);
+            _log = Analyse.GetCompare(prmResult: resultList, prmExpected: outputList, prmRaw);
 
             // assert
-            if (!outputList.IsMatch(resultList.txt))
+            if (!outputList.IsMatch(resultList.txt) && prmFail)
                 Assert.Fail(log);
         }
 
     }
-
-    public class LinesUTC : List<string>
+    public class TestLines : List<string>
     {
 
         public bool IsFull => (this.Count > 0);
@@ -70,18 +75,19 @@ namespace Katty
 
         public string raw => GetRAW();
         public string txt => GetTXT();
+        public string output(bool prmRaw) { if (prmRaw) return raw; return txt; }
 
-        public LinesUTC()
+        public TestLines()
         { }
 
-        public LinesUTC(string prmText)
+        public TestLines(string prmText)
         {
             Add(prmText);
         }
         public string GetLine(int prmIndice)
         {
             if (prmIndice <= this.Count)
-                return this[prmIndice-1];
+                return this[prmIndice - 1];
             return "";
         }
 
@@ -89,7 +95,7 @@ namespace Katty
         public new void Add(string prmText) => AddLine(prmText);
 
         private void AddLine(string prmText)
-        {          
+        {
             foreach (string line in new xLinhas(prmText))
                 AddText(line, prmMerge: false);
         }
@@ -101,9 +107,9 @@ namespace Katty
                 base[base.Count - 1] += prmText;
             else
                 if (prmText != null)
-                    base.Add(prmText);
+                base.Add(prmText);
         }
-        
+
         private string GetRAW()
         {
             xLinhas linhas = new xLinhas();
@@ -111,94 +117,94 @@ namespace Katty
             foreach (string texto in this)
                 linhas.Add(texto);
 
-            return linhas.txt;
+            return linhas.memo;
         }
         private string GetTXT() => raw + Environment.NewLine;
     }
 
-//    public class TestCase
-//    {
-//        //private String selector;
+    //    public class TestCase
+    //    {
+    //        //private String selector;
 
-//        //public TestCase(String selector)
-//        //{
-//        //    this.selector = selector;
-//        //}
+    //        //public TestCase(String selector)
+    //        //{
+    //        //    this.selector = selector;
+    //        //}
 
-//        /// Run whatever code you need to get ready for the test to run.
-//        protected void setUp() { }
+    //        /// Run whatever code you need to get ready for the test to run.
+    //        protected void setUp() { }
 
-//        /// Release whatever resources you used for the test.
-//        protected void tearDown() { }
-//        /// Run the selected method and register the result.
-///*        public void Run(TestResult result)
-//        {
-//            //try
-//            //{
-//               // Run();
-//            }
-//            //catch (Throwable e)
-//            //{
-//            //    result.error(this, e);
-//            //    return;
-//            //}
-//            //result.pass(this);
-//        }*/
-//    }
-    
-/*    public class TestRobotSuite
-    {
-        public string name;
+    //        /// Release whatever resources you used for the test.
+    //        protected void tearDown() { }
+    //        /// Run the selected method and register the result.
+    ///*        public void Run(TestResult result)
+    //        {
+    //            //try
+    //            //{
+    //               // Run();
+    //            }
+    //            //catch (Throwable e)
+    //            //{
+    //            //    result.error(this, e);
+    //            //    return;
+    //            //}
+    //            //result.pass(this);
+    //        }*/
+    //    }
 
-        private List<TestCase> testCases = new List<TestCase>();
-
-    public TestRobotSuite(String name)
+    /*    public class TestRobotSuite
         {
-            this.name = name;
-        }
+            public string name;
 
-        public TestRobotSuite addTestCase(TestCase testCase)
-        {
-            testCases.Add(testCase);
-            return this;
-        }
+            private List<TestCase> testCases = new List<TestCase>();
 
-        public TestResult run()
-        {
-            TestResult result = new TestResult(name);
-            foreach (TestCase Teste in  testCases)
+        public TestRobotSuite(String name)
             {
-                Teste.Run(result);
+                this.name = name;
             }
-            return result;
+
+            public TestRobotSuite addTestCase(TestCase testCase)
+            {
+                testCases.Add(testCase);
+                return this;
+            }
+
+            public TestResult run()
+            {
+                TestResult result = new TestResult(name);
+                foreach (TestCase Teste in  testCases)
+                {
+                    Teste.Run(result);
+                }
+                return result;
+            }
         }
-    }
 
-    public class TestResult
-    {
-        public  String name;
-
-        public List<String> errors = new List<String>();
-        public List<String> passed = new List<String>();
-
-        public TestResult(String name)
+        public class TestResult
         {
-            this.name = name;
-        }
+            public  String name;
 
-        public void error(TestCase testCase, Exception error)
-        {
-            errors.Add(String.Format("%s: %s", testCase, error));
-        }
+            public List<String> errors = new List<String>();
+            public List<String> passed = new List<String>();
 
-        public void pass(TestCase testCase)
-        {
-            passed.Add(testCase.ToString());
-        }
+            public TestResult(String name)
+            {
+                this.name = name;
+            }
 
-        public int count()
-        {
-            return passed.Count + errors.Count;
-        }
-    }*/
+            public void error(TestCase testCase, Exception error)
+            {
+                errors.Add(String.Format("%s: %s", testCase, error));
+            }
+
+            public void pass(TestCase testCase)
+            {
+                passed.Add(testCase.ToString());
+            }
+
+            public int count()
+            {
+                return passed.Count + errors.Count;
+            }
+        }*/
 }

@@ -44,7 +44,7 @@ namespace Katty
 
             name = new BlocoChaves().GetPrefixo(prmSintaxe, prmTRIM: true);
 
-            opcoes = new BlocoChaves().GetParametro(prmSintaxe);
+            opcoes = new BlocoChaves().GetSpot(prmSintaxe);
 
             Parse(name, opcoes);
         }
@@ -62,7 +62,7 @@ namespace Katty
 
             name = new BlocoColchetes().GetPrefixo(prmName, prmTRIM: true);
 
-            padrao = GetValidDefault(prmDefault: new BlocoColchetes().GetParametro(prmName));
+            padrao = GetValidDefault(prmDefault: new BlocoColchetes().GetSpot(prmName));
 
         }
 

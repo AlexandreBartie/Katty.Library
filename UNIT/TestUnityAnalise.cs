@@ -4,17 +4,20 @@ using System.Text;
 
 namespace Katty
 {
-    public class AnaliseUTC : MatrizUTC
+    public class TestUnitAnalyze : TestUnitMatrix
     {
-        public string GetCompare(string prmGerado, string prmEsperado) => GetCompare(new LinesUTC(prmGerado), new LinesUTC(prmEsperado));
-        public string GetCompare(LinesUTC prmGerado, LinesUTC prmEsperado)
+        public string GetCompare(string prmResult, string prmExpected) => GetCompare(prmResult, prmExpected, prmRaw: false);
+        public string GetCompare(string prmResult, string prmExpected, bool prmRaw) => GetCompare(new TestLines(prmResult), new TestLines(prmExpected), prmRaw);
+        public string GetCompare(TestLines prmResult, TestLines prmExpected, bool prmRaw)
         {
-            string gerado = prmGerado.txt; string esperado = prmEsperado.txt;
+            string result = prmResult.txt; string expected = prmExpected.output(prmRaw);
 
-            return string.Format("{4}Gerado:  <{1}>{4}{0}{4}Esperado:<{3}>{4}{2}{4}Sobreposição:{4}{5}", gerado, GetCompareLines(prmGerado), esperado, GetCompareLines(prmEsperado), Environment.NewLine, GetSobreposicao(prmGerado, prmEsperado));
+            string format = "{4}Result:  <{1}>{4}{0}{4}Expected:<{3}>{4}{2}{4}Differences:{4}{5}";
+
+            return string.Format(format, result, GetCompareLines(prmResult), expected, GetCompareLines(prmExpected), Environment.NewLine, GetAnalyses(prmResult, prmExpected));
         }
 
-        private string GetCompareLines(LinesUTC prmTexto)
+        private string GetCompareLines(TestLines prmTexto)
         {
 
             try
@@ -36,16 +39,16 @@ namespace Katty
         }
    }
 
-    public class MatrizUTC
+    public class TestUnitMatrix
     {
-        public string GetSobreposicao(LinesUTC prmGerado, LinesUTC prmEsperado)
+        public string GetAnalyses(TestLines prmGerado, TestLines prmEsperado)
         {
             xMemo memo = new xMemo(); string txt;
 
             for (int cont = 1; cont <= myInt.GetMaior(prmGerado.Count, prmEsperado.Count); cont++)
             {
 
-                txt = GetDiferencas(prmGerado.GetLine(cont), prmEsperado.GetLine(cont));
+                txt = GetDifferences(prmGerado.GetLine(cont), prmEsperado.GetLine(cont));
 
                 if (myString.IsFull(txt))
                     memo.Add(String.Format("{0:D3} {1}", cont, txt));
@@ -54,7 +57,7 @@ namespace Katty
             return memo.memo;
         }
 
-        private string GetDiferencas(string prmGerado, string prmEsperado)
+        private string GetDifferences(string prmGerado, string prmEsperado)
         {
             char gerado; char esperado; string txt = "";
 

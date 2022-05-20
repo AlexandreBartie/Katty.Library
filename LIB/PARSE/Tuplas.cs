@@ -6,27 +6,25 @@ namespace Katty
 {
     public class myTupla
     {
-        private string conector = "=";
-        private string conector_interno = ":";
+        private myTuplaSintaxe Main;
+        private myTuplaSintaxe Alias;
 
-        private string _name;
-        private string _value;
+        public string name => Main.name;
+        public string value => Main.value;
 
-        private string _alias;
-        private string _format;
+        public string alias => Alias.name;
+        public string format => Alias.value;
 
-        public string name => _name;
-        public string alias => _alias;
-
-        private string format => _format;
-        public string value => _value;
         public string valueEx => GetValueEx();
 
         public string name_sql => GetSQL();
-        public string var_sql => String.Format("#({0})", name);
+        public string var_sql => GetVariable();
         public string value_sql => GetValue();
-        public string mask => GetMask();
+
         public string log => GetLog();
+        public string mask => GetMask();
+        public string input => GetInput();
+
 
         public bool TemKey => myString.IsFull(name);
         public bool TemValue => !IsNull;
@@ -39,73 +37,31 @@ namespace Katty
         private bool TemDetalhe => TemAlias || TemFormat;
         public bool IsNull => myString.IsNull(value);
 
-        public bool IsMatch(string prmName) => (TemKey && myString.IsMatch(name, prmName));
+        public bool IsMatch(string prmName) => (Main.IsMatch(prmName));
+        public bool IsMatchEx(string prmName) => Main.IsMatch(prmName) || Alias.IsMatch(prmName);
+
         public bool IsAlias(string prmName) => myString.IsMatch(GetAlias(), prmName);
-        public bool IsMatchEx(string prmName) => IsMatch(prmName) || IsAlias(prmName);
 
         public myTupla(string prmTexto)
-        {
-            Parse(prmTexto);
+        { 
+            Setup(prmTexto, prmConector: "=");
         }
         public myTupla(string prmTexto, string prmConector)
+        { 
+            Setup(prmTexto, prmConector);
+        }
+        
+        private void Setup(string prmTexto, string prmConector)
         {
-            conector = prmConector;
+            Main = new myTuplaSintaxe(prmConector, prmIsMain: true);
+            Alias = new myTuplaSintaxe(prmConector: ":", prmIsMain: false);
 
             Parse(prmTexto);
         }
 
-        public void Parse(string prmTexto) { ParseDefinicao(prmTexto); ParseDetalhamento(prmTexto); }
+        public void Parse(string prmTexto) { Main.Parse(prmTexto); Alias.Parse(prmTexto); }
 
-        private void ParseDefinicao(string prmTexto)
-        {
-
-            BlocoColchetes Bloco = new BlocoColchetes(conector);
-
-            //
-            // Get DEFINICAO da Tupla (isolar "name" <conector> "valor")
-            //
-
-            string definicao = Bloco.GetRemove(prmTexto);
-
-            //
-            // Identifica "name" e "valor"
-            //
-
-            _name = Bloco.GetPrefixoConector(definicao);
-
-            _value = Bloco.GetSufixoConector(definicao, prmNull: true);
-        }
-
-        private void ParseDetalhamento(string prmTexto)
-        {
-
-            BlocoColchetes Bloco = new BlocoColchetes(conector_interno);
-
-            //
-            // Get DETALHE Tupla (estão entre os delimitadores '[' <conector> ']' )
-            //
-
-            string detalhe = Bloco.GetParametro(prmTexto);
-
-            //
-            // Identifica "alias" e "format"
-            //
-
-            _alias = Bloco.GetPrefixoConector(detalhe);
-
-            _format = Bloco.GetSufixoConector(detalhe);
-
-        }
-
-        public bool SetValue(string prmValue) { _value = prmValue; return true; }
-
-        public bool SetValue(myTupla prmTupla)
-        {
-            if (prmTupla.IsMatch(name))
-                return SetValue(prmTupla.value);
-
-            return (false);
-        }
+        public bool SetValue(string prmValue) { Main.value = prmValue; return true; }
 
         private string GetLog()
         {
@@ -128,6 +84,8 @@ namespace Katty
             return name;
         }
 
+        private string GetVariable() => String.Format("#({0})", name);
+
         private string GetValue()
         {
             if (TemValue) return value;
@@ -146,7 +104,7 @@ namespace Katty
         }
         private string GetMask()
         {
-            if (TemFormat) return string.Format("{0} = {1}", name, format);
+            if (TemFormat) return string.Format("{0} : {1}", name, format);
 
             return "";
         }
@@ -167,12 +125,66 @@ namespace Katty
             return txt;
         }
 
+        private string GetInput()
+        {
+            xLista txt = new xLista();
+
+            if (TemKey)
+                txt.Add(name);
+
+            if (TemAlias)
+                txt.Add(alias);
+
+            if (TemFormat)
+                txt.Add(format);
+
+            return txt.Export(":");
+        }
+
         private string GetAlias()
         {
             if (TemAlias)
                 return alias;
 
             return name;
+        }
+
+    }
+    internal class myTuplaSintaxe
+    {
+        private string conector;
+
+        internal string name;
+        internal string value;
+        internal bool IsMain { get; }
+
+        private BlocoColchetes Bloco;
+
+        internal bool TemKey => myString.IsFull(name);
+        internal bool IsMatch(string prmName) => (TemKey && myString.IsMatch(name, prmName));
+
+        internal myTuplaSintaxe(string prmConector, bool prmIsMain)
+        {
+            conector = prmConector; IsMain = prmIsMain;
+        }
+
+        internal void Parse(string prmText)
+        {
+            Bloco = new BlocoColchetes(conector);
+
+            //
+            // Main: 'name <conector> valor' or Spot: '[name <conector> valor]'
+            //
+
+            string param = Bloco.GetExtract(prmText, IsMain);
+
+            //
+            // Identifica "name" e "valor"
+            //
+
+            name = Bloco.GetPrefixoConector(param);
+
+            value = Bloco.GetSufixoConector(param, prmNull: IsMain);
         }
 
     }
@@ -220,7 +232,7 @@ namespace Katty
         {
             Parse(prmTuplas);
         }
-        public myTuplas SetKey(string prmKey, string prmGroup) { key = prmKey; group = prmGroup; return this; }
+        public void SetKey(string prmKey, string prmGroup) { key = prmKey; group = prmGroup; }
 
         public myTuplas SetSeparador(string prmSeparador) => SetSintaxe(prmSeparador, prmConector: conector);
         public myTuplas SetConector(string prmConector) => SetSintaxe(prmSeparador: separador, prmConector);
@@ -239,7 +251,7 @@ namespace Katty
             }
             return (this);
         }
-        private myTuplas Parse(myTuplas prmTuplas)
+        public myTuplas Parse(myTuplas prmTuplas)
         {
             foreach (myTupla tupla in prmTuplas)
                 AddTupla(tupla);
@@ -276,13 +288,13 @@ namespace Katty
         {
             if (prmTupla.TemKey)
             {
-
                 foreach (myTupla Tupla in this)
                 {
-                    if (Tupla.SetValue(prmTupla))
-                        return true;
+                    if (Tupla.IsMatch(prmTupla.name))
+                    {
+                        Tupla.SetValue(prmTupla.value); return true;
+                    }
                 }
-
             }
             return (false);
         }
@@ -357,94 +369,6 @@ namespace Katty
                 text.Add(tupla.mask);
             }
             return (text.csv);
-        }
-
-    }
-
-    public class myTuplasBox : List<myTuplas>
-    {
-
-        public string name;
-
-        public string header => name + "," + columns;
-        public string columns => GetNames();
-        public string columns_sql => GetSQL();
-        public string mask => GetMask();
-        public int qtde => GetQtde();
-
-        public myTuplas AddItem(string prmKey) => AddItem(prmKey, prmGroup: "main");
-        public myTuplas AddItem(string prmKey, string prmGroup) => AddItem(new myTuplas().SetKey(prmKey, prmGroup));
-        public myTuplas AddItem(myTuplas Tuplas)
-        {
-            Add(Tuplas); return Tuplas;
-        }
-
-        public myTuplasBox Main => Filter(prmGroup: "main");
-        public myTuplasBox Filter(string prmGroup)
-        {
-            myTuplasBox Box = new myTuplasBox();
-
-            foreach (myTuplas Tuplas in this)
-            {
-                if (Tuplas.IsGroup(prmGroup))
-                    Box.Add(Tuplas);
-            }
-            return Box;
-        }
-        public void SetValues(string prmValues)
-        {
-            myTuplas Inputs = new myTuplas(prmValues);
-            
-            foreach (myTupla tupla in Inputs)
-                SetValue(tupla);
-        }
-        private bool SetValue(myTupla prmTupla)
-        {
-            foreach (myTuplas Tuplas in this)
-                if (Tuplas.SetValue(prmTupla)) return true;
-
-            return false;
-        }
-        private string GetNames()
-        {
-            xLista text = new xMemo();
-
-            foreach (myTuplas Tuplas in this)
-                if (Tuplas.IsFull)
-                    text.Add(Tuplas.names);
-
-            return text.txt;
-        }
-        private string GetSQL()
-        {
-            xLista text = new xMemo();
-
-            foreach (myTuplas Tuplas in this)
-                if (Tuplas.IsFull)
-                    text.Add(Tuplas.sql);
-
-            return text.csv;
-        }
-        private string GetMask()
-        {
-            xLista text = new xMemo();
-
-            foreach (myTuplas Tuplas in this)
-                if (Tuplas.IsFull)
-                    text.Add(Tuplas.mask);
-
-            return text.csv;
-        }
-
-        private int GetQtde()
-        {
-            int qtde = 0;
-
-            foreach (myTuplas Tuplas in this)
-                if (Tuplas.IsFull)
-                    qtde += Tuplas.qtde;
-
-            return qtde;
         }
 
     }

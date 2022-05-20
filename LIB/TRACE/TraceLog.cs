@@ -285,7 +285,7 @@ namespace Katty
 
         public bool IsError => (IsMatch(GetTypeError) || myString.IsFull(msgError));
 
-        public bool IsHide => Hide.IsFind(tipo);
+        public bool IsHidden => Hidden.IsFind(tipo);
         public bool IsMatch(string prmTipo) => myString.IsMatch(tipo, prmTipo);
 
         public TraceMSG()
@@ -325,7 +325,7 @@ namespace Katty
 
             msgError = prmMsgError;
 
-            if (IsHide) return false;
+            if (IsHidden) return false;
 
 #if DEBUG
 
@@ -345,16 +345,15 @@ namespace Katty
 
     public class TraceHide : TraceBase
     {
-        public myDominio Hide;
-
-        //private string lista = "{ CFG,CODE,PLAY,DEF,xSQL }";
-        private string lista = "{ CFG,CODE,DEF,xSQL }";
+        public myDominio Hidden;
 
         public TraceHide()
         {
-            SetupHide(lista);
+            SetHidden(prmList: "CFG,CODE,PLAY,DEF,xSQL");
         }
-        public void SetupHide(string prmLista) { Hide = new myDominio(prmLista); }
+        public void SetHidden(string prmList) { Hidden = new myDominio(GetFormat(prmList)); }
+
+        private string GetFormat(string prmList) => "{ " + prmList + " }";
     }
 
     public class TraceBase

@@ -6,7 +6,6 @@ using System.IO;
 
 namespace Katty
 {
-
     public class DataCursor : DataCursorDados
     {
 
@@ -72,7 +71,7 @@ namespace Katty
         private TraceLog Trace => DataBase.Trace;
 
         public myMasks Masks;
-        public bool HasMasks => Masks.IsFull;
+        public bool HasMasks => GetHasMasks();
 
         public void SetMasks(myMasks prmMasks)
         {
@@ -171,6 +170,13 @@ namespace Katty
             return ("{ }");
         }
         public string GetTupla(int prmIndice) => string.Format("'{0}': '{1}'", GetName(prmIndice), GetValor(prmIndice));
+
+        private bool GetHasMasks()
+        {
+            if (Masks == null) return false;
+
+            return Masks.IsFull;
+        }
 
     }
 

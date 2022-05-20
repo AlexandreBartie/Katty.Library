@@ -182,7 +182,6 @@ namespace Katty
         public string memo => Export(prmSeparador: Environment.NewLine);
         public string txt => Export(separador);
         public string csv => Export(", ");
-
         public string Export(string prmSeparador)
         {
             string lista = ""; string aux = "";

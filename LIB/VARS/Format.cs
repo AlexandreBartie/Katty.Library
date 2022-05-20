@@ -104,7 +104,7 @@ namespace Katty
 
             BlocoParenteses bloco = new BlocoParenteses();
 
-            format = bloco.GetParametro(prmFormat);
+            format = bloco.GetSpot(prmFormat);
 
             effect = bloco.GetSufixoConector(prmFormat);
 
