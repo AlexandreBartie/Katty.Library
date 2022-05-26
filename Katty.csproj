@@ -11,7 +11,7 @@
     <AssemblyName>Katty</AssemblyName>
     <RootNamespace>KATTY</RootNamespace>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <Version>1.0.7.13</Version>
+    <Version>1.0.7.16</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl></PackageProjectUrl>
     <PackageIcon>Katty.png</PackageIcon>

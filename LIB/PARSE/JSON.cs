@@ -78,8 +78,6 @@ namespace Katty
 
         private JsonDocument doc;
 
-        private JsonElement.ArrayEnumerator Corpo;
-
         public bool IsCombineFull;
 
         public bool IsCurrent;
@@ -88,13 +86,12 @@ namespace Katty
 
         private myJSON_Flows Flows;
 
-        private JsonElement root { get => doc.RootElement; }
+        private JsonElement root => doc.RootElement;
+        private JsonElement item => Corpo.Current;
 
-        //private JsonElement.ArrayEnumerator Corpo { get => root.EnumerateArray(); }
-
-
-        private JsonElement item { get => Corpo.Current; }
         private JsonElement.ObjectEnumerator Propriedades { get => item.EnumerateObject(); }
+
+        private JsonElement.ArrayEnumerator Corpo;
 
 
         public myJSON_Control(myJSON prmJSON)

@@ -8,13 +8,47 @@ namespace Katty
 
     public delegate void NotifyLog();
 
-    public delegate void NotifySql(string prmMsgError);
+    public delegate void NotifySql(string prmErr);
 
-    public class TraceLog : TraceWrite
+    public class TraceLog : TraceGeneric
     {
 
         public event NotifyLog LogExecutado;
         public event NotifySql SqlExecutado;
+
+        public TraceLog()
+        {
+            Setup(this);
+
+        }
+
+        public void OnLogExecutado()
+        {
+            LogExecutado?.Invoke();
+        }
+        public void OnSqlExecutado(string prmTag, string prmSQL, long prmTimeElapsed, bool prmDados)
+        {
+
+            Trace.LogData.SQLExecution(prmTag, prmSQL, prmTimeElapsed, prmDados);
+
+            SqlExecutado?.Invoke(prmErr: GetMsgErr(prmDados));
+
+        }
+        public void OnSqlError(string prmTag, string prmSQL, Exception prmErro)
+        {
+
+            Trace.LogData.FailSQLConnection(prmTag, prmSQL, prmErro);
+
+            SqlExecutado?.Invoke(prmErr: prmErro.Message);
+
+        }
+
+        private string GetMsgErr(bool prmDados) => myBool.IIf(prmDados, prmTrue: "", prmFalse: "ZERO Results");
+
+    }
+
+    public class TraceGeneric : TraceWrite
+    {
 
         public TraceTipo Geral;
 
@@ -30,7 +64,7 @@ namespace Katty
 
         public TraceMSG Msg;
 
-        public TraceLog()
+        public TraceGeneric()
         {
 
             Geral = new TraceTipo();
@@ -47,50 +81,25 @@ namespace Katty
 
             Msg = new TraceMSG();
 
-            Setup(this);
-
         }
-
-        public void OnLogExecutado()
-        {
-            LogExecutado?.Invoke();
-        }
-        public void OnSqlExecutado(string prmTag, string prmSQL, long prmTimeElapsed, bool prmDados)
-        {
-
-            Trace.LogData.SQLExecution(prmTag, prmSQL, prmTimeElapsed, prmDados);
-
-            SqlExecutado?.Invoke(prmMsgError: GetError(prmDados));
-
-        }
-        public void OnSqlError(string prmTag, string prmSQL, Exception prmErro)
-        {
-
-            Trace.LogData.FailSQLConnection(prmTag, prmSQL, prmErro);
-
-            SqlExecutado?.Invoke(prmMsgError: prmErro.Message);
-
-        }
-
-        private string GetError(bool prmDados) => myBool.IIf(prmDados, prmTrue: "", prmFalse: "ZERO Results");
 
     }
 
     public class TraceLogPath : TraceTipo
     {
-        public void SetPath(string prmContexto, string prmPath) => msgDef(String.Format(@"{0,20} -path: {1}", prmContexto, prmPath));
+        public void SetPath(string prmContext, string prmPath) => msgDef(String.Format(@"{0,20} -path: {1}", prmContext, prmPath));
 
-        public void SetSubPath(string prmContexto, string prmPath) => msgDef(String.Format(@"{0,20} -subpath: {1}", prmContexto, prmPath));
+        public void SetSubPath(string prmContext, string prmPath) => msgDef(String.Format(@"{0,20} -subpath: {1}", prmContext, prmPath));
 
     }
     public class TraceLogFile : TraceTipo
     {
 
-        public void DataFileOpen(myFileTXT prmFile) => DataFileAction(prmAcao: "OPEN", prmContexto: "Importado com sucesso", prmFile);
+        public void DataFileOpen(myFileTXT prmFile) => DataFileAction(prmAcao: "OPN", prmContexto: "Importado com sucesso", prmFile);
 
-        public void DataFileSave(myFileTXT prmFile) => DataFileAction(prmAcao: "CODE", prmContexto: "Script salvo com sucesso", prmFile, prmEncoding: "default");
-        public void DataFileSave(myFileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "SAVE", prmContexto: "Salvo com sucesso", prmFile, prmEncoding);
-        public void DataFileMute(myFileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "MUTE", prmContexto: "Silenciado com sucesso", prmFile, prmEncoding);
+        public void DataFileSave(myFileTXT prmFile) => DataFileAction(prmAcao: "COD", prmContexto: "Script salvo com sucesso", prmFile, prmEncoding: "default");
+        public void DataFileSave(myFileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "SAV", prmContexto: "Salvo com sucesso", prmFile, prmEncoding);
+        public void DataFileMute(myFileTXT prmFile, string prmEncoding) => DataFileAction(prmAcao: "MUT", prmContexto: "Silenciado com sucesso", prmFile, prmEncoding);
 
         private void DataFileAction(string prmAcao, string prmContexto, myFileTXT prmFile) => DataFileAction(prmAcao, prmContexto, prmFile, prmEncoding: "");
         private void DataFileAction(string prmAcao, string prmContexto, myFileTXT prmFile, string prmEncoding)
@@ -98,7 +107,7 @@ namespace Katty
 
             string txt;
 
-            if (prmAcao == "MUTE")
+            if (prmAcao == "MUT")
                 txt = "save";
             else
                 txt = prmAcao.ToLower();
@@ -125,24 +134,24 @@ namespace Katty
         public void DataFileFormatCSV(string prmConteudo) => msgFile(prmTipo: "CSV", prmConteudo);
         public void DataFileFormatJSON(string prmConteudo) => msgFile(prmTipo: "JSON", prmConteudo);
 
-        public void FailDataFileEncoding(string prmEncoding) => msgErro(String.Format("Formato encoding [{0}] não encontrado ...", prmEncoding));
+        public void FailDataFileEncoding(string prmEncoding) => msgErr(String.Format("Formato encoding [{0}] não encontrado ...", prmEncoding));
         public void FailDataFileOpen(myFileTXT prmFile) => FailDataFileOpenDefault(prmLocal: String.Format("-file: {0} -path: {1}", prmFile.nome, prmFile.path));
-        public void FailJSONFormat(string prmContexto, string prmFlow, Exception prmErro) => msgErro(prmTexto: String.Format(@"Flow JSON: [invalid format] ... contexto: {0} Flow: {1}", prmContexto, prmFlow));
+        public void FailJSONFormat(string prmContexto, string prmFlow, Exception prmErro) => msgErr(prmTexto: String.Format(@"Flow JSON: [invalid format] ... contexto: {0} Flow: {1}", prmContexto, prmFlow));
 
-        private void FailDataFileOpenDefault(string prmLocal) => msgErro(String.Format("Falha na abertura do arquivo ... {0}", prmLocal));
+        private void FailDataFileOpenDefault(string prmLocal) => msgErr(String.Format("Open File failure ... {0}", prmLocal));
 
     }
     public class TraceLogApp : TraceTipo
     {
 
-        public void SetApp(string prmAppName, string prmAppVersion) { msgApp(string.Format("-name {0} -version: {1}", prmAppName, prmAppVersion)); }
+        public void SetApp(string prmAppName, string prmAppVersion) { msgApp(string.Format("-name: {0} -version: {1}", prmAppName, prmAppVersion)); }
 
     }
     public class TraceLogData : TraceLogData_Fail
     {
 
         public void DBConnection(string prmTag, string prmStatus) => msgData(string.Format("-db[{0}] -status: {1}", prmTag, prmStatus));
-        public void DBSetup(string prmTag, string prmCommand) => msgNoSQL(string.Format("-db[{0}] -setup: {1}", prmTag, prmCommand));
+        public void DBSetup(string prmTag, string prmCommand) => msgCmd(string.Format("-db[{0}] -setup: {1}", prmTag, prmCommand));
 
         public void SQLExecution(string prmTag, string prmSQL, long prmTimeElapsed, bool prmTemDados) => GetSQLExecution(prmMsg: string.Format(@"-db[{0}] -sql: {1}", prmTag, prmSQL), prmSQL, prmTimeElapsed, prmTemDados);
 
@@ -151,7 +160,7 @@ namespace Katty
             if (prmQtde > 0)
                 msgSet(string.Format(@"-view[{0}] -itens: {1}", prmTag, prmQtde));
             else
-                msgErro(string.Format(@"msg# -view[{0}] -desc: View sem dados", prmTag));
+                msgErr(string.Format(@"msg# -view[{0}] -desc: View sem dados", prmTag));
         }
 
         private void GetSQLExecution(string prmMsg, string prmSQL, long prmTimeElapsed, bool prmTemDados)
@@ -159,7 +168,7 @@ namespace Katty
             if (prmTemDados)
                 msgSQL(prmMsg, prmSQL, prmTimeElapsed);
             else
-                msgErroSQL(prmMsg, prmSQL, prmTimeElapsed, prmMsgError: "ZERO Results");
+                msgErrSQL(prmMsg, prmSQL, prmTimeElapsed, prmErr: "NO Results");
         }
 
     }
@@ -173,20 +182,20 @@ namespace Katty
 
         public void FailSQLConnection(string prmTag, string prmSQL, Exception prmErro) => FailConnection(prmMSG: "SQL falhou", prmTag, prmVar: "-sql", prmSQL, prmErro);
         public void FailSQLNoDataBase(string prmTag, string prmSQL, Exception prmErro) => FailConnection(prmMSG: "DB Desconectado", prmTag, prmVar: "-sql", prmSQL, prmErro);
-        public void FailFindDataView(string prmTag) => msgErro(prmTexto: string.Format("Data View não identificada ... >>> Flow: [{0}] não executou o SQL ...", prmTag));
+        public void FailFindDataView(string prmTag) => msgErr(prmTexto: string.Format("Data View não identificada ... >>> Flow: [{0}] não executou o SQL ...", prmTag));
 
-        public void FailFindSQLCommand() => msgErro("-db: sql isnt found ...");
+        public void FailFindSQLCommand() => msgErr("-db: SQL Command not found ...");
 
-        private void FailConnection(string prmMSG, string prmTag, string prmVar, Exception prmErro) => FailConnection(prmMSG, prmTag, prmVar, GetMsgErro(prmErro));
-        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmErro) => msgErro(String.Format(@"{0} >>> tag:[{1}] {2}", prmMSG, prmTag, prmVar), prmErro);
+        private void FailConnection(string prmMSG, string prmTag, string prmVar, Exception prmErro) => FailConnection(prmMSG, prmTag, prmVar, GetMsgErr(prmErro));
+        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmErro) => msgErr(String.Format(@"{0} >>> tag:[{1}] {2}", prmMSG, prmTag, prmVar), prmErro);
 
-        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, Exception prmErro) => FailConnection(prmMSG, prmTag, prmVar, prmSQL, GetMsgErro(prmErro));
-        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, string prmErro) => msgErroSQL(String.Format(@"{0} ... -db[{1}] {2}: {3} ", prmMSG, prmTag, prmVar, prmSQL), prmSQL, prmErro);
+        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, Exception prmErro) => FailConnection(prmMSG, prmTag, prmVar, prmSQL, GetMsgErr(prmErro));
+        private void FailConnection(string prmMSG, string prmTag, string prmVar, string prmSQL, string prmErro) => msgErrSQL(String.Format(@"{0} ... -db[{1}] {2}: {3} ", prmMSG, prmTag, prmVar, prmSQL), prmSQL, prmErro);
 
-        public void FailSQLFailInterface(int prmHeaderColumns, int prmSQLColumns) => msgErro(prmTexto: string.Format("Interface SQL com número de colunas incompatível ... -header({0}) -sql({1})", prmHeaderColumns, prmSQLColumns));
-        public void FailSQLFormatFindField(string prmCampo, string prmFormat) => msgErro(prmTexto: string.Format("Coluna SQL informada em Mask não encontrada ... -column: {0} -format: {1}", prmCampo, prmFormat));
+        public void FailSQLFailInterface(int prmHeaderColumns, int prmSQLColumns) => msgErr(prmTexto: string.Format("Interface SQL com número de colunas incompatível ... -header({0}) -sql({1})", prmHeaderColumns, prmSQLColumns));
+        public void FailSQLFormatFindField(string prmCampo, string prmFormat) => msgErr(prmTexto: string.Format("Coluna SQL informada em Mask não encontrada ... -column: {0} -format: {1}", prmCampo, prmFormat));
 
-        private string GetMsgErro(Exception prmErro) { if (prmErro != null) return (prmErro.Message); return (""); }
+        private string GetMsgErr(Exception prmErro) { if (prmErro != null) return (prmErro.Message); return (""); }
 
     }
 
@@ -196,37 +205,38 @@ namespace Katty
         public void msgApp(string prmTrace) => Message(prmTipo: "APP", prmTrace);
 
         public void msgCFG(string prmTrace) => Message(prmTipo: "CFG", prmTrace);
-        public void msgCode(string prmTrace) => Message(prmTipo: "CODE", prmTrace);
-        public void msgPlay(string prmTrace) => Message(prmTipo: "PLAY", prmTrace);
+        public void msgCode(string prmTrace) => Message(prmTipo: "COD", prmTrace);
+        public void msgPlay(string prmTrace) => Message(prmTipo: "PLY", prmTrace);
 
         public void msgDef(string prmTrace) => Message(prmTipo: "DEF", prmTrace, prmPrefixo: "def");
         public void msgSet(string prmTrace) => Message(prmTipo: "SET", prmTrace, prmPrefixo: "act");
 
-        public void msgSQL(string prmTrace, string prmSQL, long prmTimeElapsed) => Message(prmTipo: "SQL", prmTrace, prmSQL, prmTimeElapsed, prmMsgError: null);
+        public void msgSQL(string prmTrace, string prmSQL, long prmTimeElapsed) => Message(prmTipo: "SQL", prmTrace, prmSQL, prmTimeElapsed, prmErr: null);
 
-        public void msgNoSQL(string prmTrace) => Message(prmTipo: "xSQL", prmTrace, prmPrefixo: "def");
+        public void msgCmd(string prmTrace) => Message(prmTipo: "CMD", prmTrace, prmPrefixo: "def");
 
         public void msgData(string prmTrace) => Message(prmTipo: "DAT", prmTrace, prmPrefixo: "act");
 
         public void msgFile(string prmTipo, string prmMensagem) => Message(prmTipo, prmMensagem);
 
-        public void msgAviso(string prmAviso) => Message(prmTipo: "WARN", prmAviso);
-        public void msgFalha(string prmAviso) => Message(prmTipo: "FAIL", prmAviso);
+        public void msgAviso(string prmAviso) => Message(prmTipo: "WRN", prmAviso);
 
     }
     public class TraceErro : TraceWrite
     {
-        private string GetMsgError(string prmTexto, string prmMsgError) => String.Format(">>>> [{0}] {1}", prmMsgError, prmTexto);
-        public void msgErro(string prmTexto) => Message(GetTypeError, prmTexto);
-        public void msgErro(Exception e) => Message(GetTypeError, e.Message);
+        private string GetMsgErr(string prmTexto, string prmErr) => String.Format(">>>> [{0}] {1}", prmErr, prmTexto);
+        public void msgErr(string prmTexto) => Message(GetTypeError, prmTexto);
+        public void msgErr(Exception e) => Message(GetTypeError, e.Message);
 
-        public void msgErro(string prmTexto, Exception e) => msgErro(prmTexto, prmMsgError: e.Message);
-        public void msgErro(string prmTexto, string prmMsgError) => Message(GetTypeError, GetMsgError(prmTexto, prmMsgError));
+        public void msgErr(string prmTexto, Exception e) => msgErr(prmTexto, prmErr: e.Message);
+        public void msgErr(string prmTexto, string prmErr) => Message(GetTypeError, GetMsgErr(prmTexto, prmErr));
 
-        public void msgErroSQL(string prmTexto, string prmSQL, string prmMsgError) => msgErroSQL(prmTexto, prmSQL, prmTimeElapsed: 0, prmMsgError);
-        public void msgErroSQL(string prmTexto, string prmSQL, long prmTimeElapsed, string prmMsgError) => Message(prmTipo: GetTypeError, GetMsgError(prmTexto, prmMsgError), prmSQL, prmTimeElapsed, prmMsgError);
+        public void msgErrSQL(string prmTexto, string prmSQL, string prmErr) => msgErrSQL(prmTexto, prmSQL, prmTimeElapsed: 0, prmErr);
+        public void msgErrSQL(string prmTexto, string prmSQL, long prmTimeElapsed, string prmErr) => Message(prmTipo: GetTypeError, GetMsgErr(prmTexto, prmErr), prmSQL, prmTimeElapsed, prmErr);
 
     }
+
+
 
     public class TraceWrite : TraceBase
     {
@@ -238,24 +248,24 @@ namespace Katty
             Trace = prmTrace;
         }
 
-        protected void Message(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed, string prmMsgError) => Message(prmTipo, prmTexto, prmPrefixo: "", prmSQL, prmTimeElapsed, prmMsgError);
+        protected void Message(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed, string prmErr) => Message(prmTipo, prmTexto, prmPrefixo: "", prmSQL, prmTimeElapsed, prmErr);
         protected void Message(string prmTipo, string prmTexto) => Message(prmTipo, prmTexto, prmPrefixo: "");
-        protected void Message(string prmTipo, string prmTexto, string prmPrefixo) => Message(prmTipo, prmTexto, prmPrefixo, prmSQL: "", prmTimeElapsed: 0, prmMsgError: null);
-        protected void Message(string prmTipo, string prmTexto, string prmPrefixo, string prmSQL, long prmTimeElapsed, string prmMsgError)
+        protected void Message(string prmTipo, string prmTexto, string prmPrefixo) => Message(prmTipo, prmTexto, prmPrefixo, prmSQL: "", prmTimeElapsed: 0, prmErr: null);
+        protected void Message(string prmTipo, string prmTexto, string prmPrefixo, string prmSQL, long prmTimeElapsed, string prmErr)
         {
             string texto = prmTexto;
 
             if (prmPrefixo != "")
                 texto = prmPrefixo + "# " + texto;
 
-            LogTrace(prmTipo, texto, prmSQL, prmTimeElapsed, prmMsgError);
+            LogTrace(prmTipo, texto, prmSQL, prmTimeElapsed, prmErr);
 
         }
 
-        private void LogTrace(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed, string prmMsgError)
+        private void LogTrace(string prmTipo, string prmTexto, string prmSQL, long prmTimeElapsed, string prmErr)
         {
 
-            if (Trace.Msg.Exibir(prmTipo, prmTexto, prmSQL, prmTimeElapsed, prmMsgError))
+            if (Trace.Msg.Exibir(prmTipo, prmTexto, prmSQL, prmTimeElapsed, prmErr))
                 Trace.OnLogExecutado();
         }
 
@@ -271,19 +281,19 @@ namespace Katty
 
         public long time_elapsed;
 
-        public string msgError;
+        public string msgErr;
 
         public double time_seconds => Convert.ToDouble(time_elapsed) / 1000;
 
         public string elapsed_seconds => myFormat.DoubleToString(time_seconds, prmFormat: "##0.000");
 
-        public string title => myBool.IIf(IsError, "ERRO", tipo);
+        public string title => myBool.IIf(IsError, GetTypeError, tipo);
 
-        public string key => String.Format("[{0,6}] {1} ", time_elapsed, msg);
-        public string txt => String.Format("[{0,4}] {1} ", title, msg);
-        public string txt_sql => String.Format("[{0,4}] {1} ", title, sql);
+        public string key => String.Format(GetFormatMSGCLK, time_elapsed, msg);
+        public string txt => String.Format(GetFormatMSGLOG, title, msg);
+        public string txt_sql => String.Format(GetFormatMSGLOG, title, sql);
 
-        public bool IsError => (IsMatch(GetTypeError) || myString.IsFull(msgError));
+        public bool IsError => (IsMatch(GetTypeError) || myString.IsFull(msgErr));
 
         public bool IsHidden => Hidden.IsFind(tipo);
         public bool IsMatch(string prmTipo) => myString.IsMatch(tipo, prmTipo);
@@ -298,7 +308,7 @@ namespace Katty
             msg = prmMSG;
         }
 
-        public TraceMSG(string prmMSG, string prmSQL, long prmTimeElapsed, string prmMsgError)
+        public TraceMSG(string prmMSG, string prmSQL, long prmTimeElapsed, string prmErr)
         {
             tipo = "SQL";
 
@@ -308,12 +318,12 @@ namespace Katty
 
             time_elapsed = prmTimeElapsed;
 
-            msgError = prmMsgError;
+            msgErr = prmErr;
         }
 
-        public TraceMSG Clonar() => new TraceMSG(msg, sql, time_elapsed, msgError);
+        public TraceMSG Clonar() => new TraceMSG(msg, sql, time_elapsed, msgErr);
 
-        public bool Exibir(string prmTipo, string prmMSG, string prmSQL, long prmTimeElapsed, string prmMsgError)
+        public bool Exibir(string prmTipo, string prmMSG, string prmSQL, long prmTimeElapsed, string prmErr)
         {
 
             tipo = prmTipo;
@@ -323,7 +333,7 @@ namespace Katty
 
             time_elapsed = prmTimeElapsed;
 
-            msgError = prmMsgError;
+            msgErr = prmErr;
 
             if (IsHidden) return false;
 
@@ -349,7 +359,7 @@ namespace Katty
 
         public TraceHide()
         {
-            SetHidden(prmList: "CFG,CODE,PLAY,DEF,xSQL");
+            SetHidden(prmList: GetListHidden);
         }
         public void SetHidden(string prmList) { Hidden = new myDominio(GetFormat(prmList)); }
 
@@ -358,7 +368,11 @@ namespace Katty
 
     public class TraceBase
     {
-        public static string GetTypeError => "ERRO";
+        public static string GetTypeError => "ERR";
+        public static string GetListHidden => "CFG,COD,PLY,DEF,CMD";
+
+        public static string GetFormatMSGLOG => "[{0,3}] {1}";
+        public static string GetFormatMSGCLK => "[{0,6}] {1}";
 
     }
 

@@ -146,9 +146,9 @@ namespace Katty
 
             string arg_indice; string arg_tamanho;
 
-            arg_indice = myBrick.GetmyBrickAntes(prmFormat, prmDelimitador: "+");
+            arg_indice = myBrick.GetBefore(prmFormat, prmDelimitador: "+");
 
-            arg_tamanho = myBrick.GetmyBrickDepois(prmFormat, prmDelimitador: "+");
+            arg_tamanho = myBrick.GetAfter(prmFormat, prmDelimitador: "+");
 
             if (myInt.IsNumero(arg_indice) && myInt.IsNumero(arg_tamanho))
                 return myString.GetSubstring(prmText, prmIndice: myInt.GetNumero(arg_indice), prmTamanho: myInt.GetNumero(arg_tamanho));
@@ -160,9 +160,9 @@ namespace Katty
 
             string arg_indice; string arg_final;
 
-            arg_indice = myBrick.GetmyBrickAntes(prmFormat, prmDelimitador: "*");
+            arg_indice = myBrick.GetBefore(prmFormat, prmDelimitador: "*");
 
-            arg_final = myBrick.GetmyBrickDepois(prmFormat, prmDelimitador: "*");
+            arg_final = myBrick.GetAfter(prmFormat, prmDelimitador: "*");
 
             if (myInt.IsNumero(arg_indice) && myInt.IsNumero(arg_final))
                 return myString.GetSubPosicao(prmText, prmIndice: myInt.GetNumero(arg_indice), prmIndiceFinal: myInt.GetNumero(arg_final));

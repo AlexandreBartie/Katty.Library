@@ -465,11 +465,11 @@ namespace Katty
         public void ParseRestricao(string prmParametro)
         { ; }
 
-        private string ObterParametroAnalise(string prmSintaxe) => myBrick.GetmyBrickAntes(prmSintaxe, prmDelimitador: ":");
+        private string ObterParametroAnalise(string prmSintaxe) => myBrick.GetBefore(prmSintaxe, prmDelimitador: ":");
 
-        private string ObterParametroFormat(string prmSintaxe) => myBrick.GetmyBrickDepois(prmSintaxe, prmDelimitador: ":");
+        private string ObterParametroFormat(string prmSintaxe) => myBrick.GetAfter(prmSintaxe, prmDelimitador: ":");
 
-        private string ObterParametroRestricao(string prmSintaxe) => myBrick.GetmyBrickDepois(prmSintaxe, prmDelimitador: ":");
+        private string ObterParametroRestricao(string prmSintaxe) => myBrick.GetAfter(prmSintaxe, prmDelimitador: ":");
 
     }
     public class DynamicDateExport

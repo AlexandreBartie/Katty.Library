@@ -170,7 +170,9 @@ namespace Katty
 
         internal void Parse(string prmText)
         {
-            myBrick = new myBrickColchetes(conector);
+            myBrick = new myBrickColchetes();
+                
+            myBrick.SetConector(conector);
 
             //
             // Main: 'name <conector> valor' or Spot: '[name <conector> valor]'

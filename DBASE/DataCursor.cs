@@ -8,10 +8,9 @@ namespace Katty
 {
     public class DataCursor : DataCursorDados
     {
+        public string sql { get; }
 
-        private string _sql;
-
-        public string sql => _sql;
+        private bool IsSQL => myString.IsFull(sql);
 
         public TraceLog Trace => DataBase.Trace;
 
@@ -22,7 +21,7 @@ namespace Katty
 
             DataBase = prmDataBase;
 
-            _sql = GetTratarSQL(prmSQL);
+            sql = GetTratarSQL(prmSQL);
 
             if (DataBase.IsOK)
             {
@@ -37,16 +36,14 @@ namespace Katty
 
         private void SetQuery()
         {
-
-            if (GetRequest(sql))
-            {
-                Trace.OnSqlExecutado(DataBase.tag, sql, Timer.Elapsed.milliseconds, TemDados);
-            }
-            else
-                Trace.OnSqlError(DataBase.tag, sql, Erro);
+            if (IsSQL)
+                if (GetRequest(sql))
+                    Trace.OnSqlExecutado(DataBase.tag, sql, Timer.Elapsed.milliseconds, TemDados);
+                else
+                    Trace.OnSqlError(DataBase.tag, sql, Erro);
         }
 
-        private string GetTratarSQL(string prmSQL) => myBrick.GetmyBrickTroca(prmSQL, prmDelimitadorInicial: "<##>", prmDelimitadorFinal: "<##>", prmDelimitadorNovo: "'");
+        private string GetTratarSQL(string prmSQL) => myBrick.GetChange(prmSQL, prmDelimitador: "<##>", prmDelimitadorNovo: "'");
 
         private string GetLog()
         {

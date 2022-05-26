@@ -10,11 +10,10 @@ namespace Katty
 
         public TestLines inputList;
         public TestLines outputList;
-        private TestLines resultList;
 
-        private TestUnitAnalyze Analyse;
+        private TestCheck Check;
 
-        private string _log;
+        public myFlow Flow => Check.Flow;
 
         public void input() => input(prmText: "");
         public void input(string prmText) => input(prmText, prmCondicao: true);
@@ -32,23 +31,22 @@ namespace Katty
 
         public string GetInput() => inputList.txt;
         public string GetOutput() => outputList.txt;
-        public string GetResult() => resultList.txt;
+        public string GetResult() => Check.GetResult();
 
         public string GetInputExt() => inputList.ext;
         public string GetOutputExt() => outputList.ext;
 
-        public string log => _log;
+        public string log => Check.GetDifferences();
 
         public TestUnit()
         {
-            Analyse = new TestUnitAnalyze(); Setup();
+            Check = new TestCheck(this);  Setup();
         }
 
         private void Setup()
         {
             inputList = new TestLines();
             outputList = new TestLines();
-            resultList = new TestLines();
         }
 
         public void AssertTestNoFail(string prmResult) => AssertTest(prmResult, prmExt: false, prmFail: false);
@@ -57,16 +55,55 @@ namespace Katty
         public void AssertTest(string prmResult, bool prmExt, bool prmFail)
         {
 
-            resultList.Add(prmResult);
+            Check = new TestCheck(this);
 
-            _log = Analyse.GetCompare(prmResult: resultList, prmExpected: outputList, prmExt);
-
-            // assert
-            if (!outputList.IsMatch(resultList.txt) && prmFail)
+            if (Check.IsFail(prmResult, prmExt, prmFail))
                 Assert.Fail(log);
         }
 
     }
+
+    public class TestCheck
+    {
+
+        private TestUnit Unit;
+
+        private TestUnitAnalyze Analyse;
+
+        private TestLines Result;
+        private TestLines Expected => Unit.outputList;
+
+        public string GetResult() => Result.txt;
+        public string GetDifferences() => Analyse.dif;
+
+        public myFlow Flow => GetFlow(); private myFlow _Flow;
+
+        public TestCheck(TestUnit prmUnit)
+        {
+            Unit = prmUnit; Analyse = new TestUnitAnalyze();
+        }
+
+        public bool IsFail(string prmResult, bool prmExt, bool prmFail)
+        {
+
+            Result = new TestLines(prmResult);
+
+            Analyse.GetCompare(prmResult: Result, prmExpected: Expected, prmExt);
+
+            // assert
+            return (!Expected.IsMatch(Result.txt) && prmFail);
+        }
+
+        private myFlow GetFlow()
+        {
+            if (_Flow == null) 
+                _Flow = new myFlow(prmData: Unit.GetInput()); 
+           
+            return _Flow;
+        }
+
+    }
+
     public class TestLines : List<string>
     {
 
