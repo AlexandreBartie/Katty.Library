@@ -9,6 +9,11 @@ namespace Katty
         public bool IsFull => !IsEmpty;
         public bool IsEmpty => (Count == 0);
 
+        public T Get(int prmIndice)
+        {
+            return this[prmIndice - 1];
+        }
+
     }
 
 }

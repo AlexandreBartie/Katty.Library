@@ -19,23 +19,23 @@ namespace Katty
             _dif = string.Format(format, result, GetCompareLines(prmResult), expected, GetCompareLines(prmExpected), Environment.NewLine, GetAnalyses(prmResult, prmExpected));
         }
 
-        private string GetCompareLines(TestLines prmTexto)
+        private string GetCompareLines(TestLines prmLines)
         {
 
             try
             {
-                if (prmTexto.IsFull)
+                if (prmLines.IsFull)
                 {
-                    string txt = string.Format("[{0}]", prmTexto.txt.Length);
+                    string txt = string.Format("[{0}]", prmLines.txt.Length);
 
-                    foreach (string linha in prmTexto)
-                        txt += string.Format(":{0}", linha.Length);
+                    foreach (TestLine Line in prmLines)
+                        txt += string.Format(":{0}", Line.txt.Length);
 
                     return txt;
                 }
             }
             catch (Exception e)
-            { return (string.Format("{0} -err: {1}", prmTexto, e.Message)); }
+            { return (string.Format("{0} -err: {1}", prmLines.txt, e.Message)); }
 
             return ("");
         }

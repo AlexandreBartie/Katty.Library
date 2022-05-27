@@ -27,7 +27,8 @@ namespace Katty
 
         }
 
-        public static bool IsNoZero(int prmValor) => (prmValor != 0);
+        public static bool IsZero(int prmValor) => (prmValor == 0);
+        public static bool IsNoZero(int prmValor) => (!IsZero(prmValor));
 
         public static int GetInverter(bool prmCondicao, int prmValor)
         {

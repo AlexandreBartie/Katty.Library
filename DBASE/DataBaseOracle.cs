@@ -46,13 +46,13 @@ namespace Katty
 
             Args = new myJSON(prmDados);
 
-            Oracle.host = Args.GetValor("host", prmPadrao: "10.250.1.35");
-            Oracle.port = Args.GetValor("port", prmPadrao: "1521");
+            Oracle.host = Args.GetValue("host", prmPadrao: "10.250.1.35");
+            Oracle.port = Args.GetValue("port", prmPadrao: "1521");
 
-            Oracle.service = Args.GetValor("service");
+            Oracle.service = Args.GetValue("service");
 
-            Oracle.user = Args.GetValor("user", prmPadrao: "desenvolvedor_sia");
-            Oracle.password = Args.GetValor("password", prmPadrao: "asdfg");
+            Oracle.user = Args.GetValue("user", prmPadrao: "desenvolvedor_sia");
+            Oracle.password = Args.GetValue("password", prmPadrao: "asdfg");
 
             Connect.AddDataBase(prmTag.ToUpper(), prmConexao: Oracle.GetString());
 

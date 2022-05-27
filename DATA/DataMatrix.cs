@@ -117,7 +117,6 @@ namespace Katty
             return txt.memo;
         }
     }
-
     public class DataView
     {
 

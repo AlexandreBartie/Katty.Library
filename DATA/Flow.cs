@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Katty
@@ -22,11 +24,15 @@ namespace Katty
 
             key = Brick.GetMain(prmData);
 
-            Flow = new myJSON(prmFlow: Brick.GetSpot(prmData, prmPreserve: true));
+            Flow = new myJSON(prmData: Brick.GetSpot(prmData, prmPreserve: true));
 
         }
 
-        public string GetValor(string prmKey) => Flow.GetValor(prmKey);
+        public object Execute(object prmObject, string prmMethod) => new myReflection(prmObject).Invoke(prmMethod, prmArgs: Flow);
+
+        public string GetValue(string prmKey) => Flow.GetValue(prmKey);
 
     }
+
+
 }

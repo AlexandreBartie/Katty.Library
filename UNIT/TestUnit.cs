@@ -8,8 +8,8 @@ namespace Katty
     public class TestUnit
     {
 
-        public TestLines inputList;
-        public TestLines outputList;
+        public TestLines Input;
+        public TestLines Output;
 
         private TestCheck Check;
 
@@ -17,24 +17,22 @@ namespace Katty
 
         public void input() => input(prmText: "");
         public void input(string prmText) => input(prmText, prmCondicao: true);
-        public void input(string prmText, bool prmCondicao) { if (prmCondicao) inputList.Add(prmText); }
+        public void input(string prmText, bool prmCondicao) => input(prmText, prmArg: null, prmCondicao: true);
+        public void input(string prmText, string prmArg) => input(prmText, prmArg, prmCondicao: true);
+        public void input(string prmText, string prmArg, bool prmCondicao) { if (prmCondicao) Input.Add(prmText, prmArg); }
+
 
         public void inputText(string prmText) => inputText(prmText, prmCondicao: true);
-        public void inputText(string prmText, bool prmCondicao) { if (prmCondicao) inputList.AddText(prmText); }
+        public void inputText(string prmText, bool prmCondicao) { if (prmCondicao) Input.AddText(prmText); }
 
         public void output() => output(prmText: "");
-        public void output(string prmText) => outputList.Add(prmText);
+        public void output(string prmText) => Output.Add(prmText);
 
         public void outputText() => output();
         public void outputText(string prmText) => outputText(prmText, prmEnter: false);
-        public void outputText(string prmText, bool prmEnter) { outputList.AddText(prmText); if (prmEnter) output(); }
+        public void outputText(string prmText, bool prmEnter) { Output.AddText(prmText); if (prmEnter) output(); }
 
-        public string GetInput() => inputList.txt;
-        public string GetOutput() => outputList.txt;
         public string GetResult() => Check.GetResult();
-
-        public string GetInputExt() => inputList.ext;
-        public string GetOutputExt() => outputList.ext;
 
         public string log => Check.GetDifferences();
 
@@ -45,8 +43,8 @@ namespace Katty
 
         private void Setup()
         {
-            inputList = new TestLines();
-            outputList = new TestLines();
+            Input = new TestLines();
+            Output = new TestLines();
         }
 
         public void AssertTestNoFail(string prmResult) => AssertTest(prmResult, prmExt: false, prmFail: false);
@@ -71,7 +69,7 @@ namespace Katty
         private TestUnitAnalyze Analyse;
 
         private TestLines Result;
-        private TestLines Expected => Unit.outputList;
+        private TestLines Expected => Unit.Output;
 
         public string GetResult() => Result.txt;
         public string GetDifferences() => Analyse.dif;
@@ -97,14 +95,14 @@ namespace Katty
         private myFlow GetFlow()
         {
             if (_Flow == null) 
-                _Flow = new myFlow(prmData: Unit.GetInput()); 
+                _Flow = new myFlow(prmData: Unit.Input.txt); 
            
             return _Flow;
         }
 
     }
 
-    public class TestLines : List<string>
+    public class TestLines : List<TestLine> //List<string>
     {
 
         public bool IsFull => (this.Count > 0);
@@ -124,38 +122,61 @@ namespace Katty
         public string GetLine(int prmIndice)
         {
             if (prmIndice <= this.Count)
-                return this[prmIndice - 1];
+                return this[prmIndice - 1].txt;
             return "";
         }
 
-        public void Add() => AddLine(prmText: "");
-        public new void Add(string prmText) => AddLine(prmText);
+        public void Add() => Add(prmText: "");
+        public void Add(string prmText) => Add(prmText, prmArg: null);
+        public void Add(string prmText, string prmArg) => AddLine(prmText, prmArg);
 
-        private void AddLine(string prmText)
+        private void AddLine(string prmText, string prmArg)
         {
             foreach (string line in new myLines(prmText))
-                AddText(line, prmMerge: false);
+                AddText(line, prmArg, prmMerge: false);
         }
-        public void AddText(string prmText) => AddText(prmText, prmMerge: true);
+        public void AddText(string prmText) => AddText(prmText, prmArg: null, prmMerge: true);
 
-        private void AddText(string prmText, bool prmMerge)
+        private void AddText(string prmText, string prmArg, bool prmMerge)
         {
             if (prmMerge && this.Count != 0)
-                base[base.Count - 1] += prmText;
+                base[base.Count - 1].txt += prmText;
             else
                 if (prmText != null)
-                base.Add(prmText);
+                base.Add(new TestLine(prmText, prmArg));
         }
 
         private string GetTXT()
         {
-            myLines linhas = new myLines();
+            myLines Lines = new myLines();
 
-            foreach (string texto in this)
-                linhas.Add(texto);
+            foreach (TestLine Line in this)
+                Lines.Add(Line.txt);
 
-            return linhas.memo;
+            return Lines.memo;
         }
+
+        public List<string> GetList()
+        {
+            List<string> Lines = new List<string>();
+
+            foreach (TestLine Line in this)
+                Lines.Add(Line.txt);
+
+            return Lines;
+        }
+
+    }
+
+    public class  TestLine
+    {
+        public string txt;
+
+        public string arg;
+
+        public TestLine(string prmText, string prmArg)
+        { txt = prmText; arg = prmArg; }
+
     }
 
     //    public class TestCase

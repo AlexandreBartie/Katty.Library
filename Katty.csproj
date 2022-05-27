@@ -9,7 +9,7 @@
     <Authors>Alexandre Bartie</Authors>
     <Product>Katty LIBRARY</Product>
     <AssemblyName>Katty</AssemblyName>
-    <RootNamespace>KATTY</RootNamespace>
+    <RootNamespace>Katty</RootNamespace>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <Version>1.0.7.16</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

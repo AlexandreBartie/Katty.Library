@@ -7,48 +7,52 @@ namespace Katty
     public class myJSON
     {
 
-        public myJSON_Control Controle;
+        public myJSONCore Core;
 
         private bool _IsOK;
 
         public bool IsOK { get => _IsOK; }
         public bool IsErro { get => (Erro != null); }
-        public bool IsCurrent { get => Controle.IsCurrent; }
+        public bool IsCurrent { get => Core.IsCurrent; }
 
-        public Exception Erro { get => Controle.erro; }
+        public Exception Erro { get => Core.erro; }
 
-        public string Flow { get => Controle.Flow; }
+        public string flows { get => Core.flows; }
+        public string lines { get => Core.lines; }
+        public string values { get => Core.values; }
 
-        public string tuplas { get => Controle.tuplas; }
+        public string txt(bool prmFlow) => myBool.IIf(prmFlow, flows, lines);
+
+        public JsonProperty GetProperty(string prmKey) => Core.GetProperty(prmKey);
 
         public myJSON()
         {
-            Controle = new myJSON_Control(this);
+            Core = new myJSONCore(this);
 
         }
-        public myJSON(string prmFlow)
+        public myJSON(string prmData)
         {
 
-            Controle = new myJSON_Control(this);
+            Core = new myJSONCore(this);
 
-            Parse(prmFlow);
+            Parse(prmData);
 
         }
 
-        public void Add(string prmFlow)
+        public void Add(string prmData)
         {
-            Controle.Add(prmFlow);
+            Core.Add(prmData);
         }
 
-        public void Add(string prmFlow, string prmMestre)
+        public void Add(string prmData, string prmMestre)
         {
-            Controle.AddCombine(prmFlow, prmMestre);
+            Core.AddCombine(prmData, prmMestre);
         }
         
-        public bool Parse(string prmFlow)
+        public bool Parse(string prmData)
         {
 
-            Add(prmFlow);
+            Add(prmData);
 
             return (Save());
 
@@ -56,27 +60,22 @@ namespace Katty
         public bool Save()
         {
 
-            _IsOK = Controle.Save();
+            _IsOK = Core.Save();
 
             return (IsOK);
 
         }
-        public bool Next() => Controle.Next();
+        public bool Next() => Core.Next();
 
-        public bool Find(string prmKey) => Controle.Find(prmKey);
+        public bool Find(string prmKey) => Core.Find(prmKey);
 
-        public string FindValor(string prmKey, string prmFormato) => Controle.FindValor(prmKey, prmFormato);
-        public string GetValor(string prmKey) => Controle.GetValor(prmKey);
-        public string GetValor(string prmKey, string prmPadrao) => Controle.GetValor(prmKey, prmPadrao);
-        public JsonProperty GetProperty (string prmKey) => Controle.GetProperty(prmKey);
+        public string FindValue(string prmKey, string prmFormato) => Core.FindValue(prmKey, prmFormato);
+        public string GetValue(string prmKey) => Core.GetValue(prmKey);
+        public string GetValue(string prmKey, string prmPadrao) => Core.GetValue(prmKey, prmPadrao);
 
     }
-    public class myJSON_Control
+    public class myJSONCore : myJSONFormat
     {
-
-        private myJSON JSON;
-
-        private JsonDocument doc;
 
         public bool IsCombineFull;
 
@@ -84,35 +83,7 @@ namespace Katty
 
         public Exception erro;
 
-        private myJSON_Flows Flows;
-
-        private JsonElement root => doc.RootElement;
-        private JsonElement item => Corpo.Current;
-
-        private JsonElement.ObjectEnumerator Propriedades { get => item.EnumerateObject(); }
-
-        private JsonElement.ArrayEnumerator Corpo;
-
-
-        public myJSON_Control(myJSON prmJSON)
-        {
-            
-            JSON = prmJSON;
-
-            Setup();
-
-        }
-
-        private void Setup()
-        {
-
-            Flows = new myJSON_Flows(JSON);
-
-        }
-
-        public string Flow { get => (Flows.output); } 
-
-        public string tuplas { get => (GetTuplas()); }
+        public myJSONCore(myJSON prmJSON) : base(prmJSON) { }
 
         public void Add(string prmFlow)
         {
@@ -122,17 +93,16 @@ namespace Katty
             //Flow = Flow.Replace(@"\'", @"#""");
             linha = linha.Replace(@"'", "\"");
 
-            Flows.Add(linha);
+            Data.Add(linha);
 
         }
 
         public void AddCombine(string prmFlow, string prmMestre)
         {
-
-            string Flow_combinado = GetCombine(prmFlow, prmMestre);
-
-            Add(prmFlow: Flow_combinado);
-
+            if (prmMestre == null)
+                Add(prmFlow);
+            else
+                Add(prmFlow: GetCombine(prmFlow, prmMestre));
         }
 
         private string GetCombine(string prmFlow, string prmMestre)
@@ -148,7 +118,7 @@ namespace Katty
 
             // Sobrepor valores do MESTRE que estão presentes no Flow
 
-            foreach (JsonProperty prop in Flow.Controle.Propriedades)
+            foreach (JsonProperty prop in Flow.Core.Args)
             {
 
                 JsonProperty mix = prop;
@@ -163,7 +133,7 @@ namespace Katty
 
             // Inserir propriedades MESTRE que não aparecem no Flow
 
-            foreach (JsonProperty prop in Mestre.Controle.Propriedades)
+            foreach (JsonProperty prop in Mestre.Core.Args)
             {
 
                 if (!Flow.Find(prmKey: prop.Name))
@@ -178,25 +148,22 @@ namespace Katty
         {
             try
             {
-
-                doc = JsonDocument.Parse(Flows.output);
+                doc = JsonDocument.Parse(flows);
 
                 Corpo = root.EnumerateArray();
 
                 Next();
 
                 return (true);
-
             }
 
             catch (Exception e)
             { 
-                
-                Debug.WriteLine("Flow JSON: " + Flow);
-                Debug.WriteLine("Erro  JSON: " + e.Message);
+                Debug.WriteLine("Flow JSON: " + flows);
+                Debug.WriteLine("Erro JSON: " + e.Message);
 
-                Setup();  erro = e; return (false); }
-
+                Setup();  erro = e; return (false);
+            }
         }
         public bool Next()
         {
@@ -220,10 +187,10 @@ namespace Katty
             return (false);
 
         }
-        public string FindValor(string prmKey, string prmFormato)
+        public string FindValue(string prmKey, string prmFormato)
         {
 
-            string vlValor = GetValor(prmKey);
+            string vlValor = GetValue(prmKey);
 
             if (vlValor != "")
                 return (String.Format(prmFormato, vlValor));
@@ -231,14 +198,13 @@ namespace Katty
             return (vlValor);
 
         }
-        public string GetValor(string prmKey) => GetValor(prmKey, prmPadrao: "");
+        public string GetValue(string prmKey) => GetValue(prmKey, prmPadrao: "");
 
-        public string GetValor(string prmKey, string prmPadrao)
+        public string GetValue(string prmKey, string prmPadrao)
         {
             try
             {
                 return (GetProperty(prmKey).Value.GetString());
-
             }
             catch (Exception e)
             { erro = e; }
@@ -249,47 +215,85 @@ namespace Katty
         public JsonProperty GetProperty(string prmKey)
         {
 
-            foreach (JsonProperty propriedade in Propriedades)
+            foreach (JsonProperty Arg in Args)
             {
 
-                if (propriedade.Name.ToLower() == prmKey.ToLower())
+                if (Arg.Name.ToLower() == prmKey.ToLower())
                 {
-                    return propriedade;
+                    return Arg;
                 }
             }
 
             return(new JsonProperty());
         }
-        private string GetTuplas()
+
+    }
+    
+    public class myJSONFormat
+    {
+        internal myJSON JSON;
+
+        internal myJSONData Data;
+
+        internal JsonDocument doc;
+        internal JsonElement root => doc.RootElement;
+        internal JsonElement item => Corpo.Current;
+        internal JsonElement.ObjectEnumerator Args => item.EnumerateObject();
+
+        internal JsonElement.ArrayEnumerator Corpo;
+
+        internal string flows => GetFlows();
+        internal string lines => GetLines();
+        internal string values => GetValues();
+
+        public myJSONFormat(myJSON prmJSON)
+        {
+            JSON = prmJSON; Setup();
+        }
+
+        internal void Setup()
+        {
+            Data = new myJSONData(JSON);
+        }
+
+        private string GetFlows() => (Data.output);
+        private string GetLines()
         {
 
-            myMemo linhas = new myMemo();
+            myMemo lines = new myMemo();
 
             foreach (JsonElement item in Corpo)
 
                 foreach (JsonProperty propriedade in item.EnumerateObject())
+                    lines.Add(GetFormatTupla(prmKey: propriedade.Name));
 
-                {
-
-                    string parametro = propriedade.Name;
-
-                    string linha = string.Format("[{0}]: '{1}'", parametro, GetValor(parametro));
-
-                    linhas.Add(linha);
-
-                }
-
-            return (linhas.csv);
+            return (lines.csv);
 
         }
 
+        private string GetValues()
+        {
+
+            myMemo lines = new myMemo();
+
+            foreach (JsonElement item in Corpo)
+
+                foreach (JsonProperty propriedade in item.EnumerateObject())
+                    lines.Add(GetFormatValue(prmKey: propriedade.Name));
+
+            return (lines.csv);
+
+        }
+        private string GetFormatValue(string prmKey) => string.Format("'{0}'", JSON.GetValue(prmKey));
+        private string GetFormatTupla(string prmKey) => string.Format("[{0}]: '{1}'", prmKey, JSON.GetValue(prmKey));
+
     }
-    internal class myJSON_Flows : myMemo
+    internal class myJSONData : myMemo
     {
 
         private myJSON JSON;
 
-        public myJSON_Flows(myJSON prmJSON)
+        public myJSONData(myJSON prmJSON)
         {
 
             JSON = prmJSON;
