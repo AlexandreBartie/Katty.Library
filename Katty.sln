@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Katty.Tools", "Katty.Tools.csproj", "{3D95887A-CE95-41A9-A06C-948110A476ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Katty.Tools.QA", "..\..\..\QA\Katty.Tools.QA\Katty.Tools.QA.csproj", "{2B52CDBE-5F63-45B8-8CF5-73DCE234F0FC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{3D95887A-CE95-41A9-A06C-948110A476ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D95887A-CE95-41A9-A06C-948110A476ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D95887A-CE95-41A9-A06C-948110A476ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B52CDBE-5F63-45B8-8CF5-73DCE234F0FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B52CDBE-5F63-45B8-8CF5-73DCE234F0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B52CDBE-5F63-45B8-8CF5-73DCE234F0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B52CDBE-5F63-45B8-8CF5-73DCE234F0FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
