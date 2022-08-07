@@ -1,8 +1,5 @@
-﻿using Katty;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Katty.Tools.Test.LIB.FILES
 {
@@ -153,7 +150,7 @@ namespace Katty.Tools.Test.LIB.FILES
 
         public Diretorio GetDiretorio(string prmPath) => new Diretorio(GetPath(prmPath));
 
-        public string GetPath(string prmPath) => Environment.CurrentDirectory + @"\..\..\..\Source\DATA\TestData\" + prmPath; 
+        public string GetPath(string prmPath) => Environment.CurrentDirectory + @"/../../../Source/DATA/TestData/" + prmPath;
 
         public void ActionGeneric()
         {
