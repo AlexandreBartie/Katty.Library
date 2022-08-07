@@ -1,61 +1,50 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">Microsoft.NET.Sdk
-
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-
-    <Title>Katty LIBRARY</Title>
-    <Product>Katty.LIBRARY</Product>
-    <Description>Katty.LIBRARY is a part of Dooggy FRAMEWORK.</Description>
-
-    <AssemblyName>Katty.Library</AssemblyName>
-    <RootNamespace>Katty.Library</RootNamespace>
-    <PackageIcon>Katty.png</PackageIcon>
-    <Version>1.0.8</Version>
-
-    <License>MIT</License>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageDescription>General Library used by Dooggy FRAMEWORK.</PackageDescription>
-    <PackageTags>Encrypt</PackageTags>
-
-    <Authors>Alexandre Bartie</Authors>
-    <Company>bartie.devops</Company>
-    <RepositoryUrl>https://github.com/AlexandreBartie/Katty.Library</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl>
-
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
-
-    <PackageDescription>Extension for Encrypt String</PackageDescription>
-    <Description>A string extension method that returns its encrypted value.</Description>
-    <RepositoryUrl>https://github.com/AlexandreBartie/Encrypt</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl>
-    <PackageIcon>encrypt.png</PackageIcon>
-
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="Katty.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Katty.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="Rocket.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop"> 
+ 
+  <PropertyGroup> 
+    <OutputType>Library</OutputType> 
+    <TargetFramework>netcoreapp3.1</TargetFramework> 
+    <UseWindowsForms>True</UseWindowsForms>
+ 
+    <Title>Katty LIBRARY</Title> 
+    <Product>Katty.LIBRARY</Product> 
+    <Description>Katty.LIBRARY is a part of Dooggy Testing FRAMEWORK.</Description> 
+ 
+    <AssemblyName>Katty.Library</AssemblyName> 
+    <RootNamespace></RootNamespace> 
+    <PackageIcon>Katty.png</PackageIcon> 
+    <Version>1.0.8</Version> 
+ 
+    <License>MIT</License> 
+    <PackageLicenseExpression>MIT</PackageLicenseExpression> 
+    <PackageDescription>General Library used by Dooggy Testing FRAMEWORK.</PackageDescription> 
+    <PackageTags>Encrypt</PackageTags> 
+ 
+    <Authors>Alexandre Bartie</Authors> 
+    <Company>bartie.devops</Company> 
+    <RepositoryUrl>https://github.com/AlexandreBartie/Katty.Library</RepositoryUrl> 
+    <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl> 
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild> 
+ 
+  </PropertyGroup> 
+ 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'"> 
+    <DefineConstants>TRACE</DefineConstants> 
+  </PropertyGroup> 
+ 
+  <ItemGroup> 
+    <Content Include="Katty.ico" /> 
+  </ItemGroup> 
+ 
+  <ItemGroup> 
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" /> 
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" /> 
+  </ItemGroup> 
+ 
+  <ItemGroup> 
+    <None Update="Katty.png"> 
+      <Pack>True</Pack> 
+      <PackagePath>\</PackagePath> 
+    </None> 
+  </ItemGroup> 
+ 
 </Project>
