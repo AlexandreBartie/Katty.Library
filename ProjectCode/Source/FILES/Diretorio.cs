@@ -10,7 +10,9 @@ namespace Katty
     public class Path
     {
 
-        public string path = "";
+        private string _path = "";
+
+        public string path => myString.GetSubstituir(_path, "/", @"\");
 
         private bool TemTerminal { get => myString.GetLast(path) == @"\"; }
 
@@ -21,7 +23,7 @@ namespace Katty
         public bool SetPath(string prmPath)
         {
 
-            path = prmPath;
+            _path = prmPath;
 
             return(IsFull);
 
