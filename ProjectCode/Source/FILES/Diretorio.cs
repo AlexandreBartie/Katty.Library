@@ -10,9 +10,9 @@ namespace Katty
     public class Path
     {
 
-        private string _path = "";
+        public string path = "";
 
-        public string path => myString.GetSubstituir(_path, "/", @"\");
+        public string path_formatted => myString.GetSubstituir(path, "/", @"\");
 
         private bool TemTerminal { get => myString.GetLast(path) == @"\"; }
 
@@ -23,7 +23,7 @@ namespace Katty
         public bool SetPath(string prmPath)
         {
 
-            _path = prmPath;
+            path = prmPath;
 
             return(IsFull);
 
@@ -177,7 +177,7 @@ namespace Katty
 
             try
             {
-                return (Directory.GetFiles(Diretorio.path, prmFiltro));
+               return (Directory.GetFiles(Diretorio.path_formatted, prmFiltro));
             }
             catch (Exception e)
             { Debug.WriteLine (string.Format("{0}: -err: {1}", "Erro de carregamento dos arquivos do diretório.", e.Message)) ; }
