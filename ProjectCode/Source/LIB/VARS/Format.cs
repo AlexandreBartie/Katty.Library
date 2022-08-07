@@ -37,31 +37,37 @@ namespace Katty
             return retorno;
         }
 
-        private static string GetDateFormat(string prmFormato)
+        private static string GetDateFormat(string prmFormat)
         {
 
-            string formato = prmFormato;
+           if (myString.IsEmpty(prmFormat))
+                return "dd/MM/yyyy hh:mm:ss";
+            
+            string format = prmFormat;
 
-            formato = myString.GetSubstituir(formato, "A", "y");
-            formato = myString.GetSubstituir(formato, "a", "y");
+            format = myString.GetSubstituir(format, "A", "y");
+            format = myString.GetSubstituir(format, "a", "y");
 
-            formato = myString.GetSubstituir(formato, "D", "d");
-            formato = myString.GetSubstituir(formato, "m", "M");
+            format = myString.GetSubstituir(format, "D", "d");
+            format = myString.GetSubstituir(format, "m", "M");
 
-            return (formato);
+            return (format);
 
         }
 
-        private static string GetTimeFormat(string prmFormato)
+        private static string GetTimeFormat(string prmFormat)
         {
 
-            string formato = prmFormato;
+            if (myString.IsEmpty(prmFormat))
+                return "dd/MM/yyyy HH:mm:ss";
 
-            formato = myString.GetSubstituir(formato, "h", "H");
-            formato = myString.GetSubstituir(formato, "M", "m");
-            formato = myString.GetSubstituir(formato, "S", "s");
+            string format = prmFormat;
 
-            return (formato);
+            format = myString.GetSubstituir(format, "h", "H");
+            format = myString.GetSubstituir(format, "M", "m");
+            format = myString.GetSubstituir(format, "S", "s");
+
+            return (format);
 
         }
 
@@ -139,7 +145,6 @@ namespace Katty
             return prmText;
 
         }
-
 
         private static string GetSubstring(string prmText, string prmFormat)
         {
