@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Code\Katty.Tools.csproj" />
+    <ProjectReference Include="..\ProjectCode\Katty.Tools.csproj" />
   </ItemGroup>
 
 </Project>
