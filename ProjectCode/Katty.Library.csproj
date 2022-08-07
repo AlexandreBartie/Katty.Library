@@ -1,23 +1,37 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">Microsoft.NET.Sdk
 
   <PropertyGroup>
-    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>Katty.ico</ApplicationIcon>
-    <StartupObject></StartupObject>
-    <Authors>Alexandre Bartie</Authors>
-    <Product>Katty LIBRARY</Product>
-    <AssemblyName>Katty.Tools</AssemblyName>
-    <RootNamespace>Katty.Tools</RootNamespace>
-    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <Version>1.0.8</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl></PackageProjectUrl>
+
+    <Title>Katty LIBRARY</Title>
+    <Product>Katty.LIBRARY</Product>
+    <Description>Katty.LIBRARY is a part of Dooggy FRAMEWORK.</Description>
+
+    <AssemblyName>Katty.Library</AssemblyName>
+    <RootNamespace>Katty.Library</RootNamespace>
     <PackageIcon>Katty.png</PackageIcon>
-    <PackageIconUrl />
-    <RepositoryUrl>https://github.com/AlexandreBartie/Katty</RepositoryUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>1.0.8</Version>
+
+    <License>MIT</License>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageDescription>General Library used by Dooggy FRAMEWORK.</PackageDescription>
+    <PackageTags>Encrypt</PackageTags>
+
+    <Authors>Alexandre Bartie</Authors>
+    <Company>bartie.devops</Company>
+    <RepositoryUrl>https://github.com/AlexandreBartie/Katty.Library</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
+
+    <PackageDescription>Extension for Encrypt String</PackageDescription>
+    <Description>A string extension method that returns its encrypted value.</Description>
+    <RepositoryUrl>https://github.com/AlexandreBartie/Encrypt</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl>
+    <PackageIcon>encrypt.png</PackageIcon>
+
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
