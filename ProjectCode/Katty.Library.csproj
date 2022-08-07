@@ -10,7 +10,7 @@
  
     <AssemblyName>Katty.Library</AssemblyName> 
     <RootNamespace></RootNamespace> 
-    <PackageIcon>Katty.ico</PackageIcon> 
+    <PackageIcon>Katty.png</PackageIcon> 
     <Version>1.0.8</Version> 
  
     <License>MIT</License> 
@@ -23,6 +23,7 @@
     <RepositoryUrl>https://github.com/AlexandreBartie/Katty.Library</RepositoryUrl> 
     <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl> 
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild> 
+    <ApplicationIcon>Katty.ico</ApplicationIcon> 
  
   </PropertyGroup> 
  
