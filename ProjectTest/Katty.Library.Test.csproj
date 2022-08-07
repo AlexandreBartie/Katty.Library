@@ -1,17 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
 
-    <RootNamespace>Katty.Library.Tests</RootNamespace>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
 
+    <RootNamespace>Katty.Library.Test</RootNamespace>
     <IsPackable>false</IsPackable>
-
     <StartupObject></StartupObject>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-
-    <OutputType>Library</OutputType>
 
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
