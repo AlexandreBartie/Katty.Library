@@ -1,0 +1,4 @@
+test01_PesquisarCursosPorSigla,nSigla,nCodigoCurso,nomCurso,nTipoCurso
+,GIA,118,GRAD.INT.EM ARQUEOLOGIA,PROGRAMA DE GRADUACAO INTENSIVA
+test02_PesquisarCursosPorTipoDeCurso,nCurso,nTipoCurso,nomCurso,nSigla,nCodigoCurso
+,ÁREA DE MIGRAÇÃO,PROGRAMA DE GRADUACAO INTENSIVA,GRAD.INT.EM ARQUEOLOGIA,GIA,118
