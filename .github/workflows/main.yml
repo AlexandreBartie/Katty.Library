@@ -1,4 +1,4 @@
-name: Build and deploy 'Katty.Tools' package
+name: Build & Deploy to NUGET
 
 on:
   push:

@@ -1,13 +1,8 @@
-# Katty.Tools
-Katty it´s a library to support Dooggy and BlueRocket's Automation Testing Framework.
-
-[![.NET](https://github.com/AlexandreBartie/Katty.Tools/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AlexandreBartie/Katty.Tools/actions/workflows/dotnet.yml)
-
-## Learn how to use this package
-https://github.com/AlexandreBartie/Encrypt/wiki/How-to-Use
+# Katty.Library
+Katty it´s a library to support Dooggy Testing Framework.
 
 ## Package Informations
 
 | Package |  Version | Downloads |
 | ------- | ----- | ----- |
-| `Encrypt.String` | [![NuGet](https://img.shields.io/nuget/v/Encrypt.String.svg)](https://nuget.org/packages/Encrypt.String) | [![Nuget](https://img.shields.io/nuget/dt/Encrypt.String.svg)](https://nuget.org/packages/Encrypt.String) |
+| `Katty.Library` | [![NuGet](https://img.shields.io/nuget/v/Katty.Library.svg)](https://nuget.org/packages/Katty.Library) | [![Nuget](https://img.shields.io/nuget/dt/Katty.Library.svg)](https://nuget.org/packages/Katty.Library) |

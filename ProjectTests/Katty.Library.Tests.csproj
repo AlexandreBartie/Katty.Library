@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
-    <RootNamespace>Katty.Tools.Tests</RootNamespace>
+    <RootNamespace>Katty.Library.Tests</RootNamespace>
 
     <IsPackable>false</IsPackable>
 
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjectCode\Katty.Tools.csproj" />
+    <ProjectReference Include="..\ProjectCode\Katty.Library.csproj" />
   </ItemGroup>
 
 </Project>
