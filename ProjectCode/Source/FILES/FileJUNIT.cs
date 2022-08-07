@@ -60,7 +60,7 @@ namespace Katty
 
         internal List<TestCaseJUnit> TestCases;
 
-        private TestCaseJUnit TestCaseCurrent ;
+        private TestCaseJUnit TestCaseCurrent;
 
         public TestCasesJUnit(myFileJUNIT prmFile)
         {
@@ -82,7 +82,6 @@ namespace Katty
                 AddFlow(prmLine);
 
         }
-
 
         private void AddCase(string prmLine)
         {

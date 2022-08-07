@@ -14,6 +14,7 @@ namespace Katty
 
         public myTimer()
         {
+            
             Elapsed = new TimeElapsed(this);
         }
 
