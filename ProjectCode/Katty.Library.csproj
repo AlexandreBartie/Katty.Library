@@ -10,7 +10,7 @@
  
     <AssemblyName>Katty.Library</AssemblyName> 
     <RootNamespace></RootNamespace> 
-    <PackageIcon>Katty.png</PackageIcon> 
+    <PackageIcon>Katty.ico</PackageIcon> 
     <Version>1.0.8</Version> 
  
     <License>MIT</License> 
