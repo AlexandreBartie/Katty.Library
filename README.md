@@ -1,11 +1,8 @@
-# Katty.Tools
+# Katty.Library
 Katty it´s a library to support Dooggy Testing Framework.
-
-## Learn how to use this package
-https://github.com/AlexandreBartie/Encrypt/wiki/How-to-Use
 
 ## Package Informations
 
 | Package |  Version | Downloads |
 | ------- | ----- | ----- |
-| `Katty.Tools` | [![NuGet](https://img.shields.io/nuget/v/Katty.Tools.svg)](https://nuget.org/packages/Katty.Tools) | [![Nuget](https://img.shields.io/nuget/dt/Katty.Tools.svg)](https://nuget.org/packages/Katty.Tools) |
+| `Katty.Library` | [![NuGet](https://img.shields.io/nuget/v/Katty.Library.svg)](https://nuget.org/packages/Katty.Library) | [![Nuget](https://img.shields.io/nuget/dt/Katty.Library.svg)](https://nuget.org/packages/Katty.Library) |
