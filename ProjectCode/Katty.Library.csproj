@@ -11,7 +11,7 @@
     <AssemblyName>Katty.Library</AssemblyName> 
     <RootNamespace></RootNamespace> 
     <PackageIcon>Katty.png</PackageIcon> 
-    <Version>1.0.8</Version> 
+    <Version>1.0.9</Version> 
  
     <License>MIT</License> 
     <PackageLicenseExpression>MIT</PackageLicenseExpression> 
@@ -22,7 +22,7 @@
     <Company>bartie.devops</Company> 
     <RepositoryUrl>https://github.com/AlexandreBartie/Katty.Library</RepositoryUrl> 
     <PackageProjectUrl>https://github.com/users/AlexandreBartie/projects/1</PackageProjectUrl> 
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild> 
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild> 
     <ApplicationIcon>Katty.ico</ApplicationIcon> 
  
   </PropertyGroup> 
